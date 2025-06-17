@@ -39,6 +39,26 @@ class LiteCamera:
             raise RuntimeError("Failed to open camera")
 
     def read(self) -> tuple[bool, Any]:
+        """Read a frame from the camera with BGR format.
+
+        Returns:
+        -------
+        tuple[bool, Any]
+            A tuple containing a boolean indicating success and the frame data.
+
+        Examples:
+        --------
+        >>> cam = LiteCamera(0)
+        >>> ret, frame = cam.read()
+        >>> if ret:
+        ...     cv2.imshow("frame", frame)
+        ...     cv2.waitKey(1)
+
+        Note:
+        ----
+        The frame is in BGR format.
+
+        """
         resp = self._original_captureFrame()
         if resp is None:
             return False, None
