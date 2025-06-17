@@ -1,18 +1,30 @@
 from __future__ import annotations
 
-from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Literal
-
-from serial.tools.list_ports_common import ListPortInfo
+from typing import TYPE_CHECKING, Any, Literal
 
 from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
 from senxor._senxor import Senxor
+from senxor.cam import LiteCamera, LiteWindow, list_camera
 
 # To compatible with the old version
 from senxor.proc import remap
 
-__all__ = ["connect_senxor", "is_senxor_usb", "list_senxor", "list_senxor_usb", "remap"]
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from serial.tools.list_ports_common import ListPortInfo
+
+__all__ = [
+    "LiteCamera",
+    "LiteWindow",
+    "connect_senxor",
+    "is_senxor_usb",
+    "list_camera",
+    "list_senxor",
+    "list_senxor_usb",
+    "remap",
+]
 
 
 def list_senxor(type: Literal["serial"] | None = None, exclude: list[str] | str | None = None) -> list[Any]:
