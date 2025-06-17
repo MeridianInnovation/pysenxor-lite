@@ -24,12 +24,31 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "opencv-python>=4.11.0.86",
-    "pre-commit>=4.2.0",
-    "pytest>=7.0.1",
-    "rich>=10.11.0",
+  "lite-camera>=2.0.4",
+  "opencv-python>=4.11.0.86",
+  "pillow>=11.2.1",
+  "pre-commit>=4.2.0",
+  "pytest>=7.0.1",
+  "rich>=10.11.0",
 ]
-
+# Dual-light Camera App support.
+dual-light = [
+    # "lite-camera>=2.0.4",
+]
+# Documentation support.
+doc = [
+    "mkdocs>=1.6.1",
+    "mkdocs-include-markdown-plugin>=7.1.6",
+    "mkdocs-material>=9.6.14",
+    "mkdocstrings[python]>=0.29.1",
+]
+test = [
+    "deptry>=0.23.0",
+    "mypy>=1.16.1",
+    "pre-commit>=4.2.0",
+    "pytest>=8.4.0",
+    "ruff>=0.11.13",
+]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -45,10 +64,15 @@ py-modules = ["senxor"]
 Homepage = "https://www.meridianinno.com/"
 Issues = "https://www.meridianinno.com/"
 
+[tool.uv]
+default-groups = ["dev", "dual-light", "test"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--capture sys --verbose"
+markers = [
+    "gui: marks tests as requiring a GUI",
+]
 
 [tool.ruff]
 target-version = "py39"
