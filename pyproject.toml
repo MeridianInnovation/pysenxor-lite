@@ -1,0 +1,78 @@
+[project]
+name = "pysenxor"
+version = "2.0.0"
+authors = [{ name = "Merididan Innovation", email = "info@meridianinno.com" }]
+description = "Python library for interaction with Meridian Innovation's SenXor(TM)"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+  "colormap-tool>=1.0.0",
+  "numpy>=1.19.5",
+  "pyserial>=3.5",
+  "structlog>=21.5.0",
+]
+
+[dependency-groups]
+dev = [
+    "opencv-python>=4.11.0.86",
+    "pre-commit>=4.2.0",
+    "pytest>=7.0.1",
+    "rich>=10.11.0",
+]
+
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["senxor"]
+
+[tool.setuptools.package-data]
+"senxor" = ["**/*.json"]
+
+[project.urls]
+Homepage = "https://www.meridianinno.com/"
+Issues = "https://www.meridianinno.com/"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--capture sys --verbose"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+fix = true
+src = ["senxor", "example", "bin", "tests"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "TD", "N", "C", "T",
+  "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D401",
+  "A", "ANN",
+  "FIX",
+  "PLR", "FBT",
+  "RET", "EM", "ERA", "BLE", "SLF", "TRY",
+]
+fixable = ["ALL"]
+unfixable = ["F401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["S101"]
+
+[tool.ruff.format]
+preview = true
+skip-magic-trailing-comma = false
+docstring-code-format = true
