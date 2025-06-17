@@ -1,9 +1,22 @@
-import threading
+# nuitka-project: --standalone
+# nuitka-project: --onefile
+# nuitka-project: --enable-plugin=tk-inter
+# nuitka-project: --follow-imports
+# nuitka-project: --include-package-data=colormap_tool
+# nuitka-project: --product-name="Dual Light Viewer"
+# nuitka-project: --product-version="0.1.0"
+# nuitka-project: --file-description="Dual-light camera viewer"
+# nuitka-project: --copyright="Copyright (c) 2025 Meridian Innovation"
+# nuitka-project: --report=compilation-report.xml
+
+
+# package command:
+# nuitka example/dual_light_tkinter.py --output-dir=dist/dual_light_tkinter
+
 import time
 import tkinter as tk
 from tkinter import ttk
 
-import cv2
 import numpy as np
 
 try:
@@ -13,6 +26,7 @@ except ImportError:
     exit(1)
 
 import senxor
+from senxor.cam import LiteCamera
 from senxor.log import setup_console_logger
 from senxor.proc import normalize
 from senxor.regs import REGS
@@ -97,10 +111,8 @@ class DualLightApp:
         self.senxor.reg_write(REGS.FRAME_RATE, 2)
         self.senxor.start_stream()
 
-        self.cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        self.cam.set(cv2.CAP_PROP_FPS, 10)
+        self.cam = LiteCamera(0)
+        self.cam.setResolution(1280, 720)
 
     def _initialize_fps_counters(self):
         """Initialize variables for tracking FPS for each stream."""
@@ -160,7 +172,8 @@ class DualLightApp:
     def get_rgb_image(self):
         ret, frame = self.cam.read()
         if ret and frame is not None:
-            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # The camera returns BGR, but PIL needs RGB, so we convert it.
+            rgb = frame[:, :, ::-1]
             return Image.fromarray(rgb)
         return None
 
