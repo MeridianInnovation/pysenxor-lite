@@ -1,15 +1,19 @@
 import time
 import tkinter as tk
 from tkinter import ttk
-from typing import Callable, List
+from typing import Callable
 
 import numpy as np
-from PIL import Image, ImageOps, ImageTk
+
+try:
+    from PIL import Image, ImageOps, ImageTk
+except ImportError:
+    print("Required packages are not installed.")
+    exit(1)
 
 from senxor import connect_senxor, list_senxor
 from senxor.log import setup_console_logger
 from senxor.proc import normalize
-from senxor.regs import REGS
 
 
 class DeviceControlFrame(ttk.Frame):
@@ -53,7 +57,7 @@ class DeviceControlFrame(ttk.Frame):
         if selected_index >= 0:
             self.on_connect_callback(selected_index)
 
-    def update_device_list(self, devices: List[str]):
+    def update_device_list(self, devices: list[str]):
         """Populates the dropdown with a list of device addresses."""
         self.device_combo["values"] = devices
         if devices:

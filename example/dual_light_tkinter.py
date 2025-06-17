@@ -5,7 +5,12 @@ from tkinter import ttk
 
 import cv2
 import numpy as np
-from PIL import Image, ImageOps, ImageTk
+
+try:
+    from PIL import Image, ImageOps, ImageTk
+except ImportError:
+    print("Required packages are not installed.")
+    exit(1)
 
 import senxor
 from senxor.log import setup_console_logger

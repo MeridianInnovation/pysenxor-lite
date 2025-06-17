@@ -1,7 +1,12 @@
 """A basic example of how to stream frames from a Senxor device and display them in a window using cv2."""
 
-import cv2
 import numpy as np
+
+try:
+    import cv2
+except ImportError:
+    print("Required packages are not installed.")
+    exit(1)
 
 import senxor
 from senxor.log import setup_console_logger
