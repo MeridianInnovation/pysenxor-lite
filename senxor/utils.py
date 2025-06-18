@@ -113,7 +113,7 @@ def connect_senxor(
     if address is None:
         addrs = list_senxor(type, **kwargs)
         if len(addrs) == 0:
-            raise ValueError("No Senxor ports found")
+            raise ValueError("No Senxor device found")
         address = addrs[0]
         type = "serial"
 

@@ -6,7 +6,7 @@ from typing import Any, Literal
 import numpy as np
 from structlog import get_logger
 
-from senxor._error import SenxorReadTimeoutError
+from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
 from senxor._interface import SENXOR_CONNECTION_TYPES
 from senxor.proc import dk_to_celsius, raw_to_frame
 from senxor.regs import REGS
@@ -166,6 +166,8 @@ class Senxor:
             If the frame is not available, return None.
 
         """
+        if not self.is_connected:
+            raise SenxorNotConnectedError
         try:
             resp = self.interface.read(block)
         except SenxorReadTimeoutError as e:
@@ -216,15 +218,13 @@ class Senxor:
         95
 
         """
+        if not self.is_connected:
+            raise SenxorNotConnectedError
         if not isinstance(reg, REGS):
             reg = REGS.from_addr(reg)
         if not reg.readable:
             raise ValueError(f"Register 0x{reg.address:02X} is not readable")
-        try:
-            val = self.interface.read_reg(reg.address)
-        except Exception as e:
-            self._logger.error("read register failed", reg=reg, error=e)
-
+        val = self.interface.read_reg(reg.address)
         self._logger.info("read reg success", reg=reg, value=val)
         self.registers[reg.address] = val
         return val
@@ -255,6 +255,8 @@ class Senxor:
         {177: 0, 178: 0, 179: 0, 180: 0}
 
         """
+        if not self.is_connected:
+            raise SenxorNotConnectedError
         regs_int = []
         for reg_ in regs:
             reg = REGS.from_addr(reg_) if not isinstance(reg_, REGS) else reg_
@@ -263,10 +265,7 @@ class Senxor:
             if reg.address in regs_int:
                 raise ValueError(f"Reg 0x{reg.address:02X} is duplicated in the list: {regs}")
             regs_int.append(reg.address)
-        try:
-            regs_values = self.interface.read_regs(regs_int)
-        except Exception as e:
-            self._logger.error("read multiple registers failed", regs=regs, error=e)
+        regs_values = self.interface.read_regs(regs_int)
 
         self._logger.info("read multiple registers success", regs=regs)
         self.registers.update(regs_values)
@@ -299,6 +298,8 @@ class Senxor:
         >>> senxor.reg_write(0xCA, 0x5F)
 
         """
+        if not self.is_connected:
+            raise SenxorNotConnectedError
         if not isinstance(reg, REGS):
             reg = REGS.from_addr(reg)
         if not reg.writable:
@@ -307,10 +308,7 @@ class Senxor:
         if value < 0 or value > 0xFF:
             raise ValueError(f"Value must be between 0 and 0xFF, got {value}")
 
-        try:
-            self.interface.write_reg(reg.address, value)
-        except Exception as e:
-            self._logger.error("write register failed", reg=reg, value=value, error=e)
+        self.interface.write_reg(reg.address, value)
 
         self._logger.info("write register success", reg=reg, value=value)
         # TODO: Some regs will auto update the value after write.
@@ -334,7 +332,7 @@ class Senxor:
 
         """
         if not self.is_connected:
-            raise ValueError("Device is not connected")
+            raise SenxorNotConnectedError
 
         if self.registers and not refresh:
             return self.registers

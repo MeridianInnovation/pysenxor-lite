@@ -15,6 +15,8 @@ from senxor._error import (
     ChecksumError,
     InvalidAckBodyError,
     InvalidAckHeaderError,
+    Policy,
+    SenxorNotConnectedError,
     SenxorReadTimeoutError,
 )
 from senxor._interface.parser import SenxorMsgParser
@@ -123,7 +125,7 @@ def _rw_op_wrapper(func: Callable) -> Callable:
             try:
                 return func(self, *args, **kwargs)
             except Exception as e:
-                self.error_handler(e, func, args, kwargs)
+                return self.error_handler(e, func, args, kwargs)
 
     return wrapper
 
@@ -175,7 +177,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
             fail_on_checksum_error=fail_on_checksum_error,
         )
         self.port = port
-        self.ser: Serial = None  # type: ignore[assignment]
+        self.ser: Serial = Serial()
         self.name: str | None = None
         self._is_connected: bool = False
 
@@ -201,6 +203,8 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         self._gfra_buffer_timestamp: float = 0.0
 
         self._error_msg_clear_flag: bool = False
+
+        self._init_error_policy()
 
     def open(self) -> None:
         if self._is_connected:
@@ -325,9 +329,9 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
             cmd, ack = self._read_next_msg(max_try_times=self._frame_read_try_times)
         except SenxorReadTimeoutError:
             # If the senxor is not in the stream mode, the read operation will timeout.
-            # In this case, we should return None.
+            # In this case, we should raise the error.
             self._logger.error("read gfra request no data")
-            return None
+            raise
 
         return self.parser._parse_ack_gfra(ack)
 
@@ -529,52 +533,58 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
                 self._clear_error_msg()
         self._logger.debug("boot clear successd")
 
+    def _init_error_policy(self) -> None:
+        self._error_policy: dict[type[Exception], Policy] = {
+            InvalidAckHeaderError: Policy(callback=self._on_ack_error),
+            InvalidAckBodyError: Policy(callback=self._on_ack_error, retry_times=10),
+            SenxorReadTimeoutError: Policy(callback=None, retry_times=0),
+            SerialException: Policy(callback=self._on_lost_connection_error, retry_times=0),
+        }
+
     def error_handler(
         self,
-        e: Exception,
+        err: Exception,
         func: Callable,
         func_args: tuple[Any, ...],
         func_kwargs: dict[str, Any],
-    ) -> None:
-        if isinstance(e, InvalidAckHeaderError):
-            self._handle_invalid_senxor_header(e)
-        elif isinstance(e, InvalidAckBodyError):
-            self._handle_invalid_senxor_msg_body(e)
-        elif isinstance(e, TimeoutError): ...
-        else:
+    ) -> Any:
+        policy = self._error_policy.get(type(err), None)
+
+        if policy is None:
             self._logger.error(
                 "unhandled error",
-                error=str(e),
+                error=str(err),
                 func=func.__name__,
                 func_args=func_args,
                 func_kwargs=func_kwargs,
             )
-            raise e
+            raise err
+        else:
+            if policy.callback is not None:
+                policy.callback(err)
+            retry_times = policy.retry_times
 
-        self._logger.debug(
-            "error handler",
-            error=str(e),
-            func=func.__name__,
-            func_args=func_args,
-            func_kwargs=func_kwargs,
-        )
+        for _ in range(retry_times):
+            try:
+                if hasattr(func, "__self__"):
+                    res = func(*func_args, **func_kwargs)
+                else:
+                    res = func(self, *func_args, **func_kwargs)
+                self._logger.debug("retry success", func=func.__name__)
+                return res
+            except Exception as retry_err:  # noqa: PERF203
+                err = retry_err
+                time.sleep(0.01)
 
-        try:
-            if hasattr(func, "__self__"):
-                res = func(*func_args, **func_kwargs)
-            else:
-                res = func(self, *func_args, **func_kwargs)
-            self._logger.debug("retry success", func=func.__name__)
-            return res
-        except Exception as e:
-            self._logger.debug("retry failed", func=func.__name__)
-            raise e
+        raise err
 
-    def _handle_invalid_senxor_header(self, _):
+    def _on_ack_error(self, _: Exception) -> None:
         self._clear_error_msg()
 
-    def _handle_invalid_senxor_msg_body(self, _):
-        self._clear_error_msg()
+    def _on_lost_connection_error(self, _: Exception) -> None:
+        self._is_connected = False
+        self._logger.error("lost connection")
+        raise SenxorNotConnectedError
 
     def _clear_error_msg(self) -> None:
         """Clear the error ack from the buffer and re-align the buffer to the next msg header."""
