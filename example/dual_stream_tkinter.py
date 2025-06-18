@@ -11,14 +11,12 @@
 
 
 # package command:
-# nuitka example/dual_light_tkinter.py --output-dir=dist/dual_light_tkinter
+# nuitka example/dual_stream_tkinter.py --output-dir=dist/dual_stream_tkinter
 
-# pyinstaller -y -F -p . --collect-data=colormap_tool -i ./assets/icon.ico -n dual_light --distpath dist/dual_light example/dual_light_tkinter.py
+# pyinstaller -y -F -p . --collect-data=colormap_tool -i ./assets/icon.ico -n dual_stream --distpath dist/dual_stream example/dual_stream_tkinter.py
 import time
 import tkinter as tk
-import tkinter.filedialog as filedialog
-import tkinter.messagebox as messagebox
-import tkinter.ttk as ttk
+from tkinter import ttk
 
 import numpy as np
 
@@ -43,12 +41,10 @@ class DualLightApp:
         self.cam = None
 
         self._blank_image = ImageTk.PhotoImage(Image.new("RGB", (1, 1)))
-        self.alignment_file_var = tk.StringVar(value="No alignment file loaded.")
 
         self._setup_ui()
         self._initialize_fps_counters()
         self._refresh_devices()
-        self._auto_connect_devices()
 
         self.update_interval = 20  # ms
         self.poll_images()
@@ -56,7 +52,7 @@ class DualLightApp:
     def _setup_ui(self):
         """Create and arrange all UI elements."""
         self.root.title("Dual Light")
-        self.root.geometry("1400x600")
+        self.root.geometry("1200x600")
         self.root.configure(bg="#f4f4f4")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -74,7 +70,7 @@ class DualLightApp:
 
         # Thermal image
         self.thermal_col = ttk.Frame(img_frame)
-        self.thermal_col.pack(side=tk.LEFT, padx=10, fill=tk.BOTH, expand=True)
+        self.thermal_col.pack(side=tk.LEFT, padx=20, fill=tk.BOTH, expand=True)
         self.thermal_col.pack_propagate(False)
         self.thermal_label = ttk.Label(self.thermal_col)
         self.thermal_label.pack()
@@ -82,39 +78,25 @@ class DualLightApp:
 
         # Separator
         self.sep = ttk.Separator(img_frame, orient=tk.VERTICAL)
-        self.sep.pack(side=tk.LEFT, fill=tk.Y, padx=5)
+        self.sep.pack(side=tk.LEFT, fill=tk.Y, padx=10)
 
         # RGB image
         self.rgb_col = ttk.Frame(img_frame)
-        self.rgb_col.pack(side=tk.LEFT, padx=10, fill=tk.BOTH, expand=True)
+        self.rgb_col.pack(side=tk.LEFT, padx=20, fill=tk.BOTH, expand=True)
         self.rgb_col.pack_propagate(False)
         self.rgb_label = ttk.Label(self.rgb_col)
         self.rgb_label.pack()
         ttk.Label(self.rgb_col, text="RGB Image", font=("Segoe UI", 12)).pack(pady=5)
-
-        # Separator 2 for Fusion
-        self.sep2 = ttk.Separator(img_frame, orient=tk.VERTICAL)
-        self.sep2.pack(side=tk.LEFT, fill=tk.Y, padx=5)
-
-        # Fusion image
-        self.fusion_col = ttk.Frame(img_frame)
-        self.fusion_col.pack(side=tk.LEFT, padx=10, fill=tk.BOTH, expand=True)
-        self.fusion_col.pack_propagate(False)
-        self.fusion_label = ttk.Label(self.fusion_col, image=self._blank_image)  # type: ignore
-        self.fusion_label.pack()
-        ttk.Label(self.fusion_col, text="Fusion Image", font=("Segoe UI", 12)).pack(pady=5)
 
         # --- Controls Frame ---
         controls_frame = ttk.Frame(main_frame)
         controls_frame.pack(side=tk.TOP, fill=tk.X, pady=10)
         controls_frame.columnconfigure(0, weight=1)
         controls_frame.columnconfigure(1, weight=1)
-        controls_frame.columnconfigure(2, weight=1)
 
         # Thermal controls
-        thermal_control_frame = ttk.LabelFrame(controls_frame, text="Thermal Camera", height=80)
-        thermal_control_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
-        thermal_control_frame.grid_propagate(False)
+        thermal_control_frame = ttk.LabelFrame(controls_frame, text="Thermal Camera")
+        thermal_control_frame.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
         thermal_control_frame.columnconfigure(1, weight=1)
 
         ttk.Label(thermal_control_frame, text="Device:").grid(row=0, column=0, padx=(5, 5), sticky="w")
@@ -139,9 +121,8 @@ class DualLightApp:
         self.thermal_disconnect_button.pack(side=tk.LEFT, padx=5)
 
         # RGB controls
-        rgb_control_frame = ttk.LabelFrame(controls_frame, text="RGB Camera", height=80)
-        rgb_control_frame.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
-        rgb_control_frame.grid_propagate(False)
+        rgb_control_frame = ttk.LabelFrame(controls_frame, text="RGB Camera")
+        rgb_control_frame.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
         rgb_control_frame.columnconfigure(1, weight=1)
 
         ttk.Label(rgb_control_frame, text="Device:").grid(row=0, column=0, padx=(5, 5), sticky="w")
@@ -164,23 +145,6 @@ class DualLightApp:
             state=tk.DISABLED,
         )
         self.rgb_disconnect_button.pack(side=tk.LEFT, padx=5)
-
-        # Fusion controls
-        fusion_control_frame = ttk.LabelFrame(controls_frame, text="Fusion Control", height=80)
-        fusion_control_frame.grid(row=0, column=2, padx=10, pady=5, sticky="nsew")
-        fusion_control_frame.grid_propagate(False)
-        fusion_control_frame.columnconfigure(0, weight=1)
-
-        load_button = ttk.Button(
-            fusion_control_frame,
-            text="Load Alignment File",
-            command=self._load_alignment_file,
-        )
-        load_button.grid(row=0, column=0, pady=5, padx=10, sticky="ew")
-
-        file_label = ttk.Label(fusion_control_frame, textvariable=self.alignment_file_var, wraplength=300)
-        file_label.grid(row=1, column=0, pady=5, padx=10, sticky="ew")
-
         # Status bar (two columns)
         self.thermal_status_var = tk.StringVar()
         self.rgb_status_var = tk.StringVar()
@@ -218,9 +182,7 @@ class DualLightApp:
                 self.thermal_connect_button.config(state=tk.DISABLED)
         except Exception as e:
             self.thermal_device_combo.set("Error listing devices")
-            errmsg = f"Error listing thermal devices: {e}"
-            print(errmsg)
-            messagebox.showwarning("Device Scan Error", errmsg)
+            print(f"Error listing thermal devices: {e}")
 
         # RGB
         try:
@@ -234,12 +196,10 @@ class DualLightApp:
                 self.rgb_connect_button.config(state=tk.DISABLED)
         except Exception as e:
             self.rgb_device_combo.set("Error listing devices")
-            errmsg = f"Error listing RGB cameras: {e}"
-            print(errmsg)
-            messagebox.showwarning("Device Scan Error", errmsg)
+            print(f"Error listing RGB cameras: {e}")
 
-    def _connect_thermal(self, auto=False):
-        selected_index = self.thermal_device_combo.current() if not auto else 0
+    def _connect_thermal(self):
+        selected_index = self.thermal_device_combo.current()
         if selected_index < 0:
             return
 
@@ -250,9 +210,7 @@ class DualLightApp:
             self.senxor.start_stream()
             self._set_thermal_connection_state(True)
         except Exception as e:
-            errmsg = f"Failed to connect to thermal camera at {address}: {e}"
-            print(errmsg)
-            messagebox.showwarning("Connection Error", errmsg)
+            print(f"Failed to connect to thermal camera: {e}")
 
     def _disconnect_thermal(self):
         if self.senxor:
@@ -260,9 +218,7 @@ class DualLightApp:
                 self.senxor.stop_stream()
                 self.senxor.close()
             except Exception as e:
-                errmsg = f"Error disconnecting thermal camera: {e}"
-                print(errmsg)
-                messagebox.showwarning("Disconnection Error", errmsg)
+                print(f"Error disconnecting thermal camera: {e}")
             finally:
                 self.senxor = None
                 self._set_thermal_connection_state(False)
@@ -275,28 +231,24 @@ class DualLightApp:
         self.thermal_device_combo.config(state=tk.DISABLED if is_connected else "readonly")
         self.thermal_refresh_button.config(state=tk.DISABLED if is_connected else tk.NORMAL)
 
-    def _connect_rgb(self, auto=False):
-        selected_index = self.rgb_device_combo.current() if not auto else 0
+    def _connect_rgb(self):
+        selected_index = self.rgb_device_combo.current()
         if selected_index < 0:
             return
 
         try:
             self.cam = LiteCamera(selected_index)
-            self._set_rgb_connection_state(True)
             self.cam.setResolution(1280, 720)
+            self._set_rgb_connection_state(True)
         except Exception as e:
-            errmsg = f"Failed to connect to RGB camera (index {selected_index}): {e}"
-            print(errmsg)
-            messagebox.showwarning("Connection Error", errmsg)
+            print(f"Failed to connect to RGB camera: {e}")
 
     def _disconnect_rgb(self):
         if self.cam:
             try:
                 self.cam.release()
             except Exception as e:
-                errmsg = f"Error disconnecting RGB camera: {e}"
-                print(errmsg)
-                messagebox.showwarning("Disconnection Error", errmsg)
+                print(f"Error disconnecting RGB camera: {e}")
             finally:
                 self.cam = None
                 self._set_rgb_connection_state(False)
@@ -308,26 +260,6 @@ class DualLightApp:
         self.rgb_disconnect_button.config(state=tk.NORMAL if is_connected else tk.DISABLED)
         self.rgb_device_combo.config(state=tk.DISABLED if is_connected else "readonly")
         self.rgb_refresh_button.config(state=tk.DISABLED if is_connected else tk.NORMAL)
-
-    def _auto_connect_devices(self):
-        if self.available_thermal_devices:
-            print("Auto-connecting to the first available thermal device...")
-            self._connect_thermal(auto=True)
-
-        if self.available_rgb_cameras:
-            print("Auto-connecting to the first available RGB camera...")
-            self._connect_rgb(auto=True)
-
-    def _load_alignment_file(self):
-        filepath = filedialog.askopenfilename(
-            title="Select Alignment JSON File",
-            filetypes=(("JSON files", "*.json"), ("All files", "*.*")),
-        )
-        if filepath:
-            self.alignment_file_var.set(filepath)
-            # Future: Add logic here to parse the file
-        else:
-            self.alignment_file_var.set("No alignment file loaded.")
 
     def _initialize_fps_counters(self):
         """Initialize variables for tracking FPS for each stream."""
@@ -382,8 +314,9 @@ class DualLightApp:
         if not self.senxor:
             return None
 
-        header, thermal_frame = self.senxor.read(block=False)
-        if thermal_frame is not None:
+        resp = self.senxor.read(block=False)
+        if resp is not None:
+            _, thermal_frame = resp
             thermal_norm = normalize(thermal_frame, dtype=np.uint8)
             return Image.fromarray(thermal_norm)
         return None
