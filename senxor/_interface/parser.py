@@ -189,6 +189,8 @@ class SenxorMsgParser:
         ack = body[SenxorMsgParser.LEN_BODY_CMD :]
 
         try:
+            # When the temperature reaches to 1233.6K, the checksum can parse successfully([12336, 12336] -> 0x0000).
+            # Now senxor can not read such high temperature.
             _ = int(checksum, base=16)
         except ValueError:
             # There is a bug in the senxor.

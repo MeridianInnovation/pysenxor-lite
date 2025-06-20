@@ -158,8 +158,6 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         ----------
         port : str | ListPortInfo
             The port of the device to connect to.
-        auto_open : bool, optional
-            Whether to automatically open the device.
         frame_read_timeout : float, optional
             The timeout for the frame read operation.
         validate_gfra_checksum : bool, optional
@@ -251,12 +249,13 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
         try:
             self.ser.close()
-            self._logger.info("serial port closed")
         except Exception as e:
-            self._logger.exception("error closing serial port", error=str(e))
-            raise e
+            self._logger.warning("error closing serial port", error=str(e))
+
         finally:
             self._is_connected = False
+            self.ser = Serial()  # Empty serial object. It's a good practice to reset the serial object.
+            self._logger.debug("serial port closed")
 
     @property
     def is_connected(self) -> bool | None:
@@ -588,6 +587,8 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
     def _clear_error_msg(self) -> None:
         """Clear the error ack from the buffer and re-align the buffer to the next msg header."""
-        _ = self.ser.read_until(self.parser.MSG_PREFIX)
-        self._error_msg_clear_flag = True
+        data = self.ser.read_until(self.parser.MSG_PREFIX)
+        # Sometimes there is no next ack after the error ack. So we don't need to set the flag.
+        if data.endswith(self.parser.MSG_PREFIX):
+            self._error_msg_clear_flag = True
         self._logger.debug("clear error msg")
