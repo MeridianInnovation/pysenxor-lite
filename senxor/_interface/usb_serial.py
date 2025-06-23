@@ -241,9 +241,9 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
     def close(self) -> None:
         self._logger.info("closing serial port", port=self.port)
-        if self.ser is None or not self._is_connected:
-            self._logger.error("attempting to close unopened port")
-            raise RuntimeError("Port is not open")
+        if not self.is_connected:
+            self._logger.warning("close already closed port", port=self.port)
+            return
 
         try:
             self.ser.close()
