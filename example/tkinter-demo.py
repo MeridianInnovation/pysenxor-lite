@@ -184,10 +184,9 @@ class MainApp:
         if not self.senxor or not self.running:
             return
 
-        resp = self.senxor.read(block=False)
-        if resp:
+        header, thermal_frame = self.senxor.read(block=False)
+        if thermal_frame is not None:
             self.frame_count += 1
-            _, thermal_frame = resp
             thermal_norm = normalize(thermal_frame, dtype=np.uint8)
             pil_image = Image.fromarray(thermal_norm)
             prepared_image = ImageOps.contain(pil_image.convert("RGB"), (500, 500))

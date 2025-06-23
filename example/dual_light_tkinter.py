@@ -313,9 +313,8 @@ class DualLightApp:
         if not self.senxor:
             return None
 
-        resp = self.senxor.read(block=False)
-        if resp is not None:
-            _, thermal_frame = resp
+        header, thermal_frame = self.senxor.read(block=False)
+        if thermal_frame is not None:
             thermal_norm = normalize(thermal_frame, dtype=np.uint8)
             return Image.fromarray(thermal_norm)
         return None

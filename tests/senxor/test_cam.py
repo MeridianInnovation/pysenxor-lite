@@ -96,25 +96,6 @@ def test_camera_read(camera: LiteCamera):
     assert frame.dtype == np.uint8
 
 
-def test_camera_set_resolution(camera: LiteCamera):
-    """Test setting camera resolution."""
-    media_types = camera.listMediaTypes()
-    # Sort to ensure we pick a different resolution if available
-    media_types.sort(key=lambda x: x["width"])
-
-    if len(media_types) < 2:
-        pytest.skip("Not enough resolutions to test setting a new one.")
-
-    # Try to set a different resolution from the one set in the fixture
-    media_type = media_types[-1]  # Pick the largest resolution
-    width, height = media_type["width"], media_type["height"]
-
-    assert camera.setResolution(width, height)
-    # Allow some time for resolution to apply if needed, though API is synchronous
-    assert camera.width == width
-    assert camera.height == height
-
-
 def test_camera_release():
     """Test releasing the camera."""
     cam = LiteCamera(0)

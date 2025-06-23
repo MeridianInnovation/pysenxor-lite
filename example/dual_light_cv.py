@@ -21,9 +21,8 @@ if __name__ == "__main__":
     rgb_image = None
 
     while True:
-        thermal_resp = senxor.read(block=False)
-        if thermal_resp is not None:
-            thermal_header, thermal_raw = thermal_resp
+        thermal_header, thermal_raw = senxor.read(block=False)
+        if thermal_raw is not None:
             thermal_image = normalize(thermal_raw, dtype=np.float32)
             thermal_image = enlarge(thermal_image, 3)
 

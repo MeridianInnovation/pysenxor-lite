@@ -31,13 +31,9 @@ if __name__ == "__main__":
 
         while True:
             # Call the `read` function to get the next frame.
-            resp = dev.read(block=True, celsius=True)
+            header, frame = dev.read(block=True, celsius=True)
 
-            # Even most time the `read` function does not return None,
-            # it's still a good practice to check if the response is None.
-            if resp is not None:
-                header, frame = resp
-
+            if frame is not None:
                 # Let's say we're looking at a typical thermal image where temps are around 20-70°C.
                 # These images can have 500+ distinct values to show tiny temperature differences.
                 # Converting straight to uint8 grayscale (0-255) would cut our detail in half - not great!

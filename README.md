@@ -122,10 +122,9 @@ Once you have connected to the device, you can start the stream and read data fr
 ```python
 dev.start_stream()
 
-resp = dev.read()
+header, frame = dev.read()
 
-if resp is not None:
-    header, frame = resp
+if frame is not None:
     print(f"Frame shape: {frame.shape}, dtype: {frame.dtype}")
     # Output: Frame shape: (120, 160), dtype: float32
 
@@ -147,8 +146,8 @@ The `read` method is default in blocking mode, which means it will wait until a 
 You can set the `block` parameter to `False` to make the `read` method non-blocking.
 
 ```python
-resp = dev.read(block=False)
-if resp is None:
+header, frame = dev.read(block=False)
+if frame is None:
     print("No new frame is available")
 ```
 

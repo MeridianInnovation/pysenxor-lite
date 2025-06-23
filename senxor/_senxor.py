@@ -137,10 +137,10 @@ class Senxor:
         *,
         raw: bool = False,
         celsius: bool = True,
-    ) -> tuple[np.ndarray, np.ndarray] | None:
+    ) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
         """Read the frame data from the senxor, default unit is 1/10 Kelvin, uint16.
 
-        Note: If the device is not in the stream mode, this method will return None after timeout.
+        Note: If the device is not in the stream mode, this method will return (None, None) after timeout.
 
         Parameters
         ----------
@@ -159,11 +159,11 @@ class Senxor:
 
         Returns
         -------
-        tuple[np.ndarray, np.ndarray] | None
+        tuple[np.ndarray, np.ndarray] | tuple[None, None]
             The frame data, as a tuple of two numpy arrays.
             The first array is the header data, the second array is the frame data.
 
-            If the frame is not available, return None.
+            If the frame is not available, return (None, None).
 
         """
         if not self.is_connected:
@@ -176,7 +176,7 @@ class Senxor:
             else:
                 raise e
         if resp is None:
-            return None
+            return None, None
         else:
             header, data = resp
             if celsius:
@@ -333,18 +333,3 @@ class Senxor:
         self.registers.update(self.regs_read(REGS.list_readable_regs()))
         self._logger.info("read all registers success")
         return self.registers
-
-
-if __name__ == "__main__":
-    from senxor.log import setup_console_logger
-
-    setup_console_logger()
-
-    with Senxor("COM5", interface_type="serial") as senxor:
-        senxor.start_stream()
-        resp = senxor.read(block=True)
-        if resp is not None:
-            header, frame = resp
-            print(frame.mean())
-
-        senxor.reg_write(REGS.FRAME_FORMAT, 0b00000001)
