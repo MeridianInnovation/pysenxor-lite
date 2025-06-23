@@ -267,7 +267,7 @@ class Senxor:
             regs_int.append(reg.address)
         regs_values = self.interface.read_regs(regs_int)
 
-        self._logger.info("read multiple registers success", regs=regs)
+        self._logger.info("read regs success")
         self.registers.update(regs_values)
         return regs_values
 
