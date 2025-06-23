@@ -317,13 +317,8 @@ class Senxor:
         self.registers[reg.address] = value
         return value
 
-    def read_all_regs(self, refresh: bool = False) -> dict[int, int]:
+    def read_all_regs(self) -> dict[int, int]:
         """Get all registers and their values.
-
-        Parameters
-        ----------
-        refresh : bool, optional
-            Whether to re-read all registers from the device.
 
         Returns
         -------
@@ -333,9 +328,6 @@ class Senxor:
         """
         if not self.is_connected:
             raise SenxorNotConnectedError
-
-        if self.registers and not refresh:
-            return self.registers
 
         self.registers.clear()
         self.registers.update(self.regs_read(REGS.list_readable_regs()))
