@@ -193,15 +193,14 @@ class SenxorMsgParser:
             # Now senxor can not read such high temperature.
             _ = int(checksum, base=16)
         except ValueError:
-            # There is a bug in the senxor.
-            # the body is shorter than expected, so the msg_body includes the next msg.
-            # try search the next msg header in the body
+            # There is a bug on the windows platform.
+            # the gfra data is shorter than expected, so the msg_body includes the next msg.
             next_msg_header_pos = body.find(SenxorMsgParser.MSG_PREFIX)
             if next_msg_header_pos != -1:
                 err_body_length = next_msg_header_pos - 4
                 expected_body_length = len(body) - 4
                 raise InvalidAckBodyError(
-                    f"length mismatch, expected: {expected_body_length}, actual: {err_body_length}",
+                    f"corrupted data, expected: {expected_body_length}, actual: {err_body_length}",
                 ) from None
             raise InvalidAckBodyError from None
 

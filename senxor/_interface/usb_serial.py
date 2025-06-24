@@ -200,7 +200,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         self._gfra_buffer: bytes = b""
         self._gfra_buffer_timestamp: float = 0.0
 
-        self._error_msg_clear_flag: bool = False
+        self._prefix_read_by_align_op: bool = False
 
         self._init_error_policy()
 
@@ -233,11 +233,9 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
         self.port = port
         self.name = self.ser.name
-        # The timeout for the frame read operation.
-        # The frame read waiting time may be much longer than the w/r regs time.
-        # So, we expect a different timeout for the two operations.
+
         self.set_frame_read_timeout(self.frame_read_timeout)
-        self._boot_clear()
+        self._clear_initial_buffer()
         self._logger = self._logger.bind(port=self.ser.name)
         self._logger.info("serial port opened")
 
@@ -339,7 +337,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         _reg_hex = hex(reg)
         self._logger.debug("read reg request", reg=_reg_hex)
         read_cmd = self.parser._get_rreg_cmd(reg)
-        self._flush_gfra_buffer()
+        self._flush_buffer()
         self.ser.write(read_cmd)
         cmd, ack = self._read_next_msg()
         if cmd == SenxorMsgParser.CMD_GFRA:
@@ -359,7 +357,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         _regs_hex = [hex(r) for r in regs]
         self._logger.debug("read multiple regs request")
         read_cmd = self.parser._get_rrse_cmd(regs)
-        self._flush_gfra_buffer()
+        self._flush_buffer()
         self.ser.write(read_cmd)
         cmd, ack = self._read_next_msg()
         if cmd == SenxorMsgParser.CMD_GFRA:
@@ -377,14 +375,14 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         _reg_hex = hex(reg)
         self._logger.debug("write reg request", reg=_reg_hex, value=value)
         write_cmd = self.parser._get_wreg_cmd(reg, value)
-        self._flush_gfra_buffer()
+        self._flush_buffer()
         self.ser.write(write_cmd)
         cmd, ack = self._read_next_msg()
         if cmd == SenxorMsgParser.CMD_GFRA:
             self.gfra_buffer = ack
             cmd, ack = self._read_next_msg()
         if cmd != SenxorMsgParser.CMD_WREG:
-            self._logger.error("unexpected write reg response", reg=_reg_hex, value=value, cmd=cmd)
+            self._logger.warning("unexpected write reg response", reg=_reg_hex, value=value, cmd=cmd)
             raise RuntimeError("Unexpected Error: The ack of the write_reg is not expected", cmd)
         self.parser._parse_ack_wreg(ack)
         self._logger.debug("write reg success", reg=_reg_hex, value=value)
@@ -427,49 +425,59 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
             Any other exception.
 
         """
-        try_times = 0
+        # pyserial can not set the timeout for each read operation.
+        # We want reg operation to have a short timeout. So it can return the result quickly.
+        # And read frame operation to have a long timeout.
 
-        while try_times < max_try_times:
-            try_times += 1
-            if self._error_msg_clear_flag:
-                # If the msg is corrupted, we need to read until the next msg header to
-                # re-align the buffer. So after re-align, the next msg header only have
-                # the msg_length. e.g. "2808"
-                msg_header = self.ser.read(SenxorMsgParser.LEN_MSG_LENGTH)
-                msg_header = SenxorMsgParser.MSG_PREFIX + msg_header
-                self._error_msg_clear_flag = False
+        for _ in range(max_try_times):
+            if self._prefix_read_by_align_op:
+                # Prefix already read by align operation, read length only
+                msg_length = self.ser.read(SenxorMsgParser.LEN_MSG_LENGTH)
+                msg_header = SenxorMsgParser.MSG_PREFIX + msg_length
+                self._prefix_read_by_align_op = False
             else:
-                # e.g. "   #2808"
+                # Read full header
                 msg_header = self.ser.read(SenxorMsgParser.LEN_MSG_HEADER)
+
+            # The read operation will return "" if the timeout is reached.
+            # We check it and break the loop.
             if msg_header != b"":
                 break
-            if try_times == max_try_times:
-                self._logger.error("read next msg timeout", try_times=try_times)
-                raise SenxorReadTimeoutError
+        else:
+            self._logger.error("read next msg timeout", try_times=max_try_times)
+            raise SenxorReadTimeoutError
 
+        # This case should not happen, but we check it for safety.
         if len(msg_header) != SenxorMsgParser.LEN_MSG_HEADER:
-            self._logger.error("invalid ack header length", length=len(msg_header))
-            raise RuntimeError("Unexpected Error: msg_header length is not expected")
-        if not msg_header.startswith(SenxorMsgParser.MSG_PREFIX):
-            self._logger.error("invalid ack header", header=str(msg_header))
+            self._logger.error("corrupted ack header length", length=len(msg_header))
             raise InvalidAckHeaderError(msg_header)
 
+        # This case can happen when the buffer is not aligned.
+        if not msg_header.startswith(SenxorMsgParser.MSG_PREFIX):
+            self._logger.error("corrupted ack header", header=str(msg_header))
+            raise InvalidAckHeaderError(msg_header)
+
+        # Parse the msg length.
         msg_length_str = msg_header[SenxorMsgParser.LEN_MSG_PREFIX :]
         msg_length = SenxorMsgParser._parse_msg_length(msg_length_str)
+
+        # Read the msg body.
         msg_body = self.ser.read(msg_length)
 
+        # This case should not happen, but we check it for safety.
+        # This can only occurred by transmission interruption.
         if len(msg_body) != msg_length:
-            # May happen when the physically read timeout.
-            # For now we don't observe this error.
-            self._logger.error("ack body length mismatch", expected=msg_length, actual=len(msg_body))
-            raise RuntimeError("Unexpected Error: msg_body length is not expected")
+            self._logger.error("can't read full msg", expected=msg_length, actual=len(msg_body))
+            raise InvalidAckBodyError("can't read full msg because unknown error")
 
+        # Parse the msg body.
         try:
             cmd, ack, checksum = SenxorMsgParser._parse_msg_body(msg_body)
         except InvalidAckBodyError as e:
-            self._logger.error("invalid ack body", error=str(e))
+            self._logger.error("corrupted ack body", error=str(e))
             raise
 
+        # Validate the checksum.
         if cmd != SenxorMsgParser.CMD_GFRA or self.validate_gfra_checksum:
             # Note: The checksum includes the msg_length_str.
             to_check = msg_length_str + msg_body[: -SenxorMsgParser.LEN_BODY_CHECKSUM]
@@ -482,23 +490,49 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
                     actual=e.message_checksum,
                 )
                 raise
-        # self._logger.debug("read next msg success", cmd=cmd)
 
+        # Return the cmd and ack.
         return cmd, ack
 
-    def _flush_gfra_buffer(self) -> None:
-        # If there is one or more GFRA ack in the buffer, clear them before write to the port
-        #  to avoid the serial error.
-
+    def _flush_buffer(self) -> None:
+        """Flush the input buffer. Clear all the ack in the buffer."""
         ack = None
         while self.ser.in_waiting > 0:
             cmd, ack = self._read_next_msg()
-            self._logger.debug("flush gfra buffer", in_waiting=self.ser.in_waiting)
-            if cmd != SenxorMsgParser.CMD_GFRA:
-                self._logger.error("unexpected non gfra ack during flush", cmd=cmd)
-                raise RuntimeError("Unexpected Error: Unparsed non-GFRA ack in the buffer")
-        if ack is not None:
-            self.gfra_buffer = ack
+            self._logger.debug("flush buffer", in_waiting=self.ser.in_waiting)
+            # There should only gfra ack in the buffer.
+            if cmd == SenxorMsgParser.CMD_GFRA:
+                self.gfra_buffer = ack
+            # Very rare cases, when we open the serial port, there are no-gfra ack in the buffer.
+            else:
+                self._logger.warning("unexpected non gfra ack during flush", cmd=cmd)
+
+    def _align_buffer(self) -> None:
+        """Clear the error ack from the buffer and align the buffer to the next msg header."""
+        # Waiting a little to make sure the buffer is updated.
+        time.sleep(0.01)
+        # Case 0: Buffer is empty. Aligned.
+        if self.ser.in_waiting == 0:
+            return
+        err_ack = self.ser.read_until(SenxorMsgParser.MSG_PREFIX)
+        # Case 1: Find next ack's prefix. Aligned.
+        # `read_until` return error_ack + next ack's prefix.
+        if err_ack.endswith(SenxorMsgParser.MSG_PREFIX):
+            self._prefix_read_by_align_op = True
+        # Case 2: Only one misaligned ack in the buffer.
+        # `read_util` first read it out, and then the buffer is empty.
+        # `read_until` will timeout and return only the error_ack.
+        else:
+            self._prefix_read_by_align_op = False
+        self._logger.debug("buffer aligned")
+
+    @_rw_op_wrapper
+    def _clear_initial_buffer(self) -> None:
+        """Align and clear the initial buffer when the serial port is opened."""
+        # First align the buffer.
+        self._align_buffer()
+        # Then flush the buffer. Clear all outdated acks.
+        self._flush_buffer()
 
     @property
     def gfra_buffer(self) -> bytes:
@@ -508,29 +542,6 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
     def gfra_buffer(self, value: bytes) -> None:
         self._gfra_buffer = value
         self._gfra_buffer_timestamp = time.time()
-
-    @_rw_op_wrapper
-    def _boot_clear(self) -> None:
-        stop_stream = False
-        if stop_stream:
-            STOP_STREAM_CMD = self.parser._get_wreg_cmd(0xB1, 0b00000000)
-            STOP_STREAM_ACK = b"   #0008WREG01FD"
-            # If the senxor is in streaming mode when the port is opened,
-            # the unaligned data will be written to the buffer.
-            # Which will occur the error in booting.
-
-            # This function try to clear the buffer and stop the streaming mode.
-            self.ser.reset_input_buffer()
-            self.ser.write(STOP_STREAM_CMD)
-            timeout = self.ser.timeout
-            self.ser.timeout = self._frame_read_timeout
-            self.ser.read_until(STOP_STREAM_ACK)
-            self.ser.timeout = timeout
-        else:
-            time.sleep(0.01)
-            if self.ser.in_waiting > 0:
-                self._clear_error_msg()
-        self._logger.debug("boot clear successd")
 
     def _init_error_policy(self) -> None:
         self._error_policy: dict[type[Exception], Policy] = {
@@ -578,17 +589,9 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         raise err
 
     def _on_ack_error(self, _: Exception) -> None:
-        self._clear_error_msg()
+        self._align_buffer()
 
     def _on_lost_connection_error(self, _: Exception) -> None:
         self._is_connected = False
         self._logger.error("lost connection")
         raise SenxorNotConnectedError
-
-    def _clear_error_msg(self) -> None:
-        """Clear the error ack from the buffer and re-align the buffer to the next msg header."""
-        data = self.ser.read_until(self.parser.MSG_PREFIX)
-        # Sometimes there is no next ack after the error ack. So we don't need to set the flag.
-        if data.endswith(self.parser.MSG_PREFIX):
-            self._error_msg_clear_flag = True
-        self._logger.debug("clear error msg")
