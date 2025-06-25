@@ -9,20 +9,23 @@ from structlog import get_logger
 
 from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
 from senxor._interface import SENXOR_CONNECTION_TYPES
+from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
 from senxor.proc import dk_to_celsius, raw_to_frame
 from senxor.regs import REGS
 
 logger = get_logger("senxor")
 
 
-class _RegisterDict(dict):
+class _RegisterDict(dict[int, int]):
     def __init__(self, senxor: Senxor):
         super().__init__()
         self.senxor = senxor
 
-    def __getitem__(self, key):
-        if not isinstance(key, int):
-            raise TypeError(f"Invalid key type: {type(key)}, expected int")
+    def __getitem__(self, key: int | REGS) -> int:
+        if isinstance(key, REGS):
+            key = key.address
+        elif not isinstance(key, int):
+            raise TypeError(f"Invalid key type: {type(key)}, expected int or REGS")
         if key not in self:
             value = self.senxor.reg_read(key)
             self[key] = value
@@ -91,7 +94,7 @@ class Senxor:
         self.get_status_on_connect = get_status_on_connect
         self.stop_stream_on_connect = stop_stream_on_connect
 
-        self.registers: dict[int, int] = _RegisterDict(self)
+        self.registers: _RegisterDict = _RegisterDict(self)
 
         if auto_open:
             self.open()
@@ -373,3 +376,19 @@ class Senxor:
         self.registers.update(self.regs_read(REGS.list_readable_regs()))
         self._logger.info("read all registers success")
         return self.registers
+
+    def get_shape(self) -> tuple[int, int]:
+        """Get the frame shape(height, width) of the senxor.
+
+        Returns
+        -------
+        tuple[int, int]
+            The frame shape(height, width) of the senxor.
+
+        """
+        # Although the frame shape depends on the senxor type, but the internal implementation of `read` method
+        # do not rely on this method.
+
+        senxor_type = self.registers[REGS.SENXOR_TYPE]
+        frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
+        return frame_shape
