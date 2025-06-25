@@ -466,6 +466,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
         # This case should not happen, but we check it for safety.
         # This can only occurred by transmission interruption.
+        # We found that unplugging the cable slowly can cause this error.
         if len(msg_body) != msg_length:
             self._logger.error("can't read full msg", expected=msg_length, actual=len(msg_body))
             raise InvalidAckBodyError("can't read full msg because unknown error")
@@ -586,7 +587,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
                 err = retry_err
                 time.sleep(0.01)
 
-        raise err
+        raise err from None
 
     def _on_ack_error(self, _: Exception) -> None:
         self._align_buffer()

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import time
 from typing import Any, Literal
 
@@ -101,7 +102,9 @@ class Senxor:
     def close(self):
         if not self.is_connected:
             return
-        self.stop_stream()
+        with contextlib.suppress(SenxorNotConnectedError):
+            self.stop_stream()
+
         self._logger.info("closing senxor")
         self.interface.close()
         self._logger.info("close senxor success")
