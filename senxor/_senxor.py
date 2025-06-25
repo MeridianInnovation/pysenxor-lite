@@ -35,11 +35,33 @@ class Senxor:
         address: Any,
         interface_type: Literal["serial"] | None = None,
         auto_open: bool = True,
-        read_frame_mode: bool = True,
         stop_stream_on_connect: bool = True,
         get_status_on_connect: bool = True,
         **kwargs,
     ):
+        """Initialize the senxor.
+
+        Parameters
+        ----------
+        address : Any
+            The address of the senxor.
+        interface_type : Literal["serial"] | None, optional
+            The type of the interface, by default None.
+        auto_open : bool, optional
+            Whether to open the senxor automatically, by default True.
+        stop_stream_on_connect : bool, optional
+            Whether to stop the stream automatically on connect, by default True.
+        get_status_on_connect : bool, optional
+            Whether to get the status of the senxor automatically on connect, by default True.
+        kwargs : Any
+            The extra keyword arguments for the interface.
+
+        Raises
+        ------
+        ValueError
+            If the address is not valid for any of the supported types.
+
+        """
         logger.info(
             "init Senxor",
             address=address,
@@ -68,7 +90,6 @@ class Senxor:
         self.interface = SENXOR_CONNECTION_TYPES[interface_type](address, **kwargs)  # type: ignore[call-arg]
         self.get_status_on_connect = get_status_on_connect
         self.stop_stream_on_connect = stop_stream_on_connect
-        self.read_frame_mode = read_frame_mode
 
         self.registers: dict[int, int] = _RegisterDict(self)
 
@@ -83,6 +104,7 @@ class Senxor:
         return False
 
     def open(self):
+        """Open the senxor. If the senxor is already connected, do nothing."""
         if self.is_connected:
             return
 
@@ -100,6 +122,7 @@ class Senxor:
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
 
     def close(self):
+        """Close the senxor. If the senxor is not connected, do nothing."""
         if not self.is_connected:
             return
         with contextlib.suppress(SenxorNotConnectedError):
@@ -125,11 +148,13 @@ class Senxor:
         return self.interface.address
 
     def start_stream(self):
+        """Start the stream mode."""
         # TODO: Replace the implementation with senxor.fields
         self.reg_write(REGS.FRAME_MODE, 0b00000010)
         self._logger.info("start stream")
 
     def stop_stream(self):
+        """Stop the stream mode."""
         # TODO: Replace the implementation with senxor.fields
         self.reg_write(REGS.FRAME_MODE, 0b00000000)
         self._logger.info("stop stream")
@@ -141,9 +166,12 @@ class Senxor:
         raw: bool = False,
         celsius: bool = True,
     ) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
-        """Read the frame data from the senxor, default unit is 1/10 Kelvin, uint16.
+        """Read the frame data from the senxor, return (header: np.ndarray[uint16], frame: np.ndarray).
 
-        Note: If the device is not in the stream mode, this method will return (None, None) after timeout.
+        The header is a 1D numpy array of uint16, check documentation for more details.
+        The frame depends on the `raw` and `celsius` parameters.
+        By default, the frame is a numpy array with shape (height, width), dtype is float32, each element means the
+        temperature in Celsius.
 
         Parameters
         ----------
@@ -166,7 +194,16 @@ class Senxor:
             The frame data, as a tuple of two numpy arrays.
             The first array is the header data, the second array is the frame data.
 
-            If the frame is not available, return (None, None).
+            If `block=False` and no frame is available, return (None, None).
+
+        Raises
+        ------
+        SenxorNotConnectedError
+            If the senxor is not connected.
+        RuntimeError
+            If the senxor is not in the stream mode or single capture mode.
+        SenxorReadTimeoutError
+            If the read operation timeout due to other reasons.
 
         """
         if not self.is_connected:
