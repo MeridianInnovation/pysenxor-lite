@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
 from senxor._senxor import Senxor
-from senxor.cam import LiteCamera, LiteWindow, list_camera
+from senxor.cam import LiteCamera, list_camera
 
 # To compatible with the old version
 from senxor.proc import remap
@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 __all__ = [
     "LiteCamera",
-    "LiteWindow",
     "connect_senxor",
     "is_senxor_usb",
     "list_camera",

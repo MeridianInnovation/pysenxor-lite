@@ -7,7 +7,7 @@ import pytest
 # Skip all tests in this module if senxor.cam or its dependencies are not available,
 # or if no cameras are found.
 try:
-    from senxor.cam import LiteCamera, LiteWindow, _litecam_imported, list_camera
+    from senxor.cam import LiteCamera, _litecam_imported, list_camera
 
     _no_camera = not list_camera()
 except (ImportError, RuntimeError):
@@ -102,69 +102,3 @@ def test_camera_release():
     assert cam.isOpened()
     cam.release()
     assert not cam.isOpened()
-
-
-@pytest.mark.gui
-class TestLiteWindow:
-    """Tests for the LiteWindow class. Marked as 'gui' as they may require a display."""
-
-    @pytest.fixture
-    def window(self):
-        """Fixture to create a LiteWindow."""
-        return LiteWindow("Test Window", 640, 480)
-
-    def test_window_init(self, window: LiteWindow):
-        """Test LiteWindow initialization."""
-        assert window.window is not None
-
-    def test_show_valid_frame(self, window: LiteWindow):
-        """Test showing a valid frame without errors."""
-        frame = np.zeros((480, 640, 3), dtype=np.uint8)
-        try:
-            window.show(frame)
-        except Exception as e:
-            pytest.fail(f"window.show() raised an exception with valid input: {e}")
-
-    def test_show_invalid_frame_raises(self, window: LiteWindow):
-        """Test that showing an invalid frame raises appropriate errors."""
-        with pytest.raises(TypeError):
-            window.show("not a numpy array")  # type: ignore
-
-        with pytest.raises(ValueError):
-            window.show(np.zeros((480, 640)))  # 2D array, not 3D
-
-        with pytest.raises(ValueError):
-            window.show(np.zeros((480, 640, 4), dtype=np.uint8))  # 4 channels
-
-    def test_wait_key_validation(self, window: LiteWindow):
-        """Test input validation for the waitKey method."""
-        with pytest.raises(ValueError):
-            window.waitKey("qq")  # Too long
-        with pytest.raises(ValueError):
-            window.waitKey("")  # Too short
-        with pytest.raises(ValueError):
-            window.waitKey(123)  # type: ignore # Wrong type
-
-    def test_draw_methods(self, window: LiteWindow):
-        """Test drawing methods to ensure they run without exceptions."""
-        # Create a blank frame to draw on
-        frame = np.zeros((480, 640, 3), dtype=np.uint8)
-        window.show(frame)
-
-        # Test drawContour
-        contour_points = [(100, 100), (200, 100), (150, 200)]
-        try:
-            window.drawContour(contour_points)
-        except Exception as e:
-            pytest.fail(f"window.drawContour() raised an exception: {e}")
-
-        # Test drawText
-        try:
-            window.drawText("Hello", (50, 50), 2, (255, 255, 255))
-        except Exception as e:
-            pytest.fail(f"window.drawText() raised an exception: {e}")
-
-        # A minimal wait to allow drawing to be processed, though it might not be needed
-        # This is hard to test automatically without a display.
-        # We are mainly checking that the calls don't crash.
-        window.waitKey("a")  # Should continue if 'a' is not pressed
