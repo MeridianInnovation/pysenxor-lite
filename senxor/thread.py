@@ -201,43 +201,36 @@ class SenxorThread:
 
     def __init__(
         self,
-        address: Any,
-        interface_type: Literal["serial"] | None = None,
+        senxor: Senxor,
         *,
         frame_unit: Literal["C", "dK"] = "C",
         allow_listener: bool = True,
-        **kwargs,
     ) -> None:
         """Initialize the SenxorThread.
 
         Parameters
         ----------
-        address : Any
-            The address of the Senxor device.
-        interface_type : {"serial"}, optional
-            The type of interface to use.
+        senxor : Senxor
+            A Senxor instance.
         frame_unit : {"C", "dK"}, default "C"
             The unit of the frame data. "C" for Celsius (float32), "dK" for
             deci-Kelvin (uint16).
         allow_listener : bool, optional
             Whether to enable the listener pattern. Defaults to True.
-        **kwargs
-            Additional keyword arguments to pass to the Senxor constructor.
 
         Notes
         -----
             Listener functions **must** be extremely lightweight and non-blocking.
             If a listener function takes too long to execute, the `BackgroundReader`
-            will raise a `ListenerNotificationError` in the reading thread when the
+            will raise a `TimeoutError` in the reading thread when the
             next frame arrives. This strict policy ensures that listener notifications
             do not fall behind the sensor's frame rate.
 
         """
         self._started = False
-        self._senxor = Senxor(address, interface_type, **kwargs)
+        self._senxor = senxor
         self._celsius = frame_unit == "C"
         self._reader = _BackgroundReader(self._read_senxor, self._senxor.address, allow_listener=allow_listener)
-        self._started = False
         self._log = logger.bind(address=self._senxor.address)
 
     def read(self) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
@@ -273,7 +266,7 @@ class SenxorThread:
         -----
             Listener functions **must** be extremely lightweight and non-blocking.
             If a listener function takes too long to execute, the `BackgroundReader`
-            will raise a `ListenerNotificationError` in the reading thread when the
+            will raise a `TimeoutError` in the reading thread when the
             next frame arrives. This strict policy ensures that listener notifications
             do not fall behind the sensor's frame rate.
 
@@ -309,8 +302,6 @@ class SenxorThread:
             return
         with contextlib.suppress(Exception):
             self._reader.stop()
-        with contextlib.suppress(Exception):
-            self._senxor.stop_stream()
         with contextlib.suppress(Exception):
             self._senxor.close()
         self._started = False
@@ -348,7 +339,7 @@ class LiteCamThread:
 
     def __init__(
         self,
-        camera_index: int,
+        camera: LiteCamera,
         *,
         allow_listener: bool = True,
     ) -> None:
@@ -356,8 +347,8 @@ class LiteCamThread:
 
         Parameters
         ----------
-        camera_index : int
-            The index of the camera to open.
+        camera : LiteCamera
+            A LiteCamera instance.
         allow_listener : bool, default True
             Whether to enable the listener pattern.
 
@@ -371,13 +362,14 @@ class LiteCamThread:
 
         """
         self._started = False
-        self.camera_index = camera_index
+        self.camera = camera
+        self.camera_index = camera.index
         self._reader = _BackgroundReader(
             self._read_camera,
-            f"Camera{camera_index}",
+            f"Camera{self.camera_index}",
             allow_listener=allow_listener,
         )
-        self._log = logger.bind(camera_index=camera_index)
+        self._log = logger.bind(camera_index=self.camera_index)
 
     def read(self) -> tuple[bool, np.ndarray] | tuple[False, None]:
         """Return the newest frame and consume it.
@@ -440,14 +432,13 @@ class LiteCamThread:
         if self._started:
             return
         try:
-            self.camera = LiteCamera(self.camera_index)
+            self.camera.open()
             self._reader.start()
             self._started = True
             self._log.info("camera thread started", width=self.camera.width, height=self.camera.height)
         except Exception as exc:
             with contextlib.suppress(Exception):
-                if self.camera:
-                    self.camera.release()
+                self.camera.release()
             self._log.error("camera thread start failed", exc_info=exc)
             raise
 
@@ -458,13 +449,12 @@ class LiteCamThread:
         with contextlib.suppress(Exception):
             self._reader.stop()
         with contextlib.suppress(Exception):
-            if self.camera:
-                self.camera.release()
+            self.camera.release()
         self._started = False
         self._log.info("camera thread stopped")
 
     def _read_camera(self) -> tuple[bool, np.ndarray] | None:
-        if not self.camera or not self.camera.is_open:
+        if not self.camera.is_open:
             return None
 
         success, frame = self.camera.read()
@@ -476,21 +466,17 @@ class LiteCamThread:
     @property
     def width(self) -> int:
         """Get the width of the camera frame."""
-        if not self.camera:
-            raise RuntimeError("Camera not initialized")
         return self.camera.width
 
     @property
     def height(self) -> int:
         """Get the height of the camera frame."""
-        if not self.camera:
-            raise RuntimeError("Camera not initialized")
         return self.camera.height
 
     @property
     def is_open(self) -> bool:
         """Check if the camera is open."""
-        return self.camera is not None and self.camera.is_open
+        return self.camera.is_open
 
     def __enter__(self):
         self.start()

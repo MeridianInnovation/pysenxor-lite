@@ -12,7 +12,7 @@ import time
 
 import numpy as np
 
-from senxor import list_senxor
+from senxor import Senxor, list_senxor
 from senxor.thread import SenxorThread
 
 
@@ -30,7 +30,8 @@ def main():
 
     try:
         # Create and start a SenxorThread instance using context manager
-        with SenxorThread(address, frame_unit="C") as senxor_thread:
+        senx = Senxor(address)
+        with SenxorThread(senx, frame_unit="C") as senxor_thread:
             print(f"Started streaming from {address}. Press Ctrl+C to stop.")
 
             # Track frame statistics

@@ -138,7 +138,7 @@ from tkinter.messagebox import showerror
 
 import numpy as np
 
-from senxor import list_senxor
+from senxor import Senxor, list_senxor
 from senxor.thread import SenxorThread
 
 
@@ -366,7 +366,8 @@ class SenxorController:
 
         try:
             # Create and initialize the device model (SenxorThread)
-            self.thermal_model = SenxorThread(address, frame_unit="C")
+            self.senxor = Senxor(address)
+            self.thermal_model = SenxorThread(self.senxor, frame_unit="C")
 
             # Add listener for frame updates
             self.thermal_model.add_listener(self._frame_listener, "temp_listener")
