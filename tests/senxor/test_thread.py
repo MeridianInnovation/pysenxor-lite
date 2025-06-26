@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import pytest
 
-from senxor.thread import SenxorThread, _BackgroundReader
+from senxor.thread import LiteCamThread, SenxorThread, _BackgroundReader
 
 
 class TestBackgroundReader:
@@ -365,4 +365,184 @@ class TestSenxorThread:
         """Test that __del__ calls stop."""
         with patch.object(senxor_thread, "stop") as mock_stop:
             senxor_thread.__del__()
+            mock_stop.assert_called_once()
+
+
+class TestLiteCamThread:
+    @pytest.fixture
+    def mock_lite_camera(self):
+        """Create a mock LiteCamera instance."""
+        with patch("senxor.thread.LiteCamera") as mock_camera_cls:
+            # Create a mock instance
+            mock_instance = mock_camera_cls.return_value
+
+            # Configure the mock to return test data
+            frame = np.ones((480, 640, 3), dtype=np.uint8)
+            mock_instance.read.return_value = (True, frame)
+            mock_instance.width = 640
+            mock_instance.height = 480
+            mock_instance.is_open = True
+
+            yield mock_instance
+
+    @pytest.fixture
+    def camera_thread(self, mock_lite_camera):
+        """Create a LiteCamThread instance with a mock LiteCamera."""
+        thread = LiteCamThread(0)
+        yield thread
+        # Ensure cleanup
+        if thread._started:
+            thread.stop()
+
+    def test_init(self):
+        """Test that LiteCamThread initializes correctly."""
+        with patch("senxor.thread.LiteCamera"):
+            # Test with default parameters
+            thread = LiteCamThread(0)
+            assert thread.camera_index == 0
+            assert thread._started is False
+            assert thread.camera is None
+
+            # Test with custom parameters
+            thread = LiteCamThread(1, allow_listener=False)
+            assert thread.camera_index == 1
+            assert thread._reader._allow_listener is False
+
+    def test_read(self, camera_thread):
+        """Test that read returns the correct data."""
+        # Test when no data is available
+        with patch.object(camera_thread._reader, "read", return_value=None):
+            success, frame = camera_thread.read()
+            assert success is False
+            assert frame is None
+
+        # Test when data is available
+        test_frame = np.ones((480, 640, 3), dtype=np.uint8)
+        with patch.object(camera_thread._reader, "read", return_value=(True, test_frame)):
+            success, frame = camera_thread.read()
+            assert success is True
+            assert np.array_equal(frame, test_frame)
+
+    def test_start_stop(self, camera_thread, mock_lite_camera):
+        """Test that the thread starts and stops correctly."""
+        # Test start
+        with patch.object(camera_thread._reader, "start") as mock_reader_start:
+            camera_thread.start()
+            assert camera_thread._started is True
+            assert camera_thread._camera is mock_lite_camera
+            mock_reader_start.assert_called_once()
+            mock_lite_camera.release.assert_not_called()
+
+        # Test idempotent start
+        with patch.object(camera_thread._reader, "start") as mock_reader_start:
+            camera_thread.start()  # Should not create new camera
+            assert camera_thread._started is True
+            mock_reader_start.assert_not_called()
+
+        # Test stop
+        with patch.object(camera_thread._reader, "stop") as mock_reader_stop:
+            camera_thread.stop()
+            assert camera_thread._started is False
+            mock_reader_stop.assert_called_once()
+            mock_lite_camera.release.assert_called_once()
+
+        # Test idempotent stop
+        with patch.object(camera_thread._reader, "stop") as mock_reader_stop:
+            camera_thread.stop()  # Should not raise errors
+            assert camera_thread._started is False
+            mock_reader_stop.assert_not_called()
+
+    def test_start_error_handling(self, camera_thread):
+        """Test error handling during start."""
+        with patch("senxor.thread.LiteCamera", side_effect=RuntimeError("Camera error")):
+            with pytest.raises(RuntimeError, match="Camera error"):
+                camera_thread.start()
+            assert camera_thread._started is False
+            assert camera_thread._camera is None
+
+    def test_stop_error_suppression(self, camera_thread, mock_lite_camera):
+        """Test that errors are suppressed during stop."""
+        camera_thread.start()
+        mock_lite_camera.release.side_effect = RuntimeError("Release error")
+
+        # Should not raise an exception
+        camera_thread.stop()
+        assert camera_thread._started is False
+
+    def test_read_camera(self, camera_thread, mock_lite_camera):
+        """Test the _read_camera method."""
+        camera_thread.start()
+
+        # Test normal read
+        test_frame = np.ones((480, 640, 3), dtype=np.uint8)
+        mock_lite_camera.read.return_value = (True, test_frame)
+        result = camera_thread._read_camera()
+        assert result is not None
+        assert result[0] is True
+        assert np.array_equal(result[1], test_frame)
+
+        # Test failed read
+        mock_lite_camera.read.return_value = (False, None)
+        result = camera_thread._read_camera()
+        assert result is None
+
+        # Test camera not open
+        mock_lite_camera.is_open = False
+        result = camera_thread._read_camera()
+        assert result is None
+
+    def test_properties(self, camera_thread, mock_lite_camera):
+        """Test the width, height, and is_open properties."""
+        # Test before camera is initialized
+        with pytest.raises(RuntimeError, match="Camera not initialized"):
+            _ = camera_thread.width
+
+        with pytest.raises(RuntimeError, match="Camera not initialized"):
+            _ = camera_thread.height
+
+        assert camera_thread.is_open is False
+
+        # Test after camera is initialized
+        camera_thread.start()
+        assert camera_thread.width == 640
+        assert camera_thread.height == 480
+        assert camera_thread.is_open is True
+
+    def test_add_remove_listener(self, camera_thread):
+        """Test adding and removing listeners."""
+        listener = MagicMock()
+
+        with patch.object(camera_thread._reader, "add_listener") as mock_add:
+            mock_add.return_value = "test_listener"
+            result = camera_thread.add_listener(listener, "test_listener")
+            assert result == "test_listener"
+            adapter_fn = mock_add.call_args[0][0]
+            test_data = (True, np.ones((10, 10, 3)))
+            adapter_fn(test_data)
+            assert listener.call_count == 1
+            call_args = listener.call_args[0]
+            assert call_args[0] is True
+            assert np.array_equal(call_args[1], np.ones((10, 10, 3)))
+
+        with patch.object(camera_thread._reader, "remove_listener") as mock_remove:
+            camera_thread.remove_listener("test_listener")
+            mock_remove.assert_called_once_with("test_listener")
+
+    def test_context_manager(self, camera_thread):
+        """Test using LiteCamThread as a context manager."""
+        with patch.object(camera_thread, "start") as mock_start:
+            with patch.object(camera_thread, "stop") as mock_stop:
+                with camera_thread:
+                    mock_start.assert_called_once()
+
+                mock_stop.assert_called_once()
+
+    def test_repr(self, camera_thread):
+        """Test the __repr__ method."""
+        assert repr(camera_thread) == "LiteCamThread(camera_index=0)"
+
+    def test_del(self, camera_thread):
+        """Test that __del__ calls stop."""
+        with patch.object(camera_thread, "stop") as mock_stop:
+            camera_thread.__del__()
             mock_stop.assert_called_once()

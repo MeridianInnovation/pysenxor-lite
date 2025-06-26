@@ -9,6 +9,7 @@ import numpy as np
 from structlog import get_logger
 
 from senxor import Senxor
+from senxor.cam import LiteCamera
 
 logger = get_logger("senxor.thread")
 
@@ -334,3 +335,171 @@ class SenxorThread:
 
     def __repr__(self) -> str:
         return f"SenxorThread(addr={self._senxor.address!r})"
+
+
+class LiteCamThread:
+    """A threaded wrapper for LiteCamera for non-blocking reads with a listener pattern.
+
+    This class continuously reads frames from a camera in a background thread.
+    It implements a "consume-on-read" pattern for its `read()` method and provides
+    a listener interface for push-based notifications.
+    """
+
+    def __init__(
+        self,
+        camera_index: int,
+        *,
+        allow_listener: bool = True,
+    ) -> None:
+        """Initialize the LiteCamThread.
+
+        Parameters
+        ----------
+        camera_index : int
+            The index of the camera to open.
+        allow_listener : bool, default True
+            Whether to enable the listener pattern.
+
+        Notes
+        -----
+        Listener functions **must** be extremely lightweight and non-blocking.
+        If a listener function takes too long to execute, the `_BackgroundReader`
+        will raise a `TimeoutError` in the reading thread when the
+        next frame arrives. This strict policy ensures that listener notifications
+        do not fall behind the camera's frame rate.
+
+        """
+        self.camera_index = camera_index
+        self._reader = _BackgroundReader(
+            self._read_camera,
+            f"Camera{camera_index}",
+            allow_listener=allow_listener,
+        )
+        self._started = False
+        self._log = logger.bind(camera_index=camera_index)
+
+    def read(self) -> tuple[bool, np.ndarray] | tuple[False, None]:
+        """Return the newest frame and consume it.
+
+        Returns
+        -------
+        tuple[bool, np.ndarray] or tuple[False, None]
+            A tuple containing a boolean indicating success and the frame data,
+            or (False, None) if no new frame is available.
+
+        """
+        data = self._reader.read()
+        if data is None:
+            return False, None
+        else:
+            return data
+
+    def add_listener(
+        self,
+        fn: Callable[[bool, np.ndarray], None],
+        name: str | None = None,
+    ) -> str:
+        """Register a listener called with ``(success, frame)`` tuple.
+
+        Parameters
+        ----------
+        fn
+            Callable invoked with the latest frame. **Must be
+            lightweight and non-blocking**.
+        name
+            Optional unique identifier. If omitted, an automatic ``listener_X``
+            name is assigned.
+
+        Returns
+        -------
+        str
+            The listener name actually registered.
+
+        Notes
+        -----
+        Listener functions **must** be extremely lightweight and non-blocking.
+        If a listener function takes too long to execute, the `_BackgroundReader`
+        will raise a `TimeoutError` in the reading thread when the
+        next frame arrives. This strict policy ensures that listener notifications
+        do not fall behind the camera's frame rate.
+
+        """
+
+        def adapter(data):
+            return fn(*data) if data is not None else None
+
+        return self._reader.add_listener(adapter, name)
+
+    def remove_listener(self, name: str) -> None:
+        """Remove a previously registered listener by *name*."""
+        self._reader.remove_listener(name)
+
+    def start(self) -> None:
+        """Open the camera and start background processing (idempotent)."""
+        if self._started:
+            return
+        try:
+            self.camera = LiteCamera(self.camera_index)
+            self._reader.start()
+            self._started = True
+            self._log.info("camera thread started", width=self.camera.width, height=self.camera.height)
+        except Exception as exc:
+            with contextlib.suppress(Exception):
+                if self.camera:
+                    self.camera.release()
+            self._log.error("camera thread start failed", exc_info=exc)
+            raise
+
+    def stop(self) -> None:
+        """Stop background processing and close camera (idempotent)."""
+        if not self._started:
+            return
+        with contextlib.suppress(Exception):
+            self._reader.stop()
+        with contextlib.suppress(Exception):
+            if self.camera:
+                self.camera.release()
+        self._started = False
+        self._log.info("camera thread stopped")
+
+    def _read_camera(self) -> tuple[bool, np.ndarray] | None:
+        if not self.camera or not self.camera.is_open:
+            return None
+
+        success, frame = self.camera.read()
+        if not success or frame is None:
+            return None
+
+        return success, frame
+
+    @property
+    def width(self) -> int:
+        """Get the width of the camera frame."""
+        if not self.camera:
+            raise RuntimeError("Camera not initialized")
+        return self.camera.width
+
+    @property
+    def height(self) -> int:
+        """Get the height of the camera frame."""
+        if not self.camera:
+            raise RuntimeError("Camera not initialized")
+        return self.camera.height
+
+    @property
+    def is_open(self) -> bool:
+        """Check if the camera is open."""
+        return self.camera is not None and self.camera.is_open
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self.stop()
+
+    def __del__(self):
+        self.stop()
+
+    def __repr__(self) -> str:
+        return f"LiteCamThread(camera_index={self.camera_index!r})"
