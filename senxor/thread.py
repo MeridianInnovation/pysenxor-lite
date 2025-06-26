@@ -234,7 +234,17 @@ class SenxorThread:
         self._log = logger.bind(address=self._senxor.address)
 
     def read(self) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
-        """Return the newest *(header, frame)* pair and consume it."""
+        """Return the newest *(header, frame)* pair and consume it.
+
+        Raises
+        ------
+        RuntimeError
+            If the thread has not been started.
+
+        """
+        if not self._started:
+            raise RuntimeError("Thread not started. Call start() before reading data.")
+
         data = self._reader.read()
         # The Senxor expects (None, None) if no data is available.
         if data is None:
@@ -380,7 +390,15 @@ class LiteCamThread:
             A tuple containing a boolean indicating success and the frame data,
             or (False, None) if no new frame is available.
 
+        Raises
+        ------
+        RuntimeError
+            If the thread has not been started.
+
         """
+        if not self._started:
+            raise RuntimeError("Thread not started. Call start() before reading data.")
+
         data = self._reader.read()
         if data is None:
             return False, None

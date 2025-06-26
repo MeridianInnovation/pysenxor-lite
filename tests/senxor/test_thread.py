@@ -355,6 +355,11 @@ class TestSenxorThread:
             senxor_thread.__del__()
             mock_stop.assert_called_once()
 
+    def test_read_without_start(self, senxor_thread):
+        """Test that read raises an error if the thread is not started."""
+        with pytest.raises(RuntimeError, match="Thread not started"):
+            senxor_thread.read()
+
 
 class TestLiteCamThread:
     @pytest.fixture
@@ -533,3 +538,8 @@ class TestLiteCamThread:
         with patch.object(camera_thread, "stop") as mock_stop:
             camera_thread.__del__()
             mock_stop.assert_called_once()
+
+    def test_read_without_start(self, camera_thread):
+        """Test that read raises an error if the thread is not started."""
+        with pytest.raises(RuntimeError, match="Thread not started"):
+            camera_thread.read()
