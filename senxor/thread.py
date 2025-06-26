@@ -233,6 +233,7 @@ class SenxorThread:
             do not fall behind the sensor's frame rate.
 
         """
+        self._started = False
         self._senxor = Senxor(address, interface_type, **kwargs)
         self._celsius = frame_unit == "C"
         self._reader = _BackgroundReader(self._read_senxor, self._senxor.address, allow_listener=allow_listener)
@@ -369,13 +370,13 @@ class LiteCamThread:
         do not fall behind the camera's frame rate.
 
         """
+        self._started = False
         self.camera_index = camera_index
         self._reader = _BackgroundReader(
             self._read_camera,
             f"Camera{camera_index}",
             allow_listener=allow_listener,
         )
-        self._started = False
         self._log = logger.bind(camera_index=camera_index)
 
     def read(self) -> tuple[bool, np.ndarray] | tuple[False, None]:
