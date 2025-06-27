@@ -339,8 +339,8 @@ class SenxorThread:
         return f"SenxorThread(addr={self._senxor.address!r})"
 
 
-class LiteCamThread:
-    """A threaded wrapper for LiteCamera for non-blocking reads with a listener pattern.
+class CVCamThread:
+    """A threaded wrapper for OpenCV's VideoCapture for non-blocking reads with a listener pattern.
 
     This class continuously reads frames from a camera in a background thread.
     It implements a "consume-on-read" pattern for its `read()` method and provides
@@ -349,16 +349,16 @@ class LiteCamThread:
 
     def __init__(
         self,
-        camera: LiteCamera,
+        capture,
         *,
         allow_listener: bool = True,
     ) -> None:
-        """Initialize the LiteCamThread.
+        """Initialize the CVCamThread.
 
         Parameters
         ----------
-        camera : LiteCamera
-            A LiteCamera instance.
+        capture : cv2.VideoCapture
+            A pre-configured OpenCV VideoCapture instance.
         allow_listener : bool, default True
             Whether to enable the listener pattern.
 
@@ -372,16 +372,16 @@ class LiteCamThread:
 
         """
         self._started = False
-        self.camera = camera
-        self.camera_index = camera.index
+        self.cam = capture
+        self.camera_index = getattr(capture, "index", 0)
         self._reader = _BackgroundReader(
             self._read_camera,
-            f"Camera{self.camera_index}",
+            f"CVCamera{self.camera_index}",
             allow_listener=allow_listener,
         )
         self._log = logger.bind(camera_index=self.camera_index)
 
-    def read(self) -> tuple[bool, np.ndarray] | tuple[False, None]:
+    def read(self) -> tuple[bool, np.ndarray | None]:
         """Return the newest frame and consume it.
 
         Returns
@@ -446,55 +446,39 @@ class LiteCamThread:
         self._reader.remove_listener(name)
 
     def start(self) -> None:
-        """Open the camera and start background processing (idempotent)."""
+        """Start background processing (idempotent)."""
         if self._started:
             return
+
         try:
-            self.camera.open()
+            if not self.cam.isOpened():
+                raise RuntimeError("Camera is not open")
+
             self._reader.start()
             self._started = True
-            self._log.info("camera thread started", width=self.camera.width, height=self.camera.height)
+            self._log.info("OpenCV camera thread started")
         except Exception as exc:
-            with contextlib.suppress(Exception):
-                self.camera.release()
-            self._log.error("camera thread start failed", exc_info=exc)
+            self._log.error("OpenCV camera thread start failed", exc_info=exc)
             raise
 
     def stop(self) -> None:
-        """Stop background processing and close camera (idempotent)."""
+        """Stop background processing (idempotent)."""
         if not self._started:
             return
         with contextlib.suppress(Exception):
             self._reader.stop()
-        with contextlib.suppress(Exception):
-            self.camera.release()
         self._started = False
-        self._log.info("camera thread stopped")
+        self._log.info("OpenCV camera thread stopped")
 
     def _read_camera(self) -> tuple[bool, np.ndarray] | None:
-        if not self.camera.is_open:
+        if not self.cam.isOpened():
             return None
 
-        success, frame = self.camera.read()
+        success, frame = self.cam.read()
         if not success or frame is None:
             return None
 
         return success, frame
-
-    @property
-    def width(self) -> int:
-        """Get the width of the camera frame."""
-        return self.camera.width
-
-    @property
-    def height(self) -> int:
-        """Get the height of the camera frame."""
-        return self.camera.height
-
-    @property
-    def is_open(self) -> bool:
-        """Check if the camera is open."""
-        return self.camera.is_open
 
     def __enter__(self):
         self.start()
@@ -507,4 +491,4 @@ class LiteCamThread:
         self.stop()
 
     def __repr__(self) -> str:
-        return f"LiteCamThread(camera_index={self.camera_index!r})"
+        return f"CVCamThread(camera_index={self.camera_index!r})"
