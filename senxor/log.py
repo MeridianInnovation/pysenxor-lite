@@ -6,6 +6,15 @@ from pathlib import Path
 
 import structlog
 
+default_logger = structlog.get_logger()
+
+
+def get_logger(name: str | None = None):
+    if name is None:
+        return default_logger
+    else:
+        return structlog.get_logger(name)
+
 
 def setup_standard_logger():
     processors = [
