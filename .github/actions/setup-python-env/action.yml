@@ -1,0 +1,44 @@
+name: "Setup Python Environment"
+description: "Set up Python environment for the given Python version"
+
+inputs:
+  uv-version:
+    description: "UV version"
+    required: true
+    default: "0.6.16"
+  python-version:
+    description: "Python version to use (if specified, this takes precedence over python-version-file)"
+    required: false
+    default: ""
+  python-version-file:
+    description: "Path to file containing Python version"
+    required: false
+    default: ".python-version"
+
+runs:
+  using: "composite"
+  steps:
+    # The python package `litcam` requires `libx11-dev` to be installed.
+    # Remove this step if we don't require `litcam` in the future.
+    - name: Install libx11-dev
+      shell: bash
+      run: sudo apt-get install -y libx11-dev
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: ${{ inputs.uv-version }}
+        python-version: ${{ inputs.python-version != '' && inputs.python-version || null }}
+        enable-cache: true
+        cache-suffix: ${{ matrix.python-version }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version != '' && inputs.python-version || null }}
+        python-version-file: ${{ inputs.python-version == '' && inputs.python-version-file || null }}
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        uv sync --locked --no-editable

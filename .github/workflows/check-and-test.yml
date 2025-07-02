@@ -1,0 +1,86 @@
+name: Check and Test
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+      - "!gh-pages"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  check-should-skip:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - name: Run skip-duplicate-actions
+        id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+
+      - name: Check if is a bump commit
+        id: is_bump
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == bump:* ]]; then
+            echo "is_bump=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_bump=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if workflow should be skipped
+        id: should_skip
+        # if is_bump and skip_check all is true, then skip
+        run: |
+          if [[ ${{ steps.is_bump.outputs.is_bump }} == true || ${{ steps.skip_check.outputs.should_skip }} == true ]]; then
+            echo "should_skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_skip=false" >> $GITHUB_OUTPUT
+          fi
+
+  code-quality-checks:
+    needs: check-should-skip
+    if: needs.check-should-skip.outputs.should_skip == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+
+      - name: Pre-commit check
+        run: uv run pre-commit run -a --show-diff-on-failure --color=always
+
+
+      - name: Check for type errors
+        run: uv run mypy
+        continue-on-error: true
+
+  tests-on-multiple-python-versions:
+    name: Tests ON ${{ matrix.python-version }}
+    needs: check-should-skip
+    if: needs.check-should-skip.outputs.should_skip == 'false'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: uv run pytest tests
