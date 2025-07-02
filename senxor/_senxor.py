@@ -143,8 +143,13 @@ class Senxor:
         return res
 
     @property
-    def is_connected(self) -> bool | None:
-        return self.interface.is_connected
+    def is_connected(self) -> bool:
+        is_connected = self.interface.is_connected
+        if is_connected is None:
+            # We assume the device is connected if the connection cannot be checked.
+            return True
+        else:
+            return is_connected
 
     @property
     def address(self) -> Any:
