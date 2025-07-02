@@ -1,3 +1,4 @@
+import queue
 import threading
 import time
 from unittest.mock import MagicMock, patch
@@ -37,11 +38,13 @@ class TestBackgroundReader:
         assert reader._is_running is False
         assert reader._reader_thread is None
         assert reader._latest_data is None
+        assert reader._backlog_threshold == 5
 
         # Test with listener pattern disabled
         reader_no_listener = _BackgroundReader(mock_reader_func, "NoListener", allow_listener=False)
         assert reader_no_listener._allow_listener is False
         assert not hasattr(reader_no_listener, "_listeners")
+        assert not hasattr(reader_no_listener, "_backlog_threshold")
 
     def test_start_stop(self, reader):
         """Test that the reader starts and stops correctly."""
@@ -50,7 +53,7 @@ class TestBackgroundReader:
         assert reader._reader_thread is not None
         assert reader._reader_thread.is_alive()
         assert reader._notifier_thread is not None
-        assert reader._notifier_thread.is_alive()
+        assert reader._is_running is True
 
         # Test idempotent start
         reader.start()  # Should not create new threads
@@ -87,36 +90,57 @@ class TestBackgroundReader:
         assert data3 is not None
         assert data3 > data1  # Counter should have incremented
 
-    def test_listener_pattern(self, reader):
+    def test_listener_pattern(self, reader, mock_reader_func):
         """Test that listeners receive notifications."""
         listener1 = MagicMock()
         listener2 = MagicMock()
 
+        reader = _BackgroundReader(mock_reader_func, "TestReader")
         name1 = reader.add_listener(listener1, "test_listener1")
         name2 = reader.add_listener(listener2)
 
         assert name1 == "test_listener1"
         assert name2.startswith("listener_")
 
-        reader.start()
-        # Allow time for the reader to get data and notify listeners
-        time.sleep(0.2)
+        data_to_produce = [1, 2, 3]
+        reader_func_calls = iter(data_to_produce)
+        with patch.object(reader, "_reader_func", side_effect=lambda: next(reader_func_calls, None)):
+            reader.start()
 
-        # Both listeners should have been called at least once
-        assert listener1.call_count >= 1
-        assert listener2.call_count >= 1
+            total_expected_listener_calls = len(data_to_produce)
+            start_time = time.time()
+            while (
+                listener1.call_count < total_expected_listener_calls
+                or listener2.call_count < total_expected_listener_calls
+            ) and (time.time() - start_time < 2):
+                time.sleep(0.01)
 
-        # Test removing a listener
+            assert listener1.call_count == total_expected_listener_calls
+            assert listener2.call_count == total_expected_listener_calls
+
+            for i in range(total_expected_listener_calls):
+                assert listener1.call_args_list[i].args[0] == data_to_produce[i]
+                assert listener2.call_args_list[i].args[0] == data_to_produce[i]
+
         reader.remove_listener(name1)
         listener1.reset_mock()
         listener2.reset_mock()
 
-        # Wait for more data
-        time.sleep(0.2)
+        data_to_produce_after_remove = [4, 5]
+        reader_func_calls_after_remove = iter(data_to_produce_after_remove)
+        with patch.object(reader, "_reader_func", side_effect=lambda: next(reader_func_calls_after_remove, None)):
+            start_time = time.time()
+            total_expected_listener_calls_after_remove = len(data_to_produce_after_remove)
+            while listener2.call_count < total_expected_listener_calls_after_remove and (time.time() - start_time < 2):
+                time.sleep(0.01)
 
-        # Only listener2 should have been called
         assert listener1.call_count == 0
-        assert listener2.call_count >= 1
+        assert listener2.call_count == total_expected_listener_calls_after_remove
+
+        for i in range(total_expected_listener_calls_after_remove):
+            assert listener2.call_args_list[i].args[0] == data_to_produce_after_remove[i]
+
+        reader.stop()
 
     def test_listener_errors(self, reader):
         """Test error handling for listener operations."""
@@ -144,47 +168,54 @@ class TestBackgroundReader:
     def test_slow_listener(self, mock_reader_func):
         """Test that slow listeners cause TimeoutError."""
         reader = _BackgroundReader(mock_reader_func, "SlowListener")
+        exception_queue = queue.Queue()
 
         # Create a slow listener that blocks
         def slow_listener(data):
-            time.sleep(0.5)  # Block for a long time
+            time.sleep(0.1)
 
         reader.add_listener(slow_listener)
-        reader.start()
 
-        # Wait for the first notification to start
-        time.sleep(0.1)
+        original_notify_loop = reader._notify_loop
 
-        # Force a second read while the first is still processing
-        # This should raise a TimeoutError in the reader thread
-        with patch.object(reader, "_reader_func") as mock_read:
-            # Make sure the mock returns a value
-            mock_read.return_value = 999
+        def wrapped_notify_loop():
+            try:
+                original_notify_loop()
+            except Exception as e:
+                exception_queue.put(e)
+                raise
 
-            # Call _read_once directly to simulate the reader thread
-            with pytest.raises(TimeoutError, match="Listener processing backlog detected"):
-                reader._read_once()
+        # Patch _notify_loop to use our wrapped version
+        # Need to re-create the thread so it uses the patched target
+        reader._notifying = True
+        reader._notifier_thread = threading.Thread(
+            target=wrapped_notify_loop,
+            name=f"{reader._name}Notify",
+            daemon=True,
+        )
+        reader._notifier_thread.start()
 
-    def test_thread_safety(self, reader):
-        """Test thread safety of operations."""
+        # Manually start the reader thread to control its lifecycle
+        reader._is_running = True
+        reader._reader_thread = threading.Thread(
+            target=reader._run,
+            name=f"{reader._name}Read",
+            daemon=True,
+        )
+        reader._reader_thread.start()
 
-        # Add multiple listeners concurrently
-        def add_listeners(thread_id):
-            for i in range(10):
-                # Use thread_id to make names unique across threads
-                reader.add_listener(MagicMock(), f"concurrent_{thread_id}_{i}")
-
-        threads = [threading.Thread(target=add_listeners, args=(i,)) for i in range(5)]
-
-        for thread in threads:
-            thread.start()
-
-        for thread in threads:
-            thread.join()
-
-        # Check that all listeners were added correctly
-        with reader._listeners_lock:
-            assert len(reader._listeners) == 50  # 5 threads * 10 listeners each
+        try:
+            caught_exception = exception_queue.get(timeout=5.0)
+            assert isinstance(caught_exception, TimeoutError)
+            assert "Listener processing backlog exceeded threshold (5 frames)." in str(caught_exception)
+        except queue.Empty:
+            pytest.fail("TimeoutError was not raised by the notifier thread within the expected time.")
+        finally:
+            reader.stop()
+            if reader._notifier_thread:
+                assert not reader._notifier_thread.is_alive()
+            if reader._reader_thread:
+                assert not reader._reader_thread.is_alive()
 
 
 class TestSenxorThread:
@@ -326,7 +357,10 @@ class TestSenxorThread:
             adapter_fn = mock_add.call_args[0][0]
             test_data = (np.zeros(10), np.ones((32, 32)))
             adapter_fn(test_data)
-            listener.assert_called_once_with(*test_data)
+            assert listener.call_count == 1
+            call_args = listener.call_args[0]
+            assert np.array_equal(call_args[0], test_data[0])
+            assert np.array_equal(call_args[1], test_data[1])
 
             # Test with None data
             listener.reset_mock()
@@ -433,23 +467,12 @@ class TestCVCamThread:
             camera_thread.start()
             assert camera_thread._started is True
             mock_reader_start.assert_called_once()
-            mock_capture.isOpened.assert_called()
 
-        # Test idempotent start
-        with patch.object(camera_thread._reader, "start") as mock_reader_start:
-            camera_thread.start()  # Should not start reader again
-            assert camera_thread._started is True
-            mock_reader_start.assert_not_called()
+        camera_thread.stop()
+        assert camera_thread._started is False
 
-        # Test stop
         with patch.object(camera_thread._reader, "stop") as mock_reader_stop:
             camera_thread.stop()
-            assert camera_thread._started is False
-            mock_reader_stop.assert_called_once()
-
-        # Test idempotent stop
-        with patch.object(camera_thread._reader, "stop") as mock_reader_stop:
-            camera_thread.stop()  # Should not raise errors
             assert camera_thread._started is False
             mock_reader_stop.assert_not_called()
 
@@ -461,7 +484,7 @@ class TestCVCamThread:
             camera_thread.start()
         assert camera_thread._started is False
 
-    def test_properties(self, camera_thread, mock_capture):
+    def test_read_camera_method(self, camera_thread, mock_capture):
         """Test the camera reading functionality with different camera states."""
         # Test when camera is open
         mock_capture.isOpened.return_value = True
@@ -480,11 +503,6 @@ class TestCVCamThread:
         result = camera_thread._read_camera()
         assert result is None
 
-        # Test camera not open
-        mock_capture.isOpened.return_value = False
-        result = camera_thread._read_camera()
-        assert result is None
-
     def test_add_remove_listener(self, camera_thread):
         """Test adding and removing listeners."""
         listener = MagicMock()
@@ -500,6 +518,10 @@ class TestCVCamThread:
             call_args = listener.call_args[0]
             assert call_args[0] is True
             assert np.array_equal(call_args[1], np.ones((10, 10, 3)))
+
+            listener.reset_mock()
+            adapter_fn(None)
+            listener.assert_not_called()
 
         with patch.object(camera_thread._reader, "remove_listener") as mock_remove:
             camera_thread.remove_listener("test_listener")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import copy
+import queue
 import threading
 from typing import Any, Callable, Literal
 
@@ -18,8 +19,8 @@ class _BackgroundReader:
     """Generic background reader with listener pattern.
 
     Listener functions must be lightweight and non-blocking; otherwise a
-    built-in TimeoutError is raised when new data arrives while the previous
-    notification is still being processed.
+    built-in TimeoutError is raised when the frame queue exceeds the specified
+    backlog threshold.
     """
 
     def __init__(
@@ -46,10 +47,10 @@ class _BackgroundReader:
         if allow_listener:
             self._listeners: dict[str, Callable[[Any], None]] = {}
             self._listener_counter = 0
+            self._backlog_threshold = 5
             self._listeners_lock = threading.Lock()
-            self._event = threading.Event()
-            self._data_copy: Any | None = None
-            self._notify_loop_busy = False
+            self._frame_queue = queue.Queue()
+            self._queue_cv = threading.Condition()  # Condition for queue operations
             self._notifying = False
             self._notifier_thread: threading.Thread | None = None
 
@@ -144,7 +145,8 @@ class _BackgroundReader:
             self._reader_thread.join()
         if self._allow_listener and self._notifier_thread:
             self._notifying = False
-            self._event.set()  # wake loop
+            with self._queue_cv:
+                self._queue_cv.notify()  # Wake up the notifier to check _notifying flag
             self._notifier_thread.join()
 
     def _run(self) -> None:
@@ -163,32 +165,48 @@ class _BackgroundReader:
             self._latest_data = data
         if not self._allow_listener:
             return
-        with self._listeners_lock:
-            if self._event.is_set() and self._notify_loop_busy:
-                raise TimeoutError(
-                    "Listener processing backlog detected: previous data is still being processed.",
-                    "Ensure all listener callbacks are lightweight and non-blocking.",
-                )
-            self._data_copy = copy.copy(data)
-            self._event.set()
+
+        self._frame_queue.put(copy.copy(data))
+        with self._queue_cv:
+            self._queue_cv.notify()
 
     def _notify_loop(self) -> None:
-        while self._notifying and self._event.wait():
-            # snapshot under lock
-            with self._listeners_lock:
-                self._notify_loop_busy = True
-                data = self._data_copy
-                self._event.clear()
-                listeners = tuple(self._listeners.values())
-            try:
-                for fn in listeners:
-                    fn(data)
-            except Exception as exc:  # pylint: disable=broad-except
-                self._log.error("listener error", exc_info=exc)
-                raise exc
+        while self._notifying:
+            with self._queue_cv:
+                while self._frame_queue.empty() and self._notifying:
+                    self._queue_cv.wait(0.1)
 
-            with self._listeners_lock:
-                self._notify_loop_busy = False
+                if not self._notifying:
+                    break
+
+                current_queue_size = self._frame_queue.qsize()
+                if current_queue_size >= self._backlog_threshold:
+                    while not self._frame_queue.empty():
+                        self._frame_queue.get_nowait()
+                        self._frame_queue.task_done()
+                    raise TimeoutError(
+                        f"Listener processing backlog exceeded threshold ({self._backlog_threshold} frames).",
+                        "Ensure all listener callbacks are lightweight and non-blocking.",
+                    )
+                else:
+                    data = self._frame_queue.get_nowait()
+
+            if data is not None:
+                with self._listeners_lock:
+                    listeners = tuple(self._listeners.values())
+
+                if not listeners:
+                    self._frame_queue.task_done()
+                    continue
+
+                try:
+                    for fn in listeners:
+                        fn(data)
+                    self._frame_queue.task_done()
+                except Exception as exc:
+                    self._log.error("listener callback error", exc_info=exc)
+                    self._frame_queue.task_done()
+                    raise
 
 
 class SenxorThread:
