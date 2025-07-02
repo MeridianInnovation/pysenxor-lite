@@ -4,8 +4,11 @@ from functools import lru_cache
 from typing import ClassVar
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Register:
+    # Use __slots__ instead of slots=True to compatible with python 3.9
+    __slots__ = ("address", "desc", "readable", "writable")
+
     address: int
     readable: bool
     writable: bool
