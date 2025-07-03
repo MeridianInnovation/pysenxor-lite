@@ -18,6 +18,24 @@ __all__ = [
     "resample_lut",
 ]
 
+colormaps = {
+    "inferno": get_colormaps("inferno", namespace="cv"),
+    "magma": get_colormaps("magma", namespace="cv"),
+    "plasma": get_colormaps("plasma", namespace="cv"),
+    # ------------------------------------------------------------
+    "autumn": get_colormaps("autumn", namespace="cv"),
+    "bone": get_colormaps("bone", namespace="cv"),
+    "jet": get_colormaps("jet", namespace="cv"),
+    "rainbow": get_colormaps("rainbow", namespace="cv"),
+    "spring": get_colormaps("spring", namespace="cv"),
+    "cool": get_colormaps("cool", namespace="cv"),
+    "pink": get_colormaps("pink", namespace="cv"),
+    "hot": get_colormaps("hot", namespace="cv"),
+    "viridis": get_colormaps("viridis", namespace="cv"),
+    "cividis": get_colormaps("cividis", namespace="cv"),
+    "turbo": get_colormaps("turbo", namespace="cv"),
+}
+
 
 def dk_to_celsius(raw: np.ndarray) -> np.ndarray:
     """Convert raw data from `Senxor.read()` to Celsius degrees data.
