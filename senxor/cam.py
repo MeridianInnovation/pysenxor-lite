@@ -18,7 +18,14 @@ class LiteCamera:
     """A wrapper for the litcam.PyCamera class."""
 
     def __init__(self, index: int):
-        """Initialize a LiteCamera object."""
+        """Initialize a LiteCamera object.
+
+        Parameters
+        ----------
+        index : int
+            The index of the camera to open.
+
+        """
         if not _litecam_imported:
             raise ImportError(_litecam_imp_msg)
 
@@ -41,12 +48,12 @@ class LiteCamera:
     def read(self) -> tuple[bool, Any]:
         """Read a frame from the camera with BGR format.
 
-        Returns:
+        Returns
         -------
         tuple[bool, Any]
             A tuple containing a boolean indicating success and the frame data.
 
-        Examples:
+        Examples
         --------
         >>> cam = LiteCamera(0)
         >>> ret, frame = cam.read()
@@ -54,8 +61,8 @@ class LiteCamera:
         ...     cv2.imshow("frame", frame)
         ...     cv2.waitKey(1)
 
-        Note:
-        ----
+        Notes
+        -----
         The frame is in BGR format.
 
         """
@@ -102,7 +109,14 @@ class LiteCamera:
         raise NotImplementedError("Use `setResolution` instead.")
 
     def get(self, propId: int) -> Any:
-        """Same API as cv2.VideoCapture.get."""
+        """Same API as cv2.VideoCapture.get.
+
+        Parameters
+        ----------
+        propId : int
+            The property ID.
+
+        """
         if propId == 3:  # CAP_PROP_FRAME_WIDTH
             return self._original_getWidth()
         elif propId == 4:  # CAP_PROP_FRAME_HEIGHT
@@ -120,7 +134,21 @@ class LiteCamera:
         return self._original_listMediaTypes()
 
     def setResolution(self, width: int, height: int) -> bool:
-        """Set the resolution of the camera."""
+        """Set the resolution of the camera.
+
+        Parameters
+        ----------
+        width : int
+            The width of the resolution.
+        height : int
+            The height of the resolution.
+
+        Returns
+        -------
+        bool
+            True if the resolution is set successfully, False otherwise.
+
+        """
         ret = self._original_setResolution(width, height)
         if not ret:
             raise RuntimeError("Failed to set resolution")

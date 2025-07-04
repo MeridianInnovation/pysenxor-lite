@@ -1,4 +1,4 @@
-"""All useful constants."""
+"""Constants related to Senxor devices."""
 
 # --- Physical Constants ---
 KELVIN = 273.15

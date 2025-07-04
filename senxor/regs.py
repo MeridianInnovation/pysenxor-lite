@@ -1,3 +1,5 @@
+"""Register definitions for Senxor devices."""
+
 from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
@@ -6,6 +8,23 @@ from typing import ClassVar
 
 @dataclass(frozen=True)
 class Register:
+    """The definition of a register.
+
+    This class is used to define a register of a Senxor device.
+
+    Attributes
+    ----------
+    address : int
+        The address of the register.
+    readable : bool
+        Whether the register is readable.
+    writable : bool
+        Whether the register is writable.
+    desc : str
+        The description of the register.
+
+    """
+
     # Use __slots__ instead of slots=True to compatible with python 3.9
     __slots__ = ("address", "desc", "readable", "writable")
 
@@ -37,8 +56,8 @@ class REGS(Enum):
     The enum members are named REG_0x<address> to match the register address.
     The enum members are also aliased to the register name for convenience.
 
-    Example:
-    -------
+    Examples
+    --------
     >>> REGS.REG_0x00
     <REGS.REG_0x00: 0x00 (W) Software Reset of the MI48>
 

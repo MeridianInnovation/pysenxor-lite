@@ -1,3 +1,5 @@
+"""Thread utilities for Senxor devices."""
+
 from __future__ import annotations
 
 import contextlib
@@ -10,7 +12,6 @@ import numpy as np
 from structlog import get_logger
 
 from senxor import Senxor
-from senxor.cam import LiteCamera
 
 logger = get_logger("senxor.thread")
 

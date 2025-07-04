@@ -31,20 +31,21 @@ def is_senxor_usb(port: ListPortInfo | str) -> bool:
 
     Parameters
     ----------
-    port : ListPortInfo
+    port : ListPortInfo | str
         The port to check. Use `list_ports.comports()` to get the list of ports.
 
-    Example
-    -------
-    >>> ports = list_ports.comports()
-    >>> for port in ports:
-    >>>     if is_senxor_port(port):
-    >>>         print(port.device)
 
     Returns
     -------
     bool
         True if the port is a senxor port, False otherwise.
+
+    Examples
+    --------
+    >>> ports = list_ports.comports()
+    >>> for port in ports:
+    >>>     if is_senxor_port(port):
+    >>>         print(port.device)
 
     """
     if isinstance(port, str):
@@ -74,16 +75,16 @@ def list_senxor_usb(exclude_open_ports: bool = True) -> list[ListPortInfo]:
         If False, include the ports that are currently open (in use).
         Default is True.
 
-    Example
-    -------
-    >>> ports = list_senxor_ports()
-    >>> print([port.device for port in ports])
-    ['COM5', 'COM6']
-
     Returns
     -------
     list[ListPortInfo]
         The list of senxor ports.
+
+    Examples
+    --------
+    >>> ports = list_senxor_ports()
+    >>> print([port.device for port in ports])
+    ['COM5', 'COM6']
 
     """
     ports = list_ports.comports()

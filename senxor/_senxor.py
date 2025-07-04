@@ -1,3 +1,5 @@
+"""The core class for Senxor devices."""
+
 from __future__ import annotations
 
 import contextlib

@@ -1,3 +1,5 @@
+"""Image processing utilities for Senxor devices."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -9,6 +11,7 @@ from senxor.consts import KELVIN, SENXOR_FRAME_SHAPE
 
 __all__ = [
     "apply_colormap",
+    "colormaps",
     "dk_to_celsius",
     "enlarge",
     "get_colormaps",
