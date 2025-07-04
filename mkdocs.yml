@@ -1,0 +1,98 @@
+site_name: pysenxor
+repo_url: https://github.com/MeridianInnovation/pysenxor-open
+site_url: https://MeridianInnovation.github.io/pysenxor-open
+site_description: A Python Library for Meridian Innovation's thermal imaging devices.
+site_author: Meridian Innovation
+edit_uri: edit/main/docs/
+repo_name: MeridianInnovation/pysenxor-open
+copyright: Maintained by <a href="https://www.meridianinno.com/">MeridianInnovation</a>.
+
+nav:
+  - Home:
+      - Overview: index.md
+      # - Usage: home/usage.md
+      # - Changelog: home/changelog.md
+      # - License: home/license.md
+  - Usage:
+      - Quick Start: usage/quick_start.md
+  - Examples:
+      - Basic Stream: examples/basic_stream.md
+      - Use Thread to Stream Frames: examples/thread_stream.md
+  - API Reference:
+      - senxor: api/senxor.md
+      - senxor.proc: api/proc.md
+      - senxor.log: api/log.md
+      - senxor.consts: api/consts.md
+      - senxor.utils: api/utils.md
+      - senxor.thread: api/thread.md
+      - senxor.regs: api/regs.md
+      # - senxor.fields: api/fields.md
+      - senxor.cam: api/cam.md
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["senxor"]
+          options:
+            show_source: false
+            docstring_style: numpy
+            heading_level: 3
+            extra:
+              members_order: source
+  - include-markdown
+
+theme:
+  name: material
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.instant.preview
+    - navigation.path
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MeridianInnovation/pysenxor-open
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/pysenxor-open
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - admonition
