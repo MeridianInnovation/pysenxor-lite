@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import importlib.resources
+import json
 from typing import Any
 
 import numpy as np
@@ -21,6 +23,9 @@ __all__ = [
     "resample_lut",
 ]
 
+_RESOURCE_DIR = importlib.resources.files("senxor").joinpath("resources")
+
+
 colormaps = {
     "inferno": get_colormaps("inferno", namespace="cv"),
     "magma": get_colormaps("magma", namespace="cv"),
@@ -38,6 +43,13 @@ colormaps = {
     "cividis": get_colormaps("cividis", namespace="cv"),
     "turbo": get_colormaps("turbo", namespace="cv"),
 }
+
+with (_RESOURCE_DIR / "cmaps.json").open() as f:
+    _custom_cmaps = json.load(f)
+
+for k, v in _custom_cmaps.items():
+    lut = np.array(v, dtype=np.uint8).T.reshape(256, 3)
+    colormaps[k] = lut
 
 
 def dk_to_celsius(raw: np.ndarray) -> np.ndarray:
