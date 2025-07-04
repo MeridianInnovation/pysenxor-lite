@@ -1,0 +1,3 @@
+## `senxor.cam`
+
+::: senxor.cam

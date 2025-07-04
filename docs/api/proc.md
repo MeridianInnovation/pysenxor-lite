@@ -1,0 +1,3 @@
+## `senxor.proc`
+
+::: senxor.proc

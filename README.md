@@ -198,8 +198,8 @@ Apply a colormap to the image.
 colored_image = senxor.proc.apply_colormap(frame, lut=cmap_cv_inferno)
 ```
 
-> [!TIP]
-> To keep the lightweight of the pysenxor, the `get_colormap` and `apply_colormap` doesn't need `cv2` or `matplotlib` as dependencies. They are based on the `colormap_tool` and `numpy` only.
+!!! tip
+    To keep the lightweight of the pysenxor, the `get_colormap` and `apply_colormap` doesn't need `cv2` or `matplotlib` as dependencies. They are based on the `colormap_tool` and `numpy` only.
 
 ### Display or save the thermal image
 

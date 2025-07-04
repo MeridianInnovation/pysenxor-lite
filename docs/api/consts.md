@@ -1,0 +1,3 @@
+## `senxor.consts`
+
+::: senxor.consts

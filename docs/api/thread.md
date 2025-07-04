@@ -1,0 +1,3 @@
+## `senxor.thread`
+
+::: senxor.thread
