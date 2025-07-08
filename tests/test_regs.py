@@ -12,8 +12,8 @@ def sample_regs():
         "readable": REGS.STATUS,  # Read-only register
         "writable": REGS.MCU_RESET,  # Write-only register
         "rw": REGS.HOST_XFER_CTRL,  # Read-write register
-        "multi_byte_low": REGS.COMPPAR_P0_0,  # Low byte of a multi-byte register
-        "multi_byte_high": REGS.COMPPAR_P0_1,  # High byte of a multi-byte register
+        "multi_byte_low": REGS.FILTER_SETTING_1_0,  # Low byte of a multi-byte register
+        "multi_byte_high": REGS.FILTER_SETTING_1_1,  # High byte of a multi-byte register
     }
 
 

@@ -90,209 +90,11 @@ class REGS(Enum):
         True,
         "Host DMA transfer control",
     )
-    COMP_CTRL = Register(
-        0x02,
-        True,
-        True,
-        "Temperature Error Compensation Control",
-    )
-    COMPPAR_P0_0 = Register(
-        0x03,
-        True,
-        True,
-        "Compensation Parameter P0 Low Byte",
-    )
-    COMPPAR_P0_1 = Register(
-        0x04,
-        True,
-        True,
-        "Compensation Parameter P0 High Byte",
-    )
-    COMPPAR_P1_0 = Register(
-        0x05,
-        True,
-        True,
-        "Compensation Parameter P1 Low Byte",
-    )
-    COMPPAR_P1_1 = Register(
-        0x06,
-        True,
-        True,
-        "Compensation Parameter P1 High Byte",
-    )
-    COMPPAR_P2_0 = Register(
-        0x07,
-        True,
-        True,
-        "Compensation Parameter P2 Low Byte",
-    )
-    COMPPAR_P2_1 = Register(
-        0x08,
-        True,
-        True,
-        "Compensation Parameter P2 High Byte",
-    )
-    COMPPAR_P3_0 = Register(
-        0x09,
-        True,
-        True,
-        "Compensation Parameter P3 Low Byte",
-    )
-    COMPPAR_P3_1 = Register(
-        0x0A,
-        True,
-        True,
-        "Compensation Parameter P3 High Byte",
-    )
-    COMPPAR_P4_0 = Register(
-        0x0B,
-        True,
-        True,
-        "Compensation Parameter P4 Low Byte",
-    )
-    COMPPAR_P4_1 = Register(
-        0x0C,
-        True,
-        True,
-        "Compensation Parameter P4 High Byte",
-    )
-    COMPPAR_P5_0 = Register(
-        0x0D,
-        True,
-        True,
-        "Compensation Parameter P5 Low Byte",
-    )
-    COMPPAR_P5_1 = Register(
-        0x0E,
-        True,
-        True,
-        "Compensation Parameter P5 High Byte",
-    )
-    COMPPAR_P6_0 = Register(
-        0x0F,
-        True,
-        True,
-        "Compensation Parameter P6 Low Byte",
-    )
-    COMPPAR_P6_1 = Register(
-        0x10,
-        True,
-        True,
-        "Compensation Parameter P6 High Byte",
-    )
-    COMPPAR_P7_0 = Register(
-        0x11,
-        True,
-        True,
-        "Compensation Parameter P7 Low Byte",
-    )
-    COMPPAR_P7_1 = Register(
-        0x12,
-        True,
-        True,
-        "Compensation Parameter P7 High Byte",
-    )
-    COMPPAR_P8_0 = Register(
-        0x13,
-        True,
-        True,
-        "Compensation Parameter P8 Low Byte",
-    )
-    COMPPAR_P8_1 = Register(
-        0x14,
-        True,
-        True,
-        "Compensation Parameter P8 High Byte",
-    )
-    COMPPAR_P9_0 = Register(
-        0x15,
-        True,
-        True,
-        "Compensation Parameter P9 Low Byte",
-    )
-    COMPPAR_P9_1 = Register(
-        0x16,
-        True,
-        True,
-        "Compensation Parameter P9 High Byte",
-    )
-    COMPPAR_P10_0 = Register(
-        0x17,
-        True,
-        True,
-        "Compensation Parameter P10 Low Byte",
-    )
-    COMPPAR_P10_1 = Register(
-        0x18,
-        True,
-        True,
-        "Compensation Parameter P10 High Byte",
-    )
     SPI_RTY = Register(
         0x19,
         True,
         True,
         "SPI retransmission control",
-    )
-    COMPPAR_P11_0 = Register(
-        0x1A,
-        True,
-        True,
-        "Compensation Parameter P11 Low Byte",
-    )
-    COMPPAR_P11_1 = Register(
-        0x1B,
-        True,
-        True,
-        "Compensation Parameter P11 High Byte",
-    )
-    STARK_CTRL = Register(
-        0x20,
-        True,
-        True,
-        "STARK denoising filter control",
-    )
-    STARK_CUTOFF = Register(
-        0x21,
-        True,
-        True,
-        "STARK filter cutoff",
-    )
-    STARK_GRAD = Register(
-        0x22,
-        True,
-        True,
-        "STARK filter gradient",
-    )
-    STARK_SCALE = Register(
-        0x23,
-        True,
-        True,
-        "STARK filter scale",
-    )
-    MMS_CTRL = Register(
-        0x25,
-        True,
-        True,
-        "Min/Max Stabilization control",
-    )
-    MEDIAN_CTRL = Register(
-        0x30,
-        True,
-        True,
-        "Median denoising filter control",
-    )
-    FRAME_FORMAT = Register(
-        0x31,
-        True,
-        True,
-        "Temperature units of output frame",
-    )
-    ISP_SELECTION_CTRL = Register(
-        0x32,
-        True,
-        True,
-        "ISP Type selection and control",
     )
     FRAME_MODE = Register(
         0xB1,
@@ -390,30 +192,6 @@ class REGS(Enum):
         True,
         "Object temperature factor",
     )
-    FILTER_CONTROL = Register(
-        0xD0,
-        True,
-        True,
-        "Temporal domain denoising filter control",
-    )
-    FILTER_SETTING_1_0 = Register(
-        0xD1,
-        True,
-        True,
-        "Parameters for the temporal filter Low Byte",
-    )
-    FILTER_SETTING_1_1 = Register(
-        0xD2,
-        True,
-        True,
-        "Parameters for the temporal filter High Byte",
-    )
-    USER_FLASH_CTRL = Register(
-        0xD8,
-        True,
-        True,
-        "Enable/Disable host access to User Flash",
-    )
     SENXOR_ID_0 = Register(
         0xE0,
         True,
@@ -456,72 +234,94 @@ class REGS(Enum):
         False,
         "Serial number of the attached camera module byte 6",
     )
+    USER_FLASH_CTRL = Register(
+        0xD8,
+        True,
+        True,
+        "Enable/Disable host access to User Flash",
+    )
+    FRAME_FORMAT = Register(
+        0x31,
+        True,
+        True,
+        "Temperature units of output frame",
+    )
+
+    # These registers only support in MI48E4
+    STARK_CTRL = Register(
+        0x20,
+        True,
+        True,
+        "STARK denoising filter control",
+    )
+    STARK_CUTOFF = Register(
+        0x21,
+        True,
+        True,
+        "STARK filter cutoff",
+    )
+    STARK_GRAD = Register(
+        0x22,
+        True,
+        True,
+        "STARK filter gradient",
+    )
+    STARK_SCALE = Register(
+        0x23,
+        True,
+        True,
+        "STARK filter scale",
+    )
+    MMS_CTRL = Register(
+        0x25,
+        True,
+        True,
+        "Min/Max Stabilization control",
+    )
+    MEDIAN_CTRL = Register(
+        0x30,
+        True,
+        True,
+        "Median denoising filter control",
+    )
+    FILTER_CONTROL = Register(
+        0xD0,
+        True,
+        True,
+        "Temporal domain denoising filter control",
+    )
+    FILTER_SETTING_1_0 = Register(
+        0xD1,
+        True,
+        True,
+        "Parameters for the temporal filter Low Byte",
+    )
+    FILTER_SETTING_1_1 = Register(
+        0xD2,
+        True,
+        True,
+        "Parameters for the temporal filter High Byte",
+    )
 
     REG_0x00 = MCU_RESET
-
     REG_0x01 = HOST_XFER_CTRL
-    REG_0x02 = COMP_CTRL
-
-    REG_0x03 = COMPPAR_P0_0
-    REG_0x04 = COMPPAR_P0_1
-    REG_0x05 = COMPPAR_P1_0
-    REG_0x06 = COMPPAR_P1_1
-    REG_0x07 = COMPPAR_P2_0
-    REG_0x08 = COMPPAR_P2_1
-    REG_0x09 = COMPPAR_P3_0
-    REG_0x0A = COMPPAR_P3_1
-    REG_0x0B = COMPPAR_P4_0
-    REG_0x0C = COMPPAR_P4_1
-    REG_0x0D = COMPPAR_P5_0
-    REG_0x0E = COMPPAR_P5_1
-    REG_0x0F = COMPPAR_P6_0
-    REG_0x10 = COMPPAR_P6_1
-    REG_0x11 = COMPPAR_P7_0
-    REG_0x12 = COMPPAR_P7_1
-    REG_0x13 = COMPPAR_P8_0
-    REG_0x14 = COMPPAR_P8_1
-    REG_0x15 = COMPPAR_P9_0
-    REG_0x16 = COMPPAR_P9_1
-    REG_0x17 = COMPPAR_P10_0
-    REG_0x18 = COMPPAR_P10_1
-
     REG_0x19 = SPI_RTY
-
-    REG_0x1A = COMPPAR_P11_0
-    REG_0x1B = COMPPAR_P11_1
-
     REG_0xB1 = FRAME_MODE
-
     REG_0xB2 = FW_VERSION_1
     REG_0xB3 = FW_VERSION_2
-
     REG_0xB4 = FRAME_RATE
     REG_0xB5 = SLEEP_MODE
-
     REG_0xB6 = STATUS
-
     REG_0xB7 = CLK_SPEED
     REG_0xB9 = SENXOR_GAIN
-
     REG_0xBA = SENXOR_TYPE
     REG_0xBB = MODULE_TYPE
-
     REG_0xBC = TEMP_CONVERT_CTRL
-
     REG_0xC2 = SENSITIVITY_FACTOR
     REG_0xC5 = SELF_CALIBRATION
     REG_0xCA = EMISSIVITY
     REG_0xCB = OFFSET_CORR
-
     REG_0xCD = OBJECT_TEMP_FACTOR
-
-    REG_0xD0 = FILTER_CONTROL
-
-    REG_0xD1 = FILTER_SETTING_1_0
-    REG_0xD2 = FILTER_SETTING_1_1
-
-    REG_0xD8 = USER_FLASH_CTRL
-
     REG_0xE0 = SENXOR_ID_0
     REG_0xE1 = SENXOR_ID_1
     REG_0xE2 = SENXOR_ID_2
@@ -529,16 +329,18 @@ class REGS(Enum):
     REG_0xE4 = SENXOR_ID_4
     REG_0xE5 = SENXOR_ID_5
     REG_0xE6 = SENXOR_ID_6
+    REG_0xD8 = USER_FLASH_CTRL
+    REG_0x31 = FRAME_FORMAT
 
     REG_0x20 = STARK_CTRL
     REG_0x21 = STARK_CUTOFF
     REG_0x22 = STARK_GRAD
     REG_0x23 = STARK_SCALE
     REG_0x25 = MMS_CTRL
-
     REG_0x30 = MEDIAN_CTRL
-    REG_0x31 = FRAME_FORMAT
-    REG_0x32 = ISP_SELECTION_CTRL
+    REG_0xD0 = FILTER_CONTROL
+    REG_0xD1 = FILTER_SETTING_1_0
+    REG_0xD2 = FILTER_SETTING_1_1
 
     _ignore_: ClassVar = ["_regs_dict", "_addr_dict", "_name_dict", "_readable_regs", "_writable_regs"]
     _regs_dict: ClassVar = {}  # type: ignore  # noqa: PGH003
