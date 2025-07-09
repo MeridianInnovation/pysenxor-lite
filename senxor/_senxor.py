@@ -166,7 +166,8 @@ class Senxor:
     def stop_stream(self):
         """Stop the stream mode."""
         # TODO: Replace the implementation with senxor.fields
-        self.reg_write(REGS.FRAME_MODE, 0b00000000)
+        if self.is_connected:
+            self.reg_write(REGS.FRAME_MODE, 0b00000000)
         self._logger.info("stop stream")
 
     def read(
