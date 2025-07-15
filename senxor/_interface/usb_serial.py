@@ -262,7 +262,10 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
 
     @property
     def address(self) -> Any:
-        return self.port
+        if isinstance(self.port, ListPortInfo):
+            return self.port.device
+        else:
+            return self.port
 
     @staticmethod
     @functools.wraps(list_senxor_usb)
