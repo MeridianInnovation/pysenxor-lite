@@ -13,25 +13,9 @@ from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
 from senxor._interface import SENXOR_CONNECTION_TYPES
 from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
 from senxor.proc import dk_to_celsius, raw_to_frame
-from senxor.regs import REGS
+from senxor.regmap import Register, Registers
 
 logger = get_logger("senxor")
-
-
-class _RegisterDict(dict[int, int]):
-    def __init__(self, senxor: Senxor):
-        super().__init__()
-        self.senxor = senxor
-
-    def __getitem__(self, key: int | REGS) -> int:
-        if isinstance(key, REGS):
-            key = key.address
-        elif not isinstance(key, int):
-            raise TypeError(f"Invalid key type: {type(key)}, expected int or REGS")
-        if key not in self:
-            value = self.senxor.reg_read(key)
-            self[key] = value
-        return super().__getitem__(key)
 
 
 class Senxor:
@@ -96,7 +80,7 @@ class Senxor:
         self.get_status_on_connect = get_status_on_connect
         self.stop_stream_on_connect = stop_stream_on_connect
 
-        self.registers: _RegisterDict = _RegisterDict(self)
+        self.regs: Registers = Registers(self)
 
         if auto_open:
             self.open()
@@ -121,7 +105,7 @@ class Senxor:
             self.stop_stream()
 
         if self.get_status_on_connect:
-            self.read_all_regs()
+            self.regs.read_all()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
@@ -140,7 +124,7 @@ class Senxor:
     @property
     def is_streaming(self) -> bool:
         # TODO: Replace the implementation with senxor.fields
-        frame_mode = self.registers[REGS.FRAME_MODE.address]
+        frame_mode = self.regs.FRAME_MODE.get()
         res = (frame_mode & 0b00000010) == 0b00000010
         return res
 
@@ -160,14 +144,14 @@ class Senxor:
     def start_stream(self):
         """Start the stream mode."""
         # TODO: Replace the implementation with senxor.fields
-        self.reg_write(REGS.FRAME_MODE, 0b00000010)
+        self.regs.FRAME_MODE.set(0b00000010)
         self._logger.info("start stream")
 
     def stop_stream(self):
         """Stop the stream mode."""
         # TODO: Replace the implementation with senxor.fields
         if self.is_connected:
-            self.reg_write(REGS.FRAME_MODE, 0b00000000)
+            self.regs.FRAME_MODE.set(0b00000000)
         self._logger.info("stop stream")
 
     def read(
@@ -236,16 +220,19 @@ class Senxor:
                 data = raw_to_frame(data)
             return header, data
 
-    def reg_read(self, reg: REGS | int) -> int:
+    def read_reg(self, reg: int | str | Register) -> int:
         """Read the value from a register.
 
-        Note: If you want to read multiple registers at once, `regs_read` is more efficient.
-        The `regs_read` only communicates with the device once.
+        Notes
+        -----
+        - You need to know the register name or address to use this method.
+        - For a more modern and editor-friendly approach, use `senxor.regs.REG_NAME` to benefit from autocompletion.
+        - If you want to read multiple registers at once, `read_regs` is more efficient as it only communicates with the device once.
 
         Parameters
         ----------
-        reg : REGS | int
-            The register to read from, specified as a REGS enum member or an integer address.
+        reg : int | str | Register
+            The register to read from, specified as a Register instance, a register name, or an integer address.
 
         Returns
         -------
@@ -259,36 +246,30 @@ class Senxor:
 
         Examples
         --------
-        >>> senxor.reg_read(REGS.EMISSIVITY)
+        >>> senxor.read_reg(senxor.regs.EMISSIVITY)
         95
-        >>> senxor.reg_read(REGS.REG_0xCA)
+        >>> senxor.read_reg("EMISSIVITY")
         95
-        >>> senxor.reg_read(0xCA)
+        >>> senxor.read_reg(0xCA)
         95
-        >>> senxor.reg_read(202)
+        >>> senxor.read_reg(202)
         95
 
         """
         if not self.is_connected:
             raise SenxorNotConnectedError
-        if not isinstance(reg, REGS):
-            reg = REGS.from_addr(reg)
-        if not reg.readable:
-            raise ValueError(f"Register 0x{reg.address:02X} is not readable")
-        val = self.interface.read_reg(reg.address)
-        self._logger.info("read reg success", reg=reg, value=val)
-        self.registers[reg.address] = val
-        return val
+        addr = self.regs.get_addr(reg)
+        return self.regs.read_reg(addr)
 
-    def regs_read(self, regs: list[REGS] | list[int] | list[REGS | int]) -> dict[int, int]:
+    def read_regs(self, regs: list[str | int | Register]) -> dict[int, int]:
         """Read the values from multiple registers at once.
 
         Note: This method takes the almost same time as reading one register.
 
         Parameters
         ----------
-        regs : list[REGS | int]
-            The list of registers to read from, specified as a list of REGS enum members or integer addresses.
+        regs : list[str | int | Register]
+            The list of registers to read from, specified as a list of register names, integer addresses, or Register instances.
 
         Returns
         -------
@@ -308,27 +289,17 @@ class Senxor:
         """
         if not self.is_connected:
             raise SenxorNotConnectedError
-        regs_int = []
-        for reg_ in regs:
-            reg = REGS.from_addr(reg_) if not isinstance(reg_, REGS) else reg_
-            if not reg.readable:
-                raise ValueError(f"Reg 0x{reg.address:02X} is not readable")
-            if reg.address in regs_int:
-                raise ValueError(f"Reg 0x{reg.address:02X} is duplicated in the list: {regs}")
-            regs_int.append(reg.address)
-        regs_values = self.interface.read_regs(regs_int)
-
-        self._logger.info("read regs success")
-        self.registers.update(regs_values)
+        regs_addrs = [self.regs.get_addr(reg) for reg in regs]
+        regs_values = self.regs.read_regs(regs_addrs)
         return regs_values
 
-    def reg_write(self, reg: REGS | int, value: int):
+    def write_reg(self, reg: str | int | Register, value: int):
         """Write a value to a register.
 
         Parameters
         ----------
-        reg : REGS | int
-            The register to write to, specified as a REGS enum member or an integer address.
+        reg : str | int | Register
+            The register to write to, specified as a register name, integer address, or Register instance.
         value : int
             The value to write to the register (0-0xFF).
 
@@ -344,46 +315,17 @@ class Senxor:
 
         Examples
         --------
-        >>> senxor.reg_write(REGS.EMISSIVITY, 0x5F)
-        >>> senxor.reg_write(REGS.REG_0xCA, 0x5F)
-        >>> senxor.reg_write(0xCA, 0x5F)
+        >>> senxor.write_reg("EMISSIVITY", 0x5F)
+        >>> senxor.write_reg(0xCA, 0x5F)
+        >>> senxor.write_reg(senxor.regs.EMISSIVITY, 0x5F)
 
         """
         if not self.is_connected:
             raise SenxorNotConnectedError
-        if not isinstance(reg, REGS):
-            reg = REGS.from_addr(reg)
-        if not reg.writable:
-            raise ValueError(f"Register 0x{reg.address:02X} is not writable")
-
         if value < 0 or value > 0xFF:
             raise ValueError(f"Value must be between 0 and 0xFF, got {value}")
-
-        self.interface.write_reg(reg.address, value)
-
-        self._logger.info("write register success", reg=reg, value=value)
-        # TODO: Some regs will auto update the value after write.
-        # e.g. FRAME_MODE will auto rollback after single frame is captured.
-        # We need to handle this case.
-        self.registers[reg.address] = value
-        return value
-
-    def read_all_regs(self) -> dict[int, int]:
-        """Get all registers and their values.
-
-        Returns
-        -------
-        dict[int, int]
-            The dictionary of register addresses and their values.
-
-        """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
-
-        self.registers.clear()
-        self.registers.update(self.regs_read(REGS.list_readable_regs()))
-        self._logger.info("read all registers success")
-        return self.registers
+        addr = self.regs.get_addr(reg)
+        self.regs.write_reg(addr, value)
 
     def get_shape(self) -> tuple[int, int]:
         """Get the frame shape(height, width) of the senxor.
@@ -397,6 +339,9 @@ class Senxor:
         # Although the frame shape depends on the senxor type, but the internal implementation of `read` method
         # do not rely on this method.
 
-        senxor_type = self.registers[REGS.SENXOR_TYPE]
+        senxor_type = self.regs.SENXOR_TYPE.get()
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
+
+    def __repr__(self):
+        return f"Senxor(address={self.address}, type={self.type})"

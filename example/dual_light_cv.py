@@ -6,7 +6,6 @@ import numpy as np
 import senxor
 from senxor.log import setup_console_logger
 from senxor.proc import enlarge, normalize
-from senxor.regs import REGS
 from senxor.thread import CVCamThread, SenxorThread
 
 if __name__ == "__main__":
@@ -14,7 +13,7 @@ if __name__ == "__main__":
 
     # Initialize the Senxor device
     senxor_device = senxor.connect_senxor()
-    senxor_device.reg_write(REGS.FRAME_RATE, 0)
+    senxor_device.regs.FRAME_RATE.set(0)
 
     # Create threaded wrappers
     senxor_thread = SenxorThread(senxor_device)
