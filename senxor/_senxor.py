@@ -13,7 +13,8 @@ from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
 from senxor._interface import SENXOR_CONNECTION_TYPES
 from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
 from senxor.proc import dk_to_celsius, raw_to_frame
-from senxor.regmap import Register, Registers
+from senxor.regmap import Register
+from senxor.regmap._regmap import _RegMap
 
 logger = get_logger("senxor")
 
@@ -80,7 +81,9 @@ class Senxor:
         self.get_status_on_connect = get_status_on_connect
         self.stop_stream_on_connect = stop_stream_on_connect
 
-        self.regs: Registers = Registers(self)
+        self._regmap = _RegMap(self)
+        self.regs = self._regmap.regs
+        self.fields = self._regmap.fields
 
         if auto_open:
             self.open()
@@ -105,7 +108,7 @@ class Senxor:
             self.stop_stream()
 
         if self.get_status_on_connect:
-            self.regs.read_all()
+            self.refresh_regmap()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
@@ -153,6 +156,23 @@ class Senxor:
         if self.is_connected:
             self.regs.FRAME_MODE.set(0b00000000)
         self._logger.info("stop stream")
+
+    def refresh_regmap(self):
+        """Refresh the regmap cache. This method will read all registers and update all fields.
+
+        Then use `self.regs.status` and `self.fields.status` to get the status you want.
+
+        Examples
+        --------
+        >>> senxor.refresh_regmap()
+        >>> senxor.regs.status
+        {177: 0, 0: 0, 1: 0, ...}
+        >>> senxor.fields.status
+        {"SW_RESET": 0, "DMA_TIMEOUT_ENABLE": 0, ...}
+
+        """
+        # Only `fields.read_all()` is needed, this method calls `regs.read_all()` internally.
+        self._regmap.read_all()
 
     def read(
         self,

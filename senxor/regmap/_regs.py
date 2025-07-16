@@ -10,9 +10,8 @@ from structlog import get_logger
 from senxor.regmap._reg import Register, _RegisterDef, _RegisterDescriptor
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from senxor.regmap._regmap import _RegMap
 
-    from senxor._senxor import Senxor
 
 logger = get_logger("senxor.regmap")
 
@@ -466,18 +465,19 @@ class Registers:
     __writable_list__: ClassVar[list[str]] = [k for k, v in __reg_defs__.items() if v.writable]
     __auto_reset_list__: ClassVar[list[str]] = [k for k, v in __reg_defs__.items() if v.auto_reset]
 
-    def __init__(self, senxor: Senxor):
-        self._senxor = senxor
-        self._registers_values: dict[int, int] = {}
-        self._log = logger.bind(address=senxor.address)
-
-        self._lock = threading.Lock()
+    def __init__(self, regmap: _RegMap):
+        self._regmap = regmap
+        self._log = logger.bind(address=regmap.address)
 
         self._regs: dict[str, Register] = {k: getattr(self, k) for k in self.__name_list__}
 
     # ------------------------------------------------------------
     # Properties
     # ------------------------------------------------------------
+
+    @property
+    def _regs_cache(self) -> dict[int, int]:
+        return self._regmap._regs_cache
 
     @property
     def writable_regs(self) -> list[str]:
@@ -501,7 +501,7 @@ class Registers:
             The dictionary of register addresses and their values.
 
         """
-        return self._registers_values.copy()
+        return self._regs_cache.copy()
 
     @property
     def regs(self) -> dict[str, Register]:
@@ -536,16 +536,12 @@ class Registers:
 
     def read_reg(self, addr: int) -> int:
         """Read a single register from the device."""
-        value = self._senxor.interface.read_reg(addr)
-        self._registers_values[addr] = value
-        self._log.info("register read", addr=addr, value=value)
+        value = self._regmap.read_reg(addr)
         return value
 
     def read_regs(self, addrs: list[int]) -> dict[int, int]:
         """Read multiple registers from the device."""
-        values_dict = self._senxor.interface.read_regs(addrs)
-        self._registers_values.update(values_dict)
-        self._log.info("registers read", values=values_dict)
+        values_dict = self._regmap.read_regs(addrs)
         return values_dict
 
     def get_reg(self, addr: int) -> int:
@@ -554,19 +550,19 @@ class Registers:
         This method try to use the cached value instead of reading from the device if possible.
         """
         # The addr validation is done in __getitem__
-        if self.__addr2name__[addr] in self.__auto_reset_list__ or addr not in self._registers_values:
+        if self.__addr2name__[addr] in self.__auto_reset_list__ or addr not in self._regs_cache:
             self.read_reg(addr)
-        return self._registers_values[addr]
+        return self._regs_cache[addr]
 
     def get_regs(self, addrs: list[int]) -> dict[int, int]:
         """Get multiple register values by addresses.
 
         This method try to use the cached value instead of reading from the device if possible.
         """
-        need_read = [addr for addr in addrs if addr in self.__auto_reset_list__ or addr not in self._registers_values]
+        need_read = [addr for addr in addrs if addr in self.__auto_reset_list__ or addr not in self._regs_cache]
         if need_read:
             self.read_regs(need_read)
-        return {addr: self._registers_values[addr] for addr in addrs}
+        return {addr: self._regs_cache[addr] for addr in addrs}
 
     def write_reg(self, addr: int, value: int):
         """Write a single register to the device."""
@@ -578,9 +574,7 @@ class Registers:
             self._log.error("write protection violation", name=register_name, addr=addr, value=value)
             raise AttributeError(f"Register {register_name} (0x{addr:02X}) is read-only")
 
-        self._senxor.interface.write_reg(addr, value)
-        self._registers_values[addr] = value
-        self._log.info("register write", name=register_name, addr=addr, value=value)
+        self._regmap.write_reg(addr, value)
 
     def write_regs(self, values_dict: dict[int, int]):
         """Write multiple registers to the device."""
@@ -613,4 +607,4 @@ class Registers:
         raise AttributeError("Direct assignment to Registers is not allowed.")
 
     def __repr__(self):
-        return f"Registers(senxor={self._senxor})"
+        return f"Registers(regmap={self._regmap})"
