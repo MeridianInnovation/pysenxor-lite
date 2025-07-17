@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Literal
 
 from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
@@ -13,8 +12,6 @@ from senxor.cam import LiteCamera, list_camera
 from senxor.proc import remap
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
-
     from serial.tools.list_ports_common import ListPortInfo
 
 __all__ = [
@@ -67,7 +64,7 @@ def list_senxor(type: Literal["serial"] | None = None, exclude: list[str] | str 
     return devices
 
 
-def connect_senxor(
+def connect(
     address: str | ListPortInfo | None = None,
     type: Literal["serial"] | None = None,
     *,
@@ -77,13 +74,10 @@ def connect_senxor(
 ) -> Senxor:
     """Connect to a Senxor device.
 
-    It's recommended to use `connect` instead, which is a context manager and will automatically close the device.
-
     Parameters
     ----------
     address : str | ListPortInfo, optional
         The address of the device to connect to.
-        If not provided, the first available serial port will be used.
     type : Literal["serial"], optional
         The type of device to connect to.
         If not provided, will attempt to auto-detect from address.
@@ -101,14 +95,21 @@ def connect_senxor(
 
     Examples
     --------
-    >>> # Auto-detect first available serial device
-    >>> sensor = connect_senxor()
+    Use a context manager to connect to a device:
 
-    >>> # Connect to specific address (auto-detect type)
-    >>> sensor = connect_senxor("COM3")
+    >>> from senxor import list_senxor, connect
+    >>> addrs = list_senxor("serial")
+    >>> with connect(addrs[0]) as dev:
+    ...     print(f"Connected to device {dev.address}")
+    Connected to device COM3
 
-    >>> # Connect with explicit type
-    >>> sensor = connect_senxor("COM3", "serial", frame_read_timeout=1.0)
+    Or connect to a device without a context manager:
+
+    >>> dev = connect(addrs[0])
+    >>> print(f"Connected to device {dev.address}")
+    Connected to device COM3
+
+    It's recommended to use a context manager because it will automatically close the device when the context is exited.
 
     """
     if address is None:
@@ -121,46 +122,12 @@ def connect_senxor(
     return Senxor(address, type, auto_open, stop_stream, **kwargs)
 
 
-@contextmanager
-def connect(
+def connect_senxor(
     address: str | ListPortInfo | None = None,
     type: Literal["serial"] | None = None,
     *,
     auto_open: bool = True,
     stop_stream: bool = True,
     **kwargs,
-) -> Generator[Senxor, None, None]:
-    """Connect to a Senxor device and yield it.
-
-    Parameters
-    ----------
-    address : str | ListPortInfo, optional
-        The address of the device to connect to.
-    type : Literal["serial"], optional
-        The type of device to connect to.
-        If not provided, will attempt to auto-detect from address.
-    auto_open : bool, optional
-        Whether to automatically open the device.
-    stop_stream : bool, optional
-        Whether to stop the stream when the device is opened.
-    **kwargs
-        Additional arguments passed to the interface constructor.
-
-    Yields
-    ------
-    Senxor
-        The Senxor device.
-
-    Examples
-    --------
-    >>> with connect() as sensor:
-    >>>     sensor.start_stream()
-    >>>     while True:
-    >>>         header, data = sensor.read()
-
-    """
-    senxor = connect_senxor(address, type, auto_open=auto_open, stop_stream=stop_stream, **kwargs)
-    try:
-        yield senxor
-    finally:
-        senxor.close()
+) -> Senxor:
+    return connect(address, type, auto_open=auto_open, stop_stream=stop_stream, **kwargs)
