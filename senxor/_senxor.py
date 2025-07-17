@@ -126,10 +126,10 @@ class Senxor:
 
     @property
     def is_streaming(self) -> bool:
-        # TODO: Replace the implementation with senxor.fields
-        frame_mode = self.regs.FRAME_MODE.get()
-        res = (frame_mode & 0b00000010) == 0b00000010
-        return res
+        if self.is_connected:
+            return bool(self.fields.CONTINUOUS_STREAM.get())
+        else:
+            return False
 
     @property
     def is_connected(self) -> bool:
@@ -146,16 +146,19 @@ class Senxor:
 
     def start_stream(self):
         """Start the stream mode."""
-        # TODO: Replace the implementation with senxor.fields
-        self.regs.FRAME_MODE.set(0b00000010)
-        self._logger.info("start stream")
+        if self.is_connected:
+            self.fields.CONTINUOUS_STREAM.set(1)
+            self._logger.info("start stream")
+        else:
+            raise SenxorNotConnectedError
 
     def stop_stream(self):
         """Stop the stream mode."""
-        # TODO: Replace the implementation with senxor.fields
         if self.is_connected:
-            self.regs.FRAME_MODE.set(0b00000000)
-        self._logger.info("stop stream")
+            self.fields.CONTINUOUS_STREAM.set(0)
+            self._logger.info("stop stream")
+        else:
+            raise SenxorNotConnectedError
 
     def refresh_regmap(self):
         """Refresh the regmap cache. This method will read all registers and update all fields.
@@ -171,7 +174,8 @@ class Senxor:
         {"SW_RESET": 0, "DMA_TIMEOUT_ENABLE": 0, ...}
 
         """
-        # Only `fields.read_all()` is needed, this method calls `regs.read_all()` internally.
+        if not self.is_connected:
+            raise SenxorNotConnectedError
         self._regmap.read_all()
 
     def read(
@@ -359,7 +363,10 @@ class Senxor:
         # Although the frame shape depends on the senxor type, but the internal implementation of `read` method
         # do not rely on this method.
 
-        senxor_type = self.regs.SENXOR_TYPE.get()
+        if not self.is_connected:
+            raise SenxorNotConnectedError
+
+        senxor_type = self.fields.SENXOR_TYPE.get()
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
 

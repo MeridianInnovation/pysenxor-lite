@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Initialize the Senxor device
     senxor_device = senxor.connect_senxor()
-    senxor_device.regs.FRAME_RATE.set(0)
+    senxor_device.fields.FRAME_RATE_DIVIDER.set(0)
 
     # Create threaded wrappers
     senxor_thread = SenxorThread(senxor_device)
