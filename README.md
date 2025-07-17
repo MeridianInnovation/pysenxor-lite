@@ -78,28 +78,20 @@ print(dev.is_connected)
 
 The `with` statement will ensure that the connection is closed after the block is executed.
 
-2. Use the `connect_senxor` function.
+It's equivalent to:
 
 ```python
-addr = devices[0]
-
-dev = senxor.connect_senxor(addr, "serial")
+dev = senxor.connect(addr, "serial")
 print(dev.is_connected)
-```
-
-Remember to close the connection after you're done.
-
-```python
 dev.close()
-print(dev.is_connected)
 ```
 
-You can also use the `connect_senxor` or `connect` without specifying the address or type.
+You can also use the `connect` without specifying the address or type.
 
 In this case, the function will automatically find the first available device.
 
 ```python
-dev = senxor.connect_senxor()
+dev = senxor.connect()
 print(dev.is_connected)
 ```
 
@@ -131,11 +123,10 @@ if frame is not None:
     print(f"Frame min: {frame.min()} C, max: {frame.max()} C, mean: {frame.mean():.1f} C")
     # Output: Frame min: 20.3 C, max: 34.1 C, mean: 27.2 C
 
-dev.stop_stream()
-dev.close()
+dev.close() # Stop the stream and close the connection
 ```
 
-The `read` method will return a tuple of `(header, frame)` or `None` if the frame is not available(if block is False).
+The `read` method will return a tuple of `(header, frame)` or `(None, None)` if the frame is not available(if block is False).
 
 The `header` is a uint16 np.ndarray with some information about the frame.
 
@@ -229,6 +220,21 @@ plt.show()
 You can interact with the device in multiple threads.
 
 For example, you can read the data in a background thread, and read/write registers in the main thread. Which is useful for GUI applications.
+
+### More usage
+
+For more usage and API reference, please refer to the [Documentation](https://MeridianInnovation.github.io/pysenxor-open/).
+
+## Examples
+
+For beginners, there are some examples in the [examples](./example) folder.
+
+These examples provide a set of actual use cases of the `senxor` library.
+
+- Connect device, read thermal data, convert data to image, use cv2 to display the image stream.
+- Use thread to read data in background.
+- Create a simple GUI application to display the thermal camera stream.
+
 
 ## Contributing
 

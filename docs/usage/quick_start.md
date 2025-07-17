@@ -1,1 +1,1 @@
-{% include-markdown "../../README.md" start="## Usage" end="## Contributing" %}
+{% include-markdown "../../README.md" start="## Usage" end="## More usage" %}
