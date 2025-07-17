@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import threading
 from collections import defaultdict
 from functools import partial as _partial
 from typing import TYPE_CHECKING, ClassVar
@@ -13,6 +12,8 @@ from senxor.consts import SENXOR_TYPE as _map_senxor_type
 from senxor.regmap._field import Field, _FieldDef, _FieldDescriptor
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from senxor.regmap._regmap import _RegMap
 
 
@@ -1647,6 +1648,9 @@ class Fields:
 
     def __setitem__(self, key: str, field: Field):
         raise AttributeError("Direct assignment to Fields is not allowed.")
+
+    def __iter__(self) -> Iterator[Field]:
+        return iter(self._fields.values())
 
     def __repr__(self):
         return f"Fields(regmap={self._regmap})"

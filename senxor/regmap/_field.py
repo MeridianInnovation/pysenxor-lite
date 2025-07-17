@@ -185,6 +185,9 @@ class Field:
     def __repr__(self):
         return f"<Field(name={self.name})>"
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class _FieldDescriptor:
     def __init__(

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import threading
 from typing import TYPE_CHECKING, ClassVar
 
 from structlog import get_logger
@@ -10,6 +9,8 @@ from structlog import get_logger
 from senxor.regmap._reg import Register, _RegisterDef, _RegisterDescriptor
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from senxor.regmap._regmap import _RegMap
 
 
@@ -605,6 +606,9 @@ class Registers:
 
     def __setitem__(self, _, __):
         raise AttributeError("Direct assignment to Registers is not allowed.")
+
+    def __iter__(self) -> Iterator[Register]:
+        return iter(self._regs.values())
 
     def __repr__(self):
         return f"Registers(regmap={self._regmap})"
