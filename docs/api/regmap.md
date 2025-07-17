@@ -1,0 +1,3 @@
+## `senxor.regmap`
+
+::: senxor.regmap

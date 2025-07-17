@@ -1,3 +1,0 @@
-## `senxor.regs`
-
-::: senxor.regs

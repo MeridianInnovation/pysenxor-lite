@@ -15,6 +15,7 @@ nav:
       # - License: home/license.md
   - Usage:
       - Quick Start: usage/quick_start.md
+      - Device Control: usage/device_control.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
       - Use Thread to Stream Frames: examples/thread_stream.md
@@ -26,7 +27,7 @@ nav:
       - senxor.utils: api/utils.md
       - senxor.thread: api/thread.md
       - senxor.regs: api/regs.md
-      # - senxor.fields: api/fields.md
+      - senxor.regmap: api/regmap.md
       - senxor.cam: api/cam.md
 
 plugins:
