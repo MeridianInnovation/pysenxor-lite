@@ -1536,12 +1536,12 @@ class Fields:
     @property
     def writable_fields(self) -> list[str]:
         """Return a set of all writable field names."""
-        return self.__writable_list__
+        return self.__writable_list__.copy()
 
     @property
     def readable_fields(self) -> list[str]:
         """Return a set of all readable field names."""
-        return self.__readable_list__
+        return self.__readable_list__.copy()
 
     @property
     def status(self) -> dict[str, int]:
@@ -1565,7 +1565,7 @@ class Fields:
     @property
     def status_display(self) -> dict[str, str]:
         """Return a dictionary of all field names and human-readable representations of last status."""
-        return {k: v.display(self.status[k]) for k, v in self.fields.items()}
+        return {k: self.fields[k].display(v) for k, v in self.status.items()}
 
     # ------------------------------------------------------------
     # Public methods
@@ -1601,7 +1601,7 @@ class Fields:
     def set_fields(self, fields_values: dict[str | Field, int]):
         """Set multiple field values."""
         fields_ = [field if isinstance(field, Field) else self[field] for field in fields_values]
-        values = [fields_values[field] for field in fields_]
+        values = list(fields_values.values())
         self._set_fields(fields_, values)
 
     # ------------------------------------------------------------

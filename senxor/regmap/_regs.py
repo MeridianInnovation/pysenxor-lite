@@ -483,12 +483,12 @@ class Registers:
     @property
     def writable_regs(self) -> list[str]:
         """Return a set of all writable register names."""
-        return self.__writable_list__
+        return self.__writable_list__.copy()
 
     @property
     def readable_regs(self) -> list[str]:
         """Return a set of all readable register names."""
-        return self.__readable_list__
+        return self.__readable_list__.copy()
 
     @property
     def status(self) -> dict[int, int]:
@@ -560,7 +560,11 @@ class Registers:
 
         This method try to use the cached value instead of reading from the device if possible.
         """
-        need_read = [addr for addr in addrs if addr in self.__auto_reset_list__ or addr not in self._regs_cache]
+        need_read = [
+            addr
+            for addr in addrs
+            if self.__addr2name__[addr] in self.__auto_reset_list__ or addr not in self._regs_cache
+        ]
         if need_read:
             self.read_regs(need_read)
         return {addr: self._regs_cache[addr] for addr in addrs}

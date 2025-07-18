@@ -40,6 +40,7 @@ class _RegMap:
         return self.senxor.interface
 
     def read_reg(self, addr: int) -> int:
+        self._validate_addr(addr)
         with self._cache_lock:
             value = self.interface.read_reg(addr)
             self._regs_cache[addr] = value
@@ -48,6 +49,7 @@ class _RegMap:
             return value
 
     def write_reg(self, addr: int, value: int):
+        self._validate_addr(addr)
         with self._cache_lock:
             self.interface.write_reg(addr, value)
             self._log.info("register write", addr=addr, value=value)
@@ -55,6 +57,8 @@ class _RegMap:
             self._fresh_fields_cache_by_write({addr: value})
 
     def read_regs(self, addrs: list[int]) -> dict[int, int]:
+        for addr in addrs:
+            self._validate_addr(addr)
         with self._cache_lock:
             values_dict = self.interface.read_regs(addrs)
             self._regs_cache.update(values_dict)
@@ -63,6 +67,8 @@ class _RegMap:
             return values_dict
 
     def write_regs(self, updates: dict[int, int]):
+        for addr in updates:
+            self._validate_addr(addr)
         with self._cache_lock:
             success = {}
             try:
@@ -90,7 +96,12 @@ class _RegMap:
 
         for fname in f_need_fresh:
             field = self.fields[fname]
-            value = field._parse_field_value(self._regs_cache)
+            try:
+                value = field._parse_field_value(self._regs_cache)
+            except KeyError:
+                # The field requires more than one register, but the register is not in the cache.
+                # This means that the field is not yet initialized.
+                value = None
             if self._fields_cache.get(fname, None) != value:
                 updates[fname] = value
         if updates:
@@ -105,7 +116,10 @@ class _RegMap:
         updates = {}
         for fname in f_need_fresh:
             field = self.fields[fname]
-            value = field._parse_field_value(self._regs_cache)
+            try:
+                value = field._parse_field_value(self._regs_cache)
+            except KeyError:
+                value = None
             if self._fields_cache.get(fname, None) != value:
                 updates[fname] = value
         if updates:
@@ -113,6 +127,13 @@ class _RegMap:
             self._log.info("refresh fields by reg-write", fields=updates)
         else:
             self._log.debug("no fields changed by reg-write")
+
+    @staticmethod
+    def _validate_addr(addr: int):
+        if not isinstance(addr, int):
+            raise TypeError(f"Register address must be an integer, got {type(addr)}")
+        if addr < 0 or addr > 0xFF:
+            raise ValueError(f"Register address must be in [0, 0xFF], got {addr}")
 
     def __repr__(self) -> str:
         return f"RegMap(senxor={self.senxor})"
