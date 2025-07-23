@@ -4,8 +4,8 @@
 
 A Python Library for Meridian Innovation's thermal imaging devices.
 
-- **Github repository**: <https://github.com/MeridianInnovation/pysenxor-open/>
-- **Documentation** <https://MeridianInnovation.github.io/pysenxor-open/>
+- **Github repository**: <https://github.com/MeridianInnovation/pysenxor-lite/>
+- **Documentation** <https://MeridianInnovation.github.io/pysenxor-lite/>
 
 ## Overview
 
@@ -27,11 +27,11 @@ This package can let users interact with Meridian Innovation's thermal imaging d
 To install the project, run the following command:
 
 ```bash
-python -m pip install git+https://github.com/MeridianInnovation/pysenxor-open.git
+python -m pip install git+https://github.com/MeridianInnovation/pysenxor-lite.git
 
 # Install from local:
-git clone https://github.com/MeridianInnovation/pysenxor-open.git
-cd pysenxor-open
+git clone https://github.com/MeridianInnovation/pysenxor-lite.git
+cd pysenxor-lite
 python -m pip install .
 ```
 
@@ -223,7 +223,7 @@ For example, you can read the data in a background thread, and read/write regist
 
 ### More usage
 
-For more usage and API reference, please refer to the [Documentation](https://MeridianInnovation.github.io/pysenxor-open/).
+For more usage and API reference, please refer to the [Documentation](https://MeridianInnovation.github.io/pysenxor-lite/).
 
 ## Examples
 

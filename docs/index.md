@@ -2,5 +2,5 @@
 
 ## Next Steps
 
-- [Quick Start](usage/quick_start.md)
+- [Getting Started](guides/getting_started.md)
 - [API Reference](api/regmap.md)

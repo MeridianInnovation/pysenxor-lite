@@ -1,10 +1,10 @@
 site_name: pysenxor
-repo_url: https://github.com/MeridianInnovation/pysenxor-open
-site_url: https://MeridianInnovation.github.io/pysenxor-open
+repo_url: https://github.com/MeridianInnovation/pysenxor-lite
+site_url: https://MeridianInnovation.github.io/pysenxor-lite
 site_description: A Python Library for Meridian Innovation's thermal imaging devices.
 site_author: Meridian Innovation
 edit_uri: edit/main/docs/
-repo_name: MeridianInnovation/pysenxor-open
+repo_name: MeridianInnovation/pysenxor-lite
 copyright: Maintained by <a href="https://www.meridianinno.com/">MeridianInnovation</a>.
 
 nav:
@@ -13,9 +13,9 @@ nav:
       # - Usage: home/usage.md
       # - Changelog: home/changelog.md
       # - License: home/license.md
-  - Usage:
-      - Quick Start: usage/quick_start.md
-      - Device Control: usage/device_control.md
+  - Tutorials:
+      - Getting Started: guides/getting_started.md
+      - Device Control: guides/device_control.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
       - Use Thread to Stream Frames: examples/thread_stream.md
@@ -26,7 +26,6 @@ nav:
       - senxor.consts: api/consts.md
       - senxor.utils: api/utils.md
       - senxor.thread: api/thread.md
-      - senxor.regs: api/regs.md
       - senxor.regmap: api/regmap.md
       - senxor.cam: api/cam.md
 
@@ -84,9 +83,9 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/MeridianInnovation/pysenxor-open
+      link: https://github.com/MeridianInnovation/pysenxor-lite
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/pysenxor-open
+      link: https://pypi.org/project/pysenxor-lite
 markdown_extensions:
   - toc:
       permalink: true
