@@ -372,3 +372,30 @@ class Senxor:
 
     def __repr__(self):
         return f"Senxor(address={self.address}, type={self.type})"
+
+    # ------------------------------------------------------------
+    # Backward compatibility code
+    # ------------------------------------------------------------
+
+    # These methods are for backward compatibility.
+    # Please try to use the new methods instead.
+
+    def regread(self, reg: str | int) -> int:
+        return self.read_reg(reg)
+
+    def regwrite(self, reg: str | int, value: int):
+        return self.write_reg(reg, value)
+
+    def start(self):
+        return self.start_stream()
+
+    def stop(self):
+        return self.close()
+
+    def stop_capture(self):
+        return self.stop_stream()
+
+    @property
+    def fpa_shape(self) -> tuple[int, int]:
+        nrows, ncols = self.get_shape()
+        return ncols, nrows
