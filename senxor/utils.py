@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
+import numpy as np
+
 from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
 from senxor._senxor import Senxor
 from senxor.cam import LiteCamera, list_camera
 
 # To compatible with the old version
-from senxor.proc import remap
+from senxor.proc import normalize, raw_to_frame
 
 if TYPE_CHECKING:
     from serial.tools.list_ports_common import ListPortInfo
@@ -131,3 +133,59 @@ def connect_senxor(
     **kwargs,
 ) -> Senxor:
     return connect(address, type, auto_open=auto_open, stop_stream=stop_stream, **kwargs)
+
+
+def remap(
+    image: np.ndarray,
+    in_range: tuple | None = None,
+    out_range: tuple | None = None,
+    dtype: Any = np.uint8,
+):
+    """Remap image intensity to a desired range and data type using NumPy.
+
+    It's equivalent to `normalize(..., dtype=np.uint8)`.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        The image to remap.
+    in_range : tuple | None, optional
+        The input range of the image. If `None`, the image's min/max are used.
+    out_range : tuple | None, optional
+        The output range of the image.
+    dtype : Any, optional
+        The data type of the image.
+
+    Returns
+    -------
+    np.ndarray
+        The remapped image.
+
+    """
+    return normalize(image, in_range, out_range, dtype)
+
+
+def data_to_frame(data: np.ndarray, array_shape: tuple[int, int] | None = None, *, hflip: bool = False) -> np.ndarray:  # noqa: ARG001
+    """Convert raw data to a frame.
+
+    It's used for backward compatibility.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        The raw data.
+    array_shape : tuple[int, int] | None
+        Not needed, it's for backward compatibility.
+    hflip : bool, optional
+        Whether to flip the image horizontally.
+
+    Returns
+    -------
+    np.ndarray
+        The frame.
+
+    """
+    frame = raw_to_frame(data)
+    if hflip:
+        frame = np.flip(frame, axis=1)
+    return frame

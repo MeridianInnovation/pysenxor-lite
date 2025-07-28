@@ -230,36 +230,6 @@ def normalize(
     return normalized_image
 
 
-def remap(
-    image: np.ndarray,
-    in_range: tuple | None = None,
-    out_range: tuple | None = None,
-    dtype: Any = np.uint8,
-):
-    """Remap image intensity to a desired range and data type using NumPy.
-
-    It's equivalent to `normalize(..., dtype=np.uint8)`.
-
-    Parameters
-    ----------
-    image : np.ndarray
-        The image to remap.
-    in_range : tuple | None, optional
-        The input range of the image. If `None`, the image's min/max are used.
-    out_range : tuple | None, optional
-        The output range of the image.
-    dtype : Any, optional
-        The data type of the image.
-
-    Returns
-    -------
-    np.ndarray
-        The remapped image.
-
-    """
-    return normalize(image, in_range, out_range, dtype)
-
-
 def enlarge(image: np.ndarray, scale: int) -> np.ndarray:
     """Enlarge an image by an integer scale factor using nearest neighbor (no interpolation).
 
