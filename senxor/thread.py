@@ -237,14 +237,6 @@ class SenxorThread:
         allow_listener : bool, optional
             Whether to enable the listener pattern. Defaults to True.
 
-        Notes
-        -----
-            Listener functions **must** be extremely lightweight and non-blocking.
-            If a listener function takes too long to execute, the `BackgroundReader`
-            will raise a `TimeoutError` in the reading thread when the
-            next frame arrives. This strict policy ensures that listener notifications
-            do not fall behind the sensor's frame rate.
-
         """
         self._started = False
         self._senxor = senxor
@@ -380,14 +372,6 @@ class CVCamThread:
             A pre-configured OpenCV VideoCapture instance.
         allow_listener : bool, default True
             Whether to enable the listener pattern.
-
-        Notes
-        -----
-        Listener functions **must** be extremely lightweight and non-blocking.
-        If a listener function takes too long to execute, the `_BackgroundReader`
-        will raise a `TimeoutError` in the reading thread when the
-        next frame arrives. This strict policy ensures that listener notifications
-        do not fall behind the camera's frame rate.
 
         """
         self._started = False

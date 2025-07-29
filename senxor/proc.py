@@ -100,14 +100,15 @@ def normalize(
     out_range: tuple | None = None,
     dtype: Any | None = np.float32,
 ):
-    r"""Normalize image intensity to a desired range and data type using NumPy.
+    """Normalize image intensity to a desired range and data type using NumPy.
 
     Supported dtypes:
-    - np.floating
-    - np.uint8
-    - np.uint16
-    - np.int16
-    - np.int32
+
+    - `np.floating`
+    - `np.uint8`
+    - `np.uint16`
+    - `np.int16`
+    - `np.int32`
 
     Parameters
     ----------
@@ -124,6 +125,7 @@ def normalize(
         The function does not validate the `out_range` parameter if it is specified, be careful.
 
         If None:
+
         - If `dtype` is specified as a floating-point type, (0.0, 1.0) is used.
         - If `dtype` is specified as an integer type, the min/max of `dtype` are used.
         - If `dtype` is None:
@@ -181,13 +183,11 @@ def normalize(
 
     Notes
     -----
-        - Avoiding Re-computation: If you've already computed min/max, provide them
-            via `in_range` to avoid re-computation.
-        - Preserving Original Contrast: To prevent stretching, set `in_range`
-            to the original data's known intensity bounds or full `dtype` range.
-        - Maintaining Precision: For multi-step processing, use floating-point types
-            (`np.float32`/`np.float64`) for intermediate steps. Only normalize to
-            `np.uint8` as the **very last step** for display or saving.
+    1. Avoiding re-computation: If you've already computed min/max, provide them via `in_range` to avoid re-computation.
+    2. Preserving original contrast: To prevent stretching, set `in_range` to the original data's known intensity bounds
+    or full `dtype` range.
+    3. Maintaining precision: For multi-step processing, use floating-point types (`np.float32`/`np.float64`) for
+    intermediate steps. Only normalize to `np.uint8` as the **very last step** for display or saving.
 
     """
     target_dtype = dtype if dtype is not None else image.dtype

@@ -251,7 +251,8 @@ class Senxor:
         -----
         - You need to know the register name or address to use this method.
         - For a more modern and editor-friendly approach, use `senxor.regs.REG_NAME` to benefit from autocompletion.
-        - If you want to read multiple registers at once, `read_regs` is more efficient as it only communicates with the device once.
+        - If you want to read multiple registers at once, `read_regs` is more efficient as it only communicates with the
+        device once.
 
         Parameters
         ----------
