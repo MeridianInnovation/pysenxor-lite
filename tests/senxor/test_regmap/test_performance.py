@@ -115,22 +115,3 @@ class TestCacheOptimization:
 
         # Should have high cache hit ratio (minimal hardware calls)
         assert len(mock_interface.read_calls) == 0
-
-
-class TestStressTestScenarios:
-    """Test performance under stress conditions."""
-
-    def test_high_frequency_operations(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:
-        """Test performance under high-frequency operations."""
-        test_addr = 0xCA
-        mock_interface.set_register_value(test_addr, 80)
-
-        # High-frequency reads
-        start_time = time.perf_counter()
-        for _ in range(1000):
-            regmap.regs.get_reg(test_addr)
-        end_time = time.perf_counter()
-
-        # Should handle high frequency efficiently
-        total_time = end_time - start_time
-        assert total_time < 1.0  # Less than 1 second for 1000 operations

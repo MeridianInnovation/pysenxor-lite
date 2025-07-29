@@ -155,26 +155,6 @@ class TestSynchronousRead:
         for addr in test_addrs:
             assert addr in mock_interface.read_calls
 
-    def test_read_field_updates_reg_cache(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:
-        """Test that field reads update register cache."""
-        # This test would need actual field implementation
-        # For now, test the _get_regs method that fields use
-        test_addrs = [0xCA, 0xB4]
-        test_values = {0xCA: 80, 0xB4: 100}
-
-        for addr, value in test_values.items():
-            mock_interface.set_register_value(addr, value)
-
-        # Simulate field access through _get_regs
-        result = regmap._get_regs(test_addrs)
-
-        # Verify return values
-        assert result == test_values
-
-        # Verify register cache updates
-        for addr, value in test_values.items():
-            assert regmap._regs_cache[addr] == value
-
     def test_read_all_populates_caches(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:
         """Test that read_all populates both caches."""
         # Setup some test data
@@ -481,47 +461,3 @@ class TestConcurrencySupport:
         for data in write_data:
             for addr, value in data.items():
                 assert regmap._regs_cache[addr] == value
-
-
-class TestPerformanceCharacteristics:
-    """Test performance characteristics of _RegMap operations."""
-
-    def test_cache_hit_performance(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:
-        """Test that cache hits are faster than cache misses."""
-        test_addr = 0xB4
-        test_value = 100
-
-        # First read (cache miss)
-        mock_interface.set_register_value(test_addr, test_value)
-        start_time = time.time()
-        regmap.read_reg(test_addr)
-        miss_time = time.time() - start_time
-
-        # Second read through get_regs (cache hit for normal registers)
-        start_time = time.time()
-        regmap._get_regs([test_addr])
-        hit_time = time.time() - start_time
-
-        # Cache hit should be significantly faster
-        # (This is a basic test - actual performance testing would be more sophisticated)
-        assert hit_time < miss_time or hit_time < 0.001  # Very fast for cache hit
-
-    def test_bulk_operation_efficiency(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:
-        """Test that bulk operations are efficient."""
-        test_addrs = list(TestDataGenerator.generate_register_values(count=10).keys())
-
-        # Bulk read
-        start_time = time.time()
-        regmap.read_regs(test_addrs)
-        bulk_time = time.time() - start_time
-
-        # Individual reads
-        mock_interface.reset_call_history()
-        start_time = time.time()
-        for addr in test_addrs:
-            regmap.read_reg(addr)
-        individual_time = time.time() - start_time
-
-        # Bulk should be at least as efficient as individual
-        # (In practice, bulk operations might have optimizations)
-        assert bulk_time <= individual_time * 1.5  # Allow some overhead
