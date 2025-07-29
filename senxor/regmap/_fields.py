@@ -1610,14 +1610,13 @@ class Fields:
 
     def _get_field(self, field: Field) -> int:
         """Get a field value."""
-        regs_values = field._fetch_regs_values()
+        regs_values = self._regmap._fetch_regs_values_by_fields([field])
         value = field._parse_field_value(regs_values)
         return value
 
     def _get_fields(self, fields: list[Field]) -> dict[str, int]:
         """Get multiple field values."""
-        reg_addrs = [addr for field in fields for addr in field.addr_map]
-        regs_values = self._regmap._get_regs(reg_addrs)
+        regs_values = self._regmap._fetch_regs_values_by_fields(fields)
         fields_values = {field.name: field._parse_field_value(regs_values) for field in fields}
         return fields_values
 
@@ -1625,7 +1624,8 @@ class Fields:
         """Set a field value."""
         if not field.writable:
             raise AttributeError(f"Field '{field.name}' is read-only")
-        update = field._encode_field_value(value, field._fetch_regs_values())
+        regs_values = self._regmap._fetch_regs_values_by_fields([field])
+        update = field._encode_field_value(value, regs_values)
         self._regmap.write_regs(update)
 
     def _set_fields(self, fields: list[Field], values: list[int]):
@@ -1634,8 +1634,7 @@ class Fields:
             if not field.writable:
                 raise AttributeError(f"Field '{field.name}' is read-only")
 
-        reg_addrs = list({addr for field in fields for addr in field.addr_map})
-        regs_values = self._regmap._get_regs(reg_addrs)
+        regs_values = self._regmap._fetch_regs_values_by_fields(fields)
         updates = regs_values
         for field, value in zip(fields, values):
             update = field._encode_field_value(value, updates)

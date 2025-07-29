@@ -145,10 +145,6 @@ class Field:
     # Private methods
     # ----------------------------------------------------------------
 
-    def _fetch_regs_values(self) -> dict[int, int]:
-        """Fetch register values from the instance."""
-        return self._instance._regmap._get_regs(list(self.addr_map.keys()))
-
     def _parse_field_value(self, regs_values: dict[int, int]) -> int:
         """Parse field value from register bytes."""
         val = 0

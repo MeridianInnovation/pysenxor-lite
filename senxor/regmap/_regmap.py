@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from structlog import get_logger
 
+from senxor.regmap._field import Field
 from senxor.regmap._fields import Fields
 from senxor.regmap._regs import Registers
 
@@ -83,10 +84,19 @@ class _RegMap:
     def read_all(self):
         self.regs.read_all()
 
-    def _get_regs(self, addrs: list[int]) -> dict[int, int]:
-        """The private API for fields to get register values."""
-        # No cache lock here!
-        return self.regs.get_regs(addrs)
+    def _fetch_regs_values_by_fields(self, fields: list[Field]) -> dict[int, int]:
+        """Fetch register values by fields.
+
+        This method is used by fields to fetch register values.
+        It will read the registers if the field.auto_reset flag is set or the register is not in the cache, but ignore
+        the reg.auto_reset flag.
+        """
+        need_read = {
+            addr for field in fields for addr in field.addr_map if field.auto_reset or addr not in self._regs_cache
+        }
+        if need_read:
+            self.read_regs(list(need_read))
+        return self._regs_cache
 
     def _fresh_fields_cache_by_read(self, regs_values: dict[int, int]):
         """Refresh the cache by reading the registers."""
