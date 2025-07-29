@@ -8,7 +8,7 @@ import numpy as np
 
 from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
 from senxor._senxor import Senxor
-from senxor.cam import LiteCamera, list_camera
+from senxor.cam import list_camera
 
 # To compatible with the old version
 from senxor.proc import normalize, raw_to_frame
@@ -17,7 +17,6 @@ if TYPE_CHECKING:
     from serial.tools.list_ports_common import ListPortInfo
 
 __all__ = [
-    "LiteCamera",
     "connect_senxor",
     "is_senxor_usb",
     "list_camera",

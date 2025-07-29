@@ -1,178 +1,111 @@
-"""Wrapper for the lite-camera library. Provide a lightweight camera read and display interface."""
+"""RGB camera related utilities."""
 
-from typing import Any
+import logging
+from typing import TYPE_CHECKING
 
-import numpy as np
+from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras
+from cv2_enumerate_cameras import supported_backends
 
-try:
-    import litecam
+if TYPE_CHECKING:
+    from cv2_enumerate_cameras.camera_info import CameraInfo
 
-    _litecam_imported = True
-except ImportError:
-    _litecam_imported = False
-
-_litecam_imp_msg = "Install `lite-camera` to use LiteCamera related features."
+logger = logging.getLogger(__name__)
 
 
-class LiteCamera:
-    """A wrapper for the litcam.PyCamera class."""
+def list_camera_info(
+    backend: int = 0,
+    *,
+    exclude_same_index: bool = True,
+) -> list["CameraInfo"]:
+    """List available camera information.
 
-    def __init__(self, index: int):
-        """Initialize a LiteCamera object.
+    Parameters
+    ----------
+    backend : int, optional
+        The backend to use for camera enumeration. If 0, all supported backends are used.
+    exclude_same_index : bool, optional
+        If backend is 0, True means exclude cameras with the same index across backends.
+        Some cameras are available on multiple backends. If you are not interested in this, set it to False.
 
-        Parameters
-        ----------
-        index : int
-            The index of the camera to open.
+    Returns
+    -------
+    list of CameraInfo
+        List of camera information objects. Use `cv2.VideoCapture(camera.index, camera.backend)` to open a camera.
 
-        """
-        if not _litecam_imported:
-            raise ImportError(_litecam_imp_msg)
+    Examples
+    --------
+    1. List all cameras available and exclude duplicate indices.
+    >>> for camera in list_camera_info():
+    ...     print(camera.index, camera.name, camera.backend)
+    0 GENERAL - VIDEO 700
+    1 Integrated Camera 700
 
-        self.camera: Any = litecam.PyCamera()  # type: ignore[attr-defined]
-        self.index = index
-        self._is_open = False
+    2. List all cameras available and include duplicate indices.
+    >>> for camera in list_camera_info(exclude_same_index=False):
+    ...     print(camera.index, camera.name, camera.backend)
+    0 GENERAL - VIDEO 700
+    1 Integrated Camera 700
+    0 GENERAL - VIDEO 1400
+    1 Integrated Camera 1400
 
-        # Keep a reference to the original functions to avoid type checker errors
-        self._original_open = self.camera.open
-        self._original_release = self.camera.release
-        self._original_captureFrame = self.camera.captureFrame
-        self._original_getWidth = self.camera.getWidth
-        self._original_getHeight = self.camera.getHeight
-        self._original_setResolution = self.camera.setResolution
-        self._original_listMediaTypes = self.camera.listMediaTypes
+    3. Connect to a specific camera.
+    >>> camera = list_camera_info()[0]
+    >>> cap = cv2.VideoCapture(camera.index, camera.backend)
 
-        if not self.open():
-            raise RuntimeError("Failed to open camera")
+    4. View the camera information.
+    >>> cam_info = list_camera_info()[0]
+    >>> print(cam_info.index)
+    0
+    >>> print(cam_info.name)
+    GENERAL - VIDEO
+    >>> print(cam_info.backend)
+    700
+    >>> print(cam_info.vid)
+    1234
+    >>> print(cam_info.pid)
+    5678
+    >>> print(cam_info.path)
+    /dev/video0
 
-    def read(self) -> tuple[bool, Any]:
-        """Read a frame from the camera with BGR format.
-
-        Returns
-        -------
-        tuple[bool, Any]
-            A tuple containing a boolean indicating success and the frame data.
-
-        Examples
-        --------
-        >>> cam = LiteCamera(0)
-        >>> ret, frame = cam.read()
-        >>> if ret:
-        ...     cv2.imshow("frame", frame)
-        ...     cv2.waitKey(1)
-
-        Notes
-        -----
-        The frame is in BGR format.
-
-        """
-        resp = self._original_captureFrame()
-        if resp is None:
-            return False, None
-        width, height, size, data = resp
-
-        if size != width * height * 3:
-            print(f"Warning: Unexpected data size. Expected {width * height * 3}, got {size}")
-            return False, None
-
-        data = np.frombuffer(data, dtype=np.uint8)
-        data = data.reshape(height, width, 3)
-
-        if width > 0 and height > 0:
-            return True, data
+    """
+    if backend == 0:
+        cameras = []
+        if exclude_same_index:
+            seen_indices = set()
+            for b in sorted(supported_backends):
+                for cam in _enumerate_cameras(b):
+                    if cam.index not in seen_indices:
+                        cameras.append(cam)
+                        seen_indices.add(cam.index)
         else:
-            return False, None
+            [cameras.extend(_enumerate_cameras(b)) for b in sorted(supported_backends)]
+    else:
+        cameras = _enumerate_cameras(backend)
 
-    def isOpened(self) -> bool:
-        """Same API as cv2.VideoCapture.isOpened."""
-        return self._is_open
-
-    @property
-    def width(self) -> int:
-        return self._original_getWidth()
-
-    @property
-    def height(self) -> int:
-        return self._original_getHeight()
-
-    @property
-    def is_open(self) -> bool:
-        return self._is_open
-
-    def open(self) -> bool:
-        """Open the camera."""
-        is_open = self._original_open(self.index)
-        self._is_open = bool(is_open)
-        return self._is_open
-
-    def set(self, propId: int, value: Any) -> bool:
-        raise NotImplementedError("Use `setResolution` instead.")
-
-    def get(self, propId: int) -> Any:
-        """Same API as cv2.VideoCapture.get.
-
-        Parameters
-        ----------
-        propId : int
-            The property ID.
-
-        """
-        if propId == 3:  # CAP_PROP_FRAME_WIDTH
-            return self._original_getWidth()
-        elif propId == 4:  # CAP_PROP_FRAME_HEIGHT
-            return self._original_getHeight()
-        else:
-            raise ValueError(f"Unsupported property: {propId}")
-
-    def release(self) -> None:
-        """Release the camera."""
-        self._original_release()
-        self._is_open = False
-
-    def listMediaTypes(self) -> list:
-        """List the media types supported by the camera."""
-        return self._original_listMediaTypes()
-
-    def setResolution(self, width: int, height: int) -> bool:
-        """Set the resolution of the camera.
-
-        Parameters
-        ----------
-        width : int
-            The width of the resolution.
-        height : int
-            The height of the resolution.
-
-        Returns
-        -------
-        bool
-            True if the resolution is set successfully, False otherwise.
-
-        """
-        ret = self._original_setResolution(width, height)
-        if not ret:
-            raise RuntimeError("Failed to set resolution")
-        return bool(ret)
+    return cameras
 
 
 def list_camera() -> list[str]:
     """List all cameras available.
 
-    Returns
+    Warning:
+    -------
+    This function is deprecated. Use `list_camera_info` instead.
+
+    Returns:
     -------
     list[str]
         A list of camera names.
 
-    Examples
+    Examples:
     --------
     >>> list_camera()
     ['Camera 0', 'Camera 1', 'Camera 2']
 
-    You can use `LiteCamera(index)` to open a camera.
-    >>> cam = LiteCamera(0)
+    You can use `cv2.VideoCapture(index)` to open a camera.
 
     """
-    if not _litecam_imported:
-        raise ImportError(_litecam_imp_msg)
+    logger.warning("`list_camera` is deprecated. Use `list_camera_info` instead.")
 
-    return litecam.getDeviceList()  # type: ignore  # noqa: PGH003
+    all_cams = list_camera_info()
+    return [cam.name for cam in all_cams]

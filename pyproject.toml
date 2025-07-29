@@ -20,22 +20,20 @@ dependencies = [
   "numpy>=1.19.5",
   "pyserial>=3.5",
   "structlog>=21.5.0",
+  "cv2-enumerate-cameras>=1.2.2",
 ]
 
 [dependency-groups]
 dev = [
-  "lite-camera>=2.0.4",
-  "opencv-python>=4.11.0.86",
   "pillow>=11.2.1",
   "pre-commit>=4.2.0",
-  "pytest>=7.0.1",
   "rich>=10.11.0",
 ]
-# Dual-light Camera App support.
-dual-light = [
-    # "lite-camera>=2.0.4",
+
+camera = [
+    "opencv-python>=4.11.0.86",
 ]
-# Documentation support.
+
 doc = [
     "mkdocs>=1.6.1",
     "mkdocs-gen-files>=0.5.0",
@@ -70,7 +68,7 @@ Homepage = "https://www.meridianinno.com/"
 Issues = "https://www.meridianinno.com/"
 
 [tool.uv]
-default-groups = ["dev", "dual-light", "test"]
+default-groups = ["dev", "camera", "test"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
