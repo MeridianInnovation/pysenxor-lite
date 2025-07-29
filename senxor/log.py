@@ -100,6 +100,7 @@ def setup_console_logger(log_level: int = logging.INFO):
             structlog.stdlib.ProcessorFormatter.remove_processors_meta,
             structlog.dev.ConsoleRenderer(sort_keys=False),
         ],
+        logger=logging.getLogger(),
     )
 
     handler = logging.StreamHandler()
