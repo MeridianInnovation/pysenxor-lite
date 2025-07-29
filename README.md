@@ -235,10 +235,27 @@ These examples provide a set of actual use cases of the `senxor` library.
 - Use thread to read data in background.
 - Create a simple GUI application to display the thermal camera stream.
 
+## License
+
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+You may freely use, modify, and distribute this software for both open-source and commercial purposes, subject to the terms of the license.
 
 ## Contributing
 
-Please follow the [Contributing Guide](./CONTRIBUTING.md) to contribute to this project.
+We welcome contributions from the community.
+
+By submitting a pull request, you certify compliance with the [Developer Certificate of Origin (DCO)](https://developercertificate.org/). This means you assert that:
+
+- You wrote the code or have the right to submit it;
+- You grant us the right to use your contribution under the project license.
+
+Please add the following line to your Git commit message to confirm DCO compliance:
+
+`Signed-off-by: Your Name your.email@example.com`
+
+You can automate this with `git commit -s`.
+
+See more details in [Contributing Guide](./CONTRIBUTING.md).
 
 ## Contact
 
