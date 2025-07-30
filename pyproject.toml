@@ -19,7 +19,7 @@ dependencies = [
   "colormap-tool>=1.0.0",
   "numpy>=1.19.5",
   "pyserial>=3.5",
-  "structlog>=21.5.0",
+  "structlog>=25.4.0",
   "cv2-enumerate-cameras>=1.2.2",
 ]
 

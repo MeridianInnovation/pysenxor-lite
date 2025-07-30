@@ -6,14 +6,14 @@ import contextlib
 import copy
 import queue
 import threading
-from typing import Any, Callable, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal
 
-import numpy as np
-from structlog import get_logger
+from senxor.log import get_logger
 
-from senxor import Senxor
+if TYPE_CHECKING:
+    import numpy as np
 
-logger = get_logger("senxor.thread")
+    from senxor import Senxor
 
 
 class _BackgroundReader:
@@ -35,7 +35,7 @@ class _BackgroundReader:
         self._name = name
         self._allow_listener = allow_listener
 
-        self._log = logger.bind(name=name)
+        self._log = get_logger(name=name)
 
         self._is_running = False
         self._reader_thread: threading.Thread | None = None
@@ -242,7 +242,7 @@ class SenxorThread:
         self._senxor = senxor
         self._celsius = frame_unit == "C"
         self._reader = _BackgroundReader(self._read_senxor, self._senxor.address, allow_listener=allow_listener)
-        self._log = logger.bind(address=self._senxor.address)
+        self._log = get_logger(address=self._senxor.address)
 
     def read(self) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
         """Return the newest *(header, frame)* pair and consume it.
@@ -382,7 +382,7 @@ class CVCamThread:
             f"CVCamera{self.camera_index}",
             allow_listener=allow_listener,
         )
-        self._log = logger.bind(camera_index=self.camera_index)
+        self._log = get_logger(camera_index=self.camera_index)
 
     def read(self) -> tuple[bool, np.ndarray | None]:
         """Return the newest frame and consume it.

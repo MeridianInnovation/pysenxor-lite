@@ -1,16 +1,13 @@
 from threading import Lock
 from typing import TYPE_CHECKING
 
-from structlog import get_logger
-
+from senxor.log import get_logger
 from senxor.regmap._field import Field
 from senxor.regmap._fields import Fields
 from senxor.regmap._regs import Registers
 
 if TYPE_CHECKING:
     from senxor._senxor import Senxor
-
-logger = get_logger("senxor.regmap")
 
 
 class _RegMap:
@@ -19,7 +16,7 @@ class _RegMap:
     def __init__(self, senxor: "Senxor"):
         self.senxor = senxor
 
-        self._log = logger.bind(address=self.address)
+        self._log = get_logger(address=self.address)
 
         self._regs_cache: dict[int, int] = {}
         self._fields_cache: dict[str, int] = {}

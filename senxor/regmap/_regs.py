@@ -4,17 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar
 
-from structlog import get_logger
-
+from senxor.log import get_logger
 from senxor.regmap._reg import Register, _RegisterDef, _RegisterDescriptor
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from senxor.regmap._regmap import _RegMap
-
-
-logger = get_logger("senxor.regmap")
 
 
 class Registers:
@@ -468,7 +464,7 @@ class Registers:
 
     def __init__(self, regmap: _RegMap):
         self._regmap = regmap
-        self._log = logger.bind(address=regmap.address)
+        self._log = get_logger(address=regmap.address)
 
         self._regs: dict[str, Register] = {k: getattr(self, k) for k in self.__name_list__}
 

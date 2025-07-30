@@ -4,19 +4,20 @@ from __future__ import annotations
 
 import contextlib
 import time
-from typing import Any, Literal
-
-import numpy as np
-from structlog import get_logger
+from typing import TYPE_CHECKING, Any, Literal
 
 from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
 from senxor._interface import SENXOR_CONNECTION_TYPES
 from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
+from senxor.log import get_logger
 from senxor.proc import dk_to_celsius, raw_to_frame
 from senxor.regmap import Register
 from senxor.regmap._regmap import _RegMap
 
-logger = get_logger("senxor")
+if TYPE_CHECKING:
+    import numpy as np
+
+    from senxor.regmap import Register
 
 
 class Senxor:
@@ -52,6 +53,7 @@ class Senxor:
             If the address is not valid for any of the supported types.
 
         """
+        logger = get_logger()
         logger.info(
             "init Senxor",
             address=address,
@@ -102,7 +104,7 @@ class Senxor:
 
         time_start = time.time()
         self.interface.open()
-        self._logger = get_logger("senxor").bind(address=self.address)
+        self._logger = get_logger(address=self.address)
 
         if self.stop_stream_on_connect:
             self.stop_stream()
@@ -294,7 +296,8 @@ class Senxor:
         Parameters
         ----------
         regs : list[str | int | Register]
-            The list of registers to read from, specified as a list of register names, integer addresses, or Register instances.
+            The list of registers to read from, specified as a list of register names, integer addresses, or Register
+            instances.
 
         Returns
         -------

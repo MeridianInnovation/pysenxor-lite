@@ -19,7 +19,6 @@ __all__ = [
     "get_colormaps",
     "normalize",
     "raw_to_frame",
-    "remap",
     "resample_lut",
 ]
 

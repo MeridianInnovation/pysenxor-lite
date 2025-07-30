@@ -4,20 +4,16 @@ from collections import defaultdict
 from functools import partial as _partial
 from typing import TYPE_CHECKING, ClassVar
 
-from structlog import get_logger
-
 from senxor.consts import MCU_TYPE as _map_mcu_type
 from senxor.consts import MODULE_TYPE as _map_module_type
 from senxor.consts import SENXOR_TYPE as _map_senxor_type
+from senxor.log import get_logger
 from senxor.regmap._field import Field, _FieldDef, _FieldDescriptor
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from senxor.regmap._regmap import _RegMap
-
-
-logger = get_logger("senxor.regmap")
 
 
 # ----------------------------------------------------------------
@@ -1521,7 +1517,7 @@ class Fields:
 
     def __init__(self, regmap: _RegMap):
         self._regmap = regmap
-        self._log = logger.bind(address=regmap.address)
+        self._log = get_logger(address=regmap.address)
 
         self._fields: dict[str, Field] = {k: getattr(self, k) for k in self.__name_list__}
 

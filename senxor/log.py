@@ -5,11 +5,12 @@ from __future__ import annotations
 import logging
 import logging.config
 from pathlib import Path
+from typing import TYPE_CHECKING, TextIO, cast
 
 import structlog
 
-default_logger = structlog.get_logger()
-
+if TYPE_CHECKING:
+    from structlog.types import FilteringBoundLogger
 
 __all__ = [
     "get_logger",
@@ -19,24 +20,42 @@ __all__ = [
 ]
 
 
-def get_logger(name: str | None = None):
+def get_logger(*args, **kwargs) -> FilteringBoundLogger:
     """Get a structured logger instance.
 
     Parameters
     ----------
-    name : str | None, optional
-        The name of the logger, by default None
+    *args : Any
+        Positional arguments to pass to `structlog.get_logger`.
+    **kwargs : Any
+        Keyword arguments to pass to `structlog.get_logger`.
 
     Returns
     -------
     structlog.BoundLogger
         A structured logger instance.
 
+    Examples
+    --------
+    >>> from senxor.log import get_logger
+    >>> logger = get_logger(device_id="1")
+    >>> logger.warning("This is a warning message.")
+    [warning  ] This is a warning message.    device_id=1
+
     """
-    if name is None:
-        return default_logger
-    else:
-        return structlog.get_logger(name)
+    return structlog.get_logger(*args, **kwargs)
+
+
+class _ConsoleOutPutProcessor:
+    def __init__(self):
+        self._formatter = structlog.dev.ConsoleRenderer(sort_keys=False)
+        self._writer = structlog.PrintLogger()
+
+    def __call__(self, logger, method, event):
+        ev = event.copy()
+        msg = self._formatter(logger, method, event)
+        self._writer.msg(msg)
+        return ev
 
 
 def setup_standard_logger():
@@ -53,12 +72,11 @@ def setup_standard_logger():
     processors = [
         structlog.stdlib.filter_by_level,
         structlog.contextvars.merge_contextvars,
+        structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.StackInfoRenderer(),
-        structlog.dev.ConsoleRenderer(
-            sort_keys=False,
-            colors=False,
-        ),
+        structlog.processors.format_exc_info,
+        structlog.dev.ConsoleRenderer(sort_keys=False),
     ]
     structlog.configure(
         processors=processors,
@@ -80,41 +98,29 @@ def setup_console_logger(log_level: int = logging.INFO):
         The log level to use, by default `logging.INFO`
 
     """
-    shared_processors = [
-        structlog.stdlib.filter_by_level,
-        structlog.contextvars.merge_contextvars,
-        structlog.processors.add_log_level,
-        structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=False),
-        structlog.processors.StackInfoRenderer(),
-    ]
-
     structlog.configure(
-        processors=[*shared_processors, structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
-        logger_factory=structlog.stdlib.LoggerFactory(),
+        processors=[
+            structlog.contextvars.merge_contextvars,
+            structlog.processors.add_log_level,
+            structlog.processors.StackInfoRenderer(),
+            structlog.dev.set_exc_info,
+            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=False),
+            structlog.dev.ConsoleRenderer(sort_keys=False),
+        ],
+        wrapper_class=structlog.make_filtering_bound_logger(log_level),
+        context_class=dict,
+        logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
     )
 
-    formatter = structlog.stdlib.ProcessorFormatter(
-        foreign_pre_chain=shared_processors,
-        processors=[
-            structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-            structlog.dev.ConsoleRenderer(sort_keys=False),
-        ],
-        logger=logging.getLogger(),
-    )
-
-    handler = logging.StreamHandler()
-    # Use OUR `ProcessorFormatter` to format all `logging` entries.
-    handler.setFormatter(formatter)
-    root_logger = logging.getLogger()
-    root_logger.addHandler(handler)
-    root_logger.setLevel(log_level)
-
 
 def setup_file_logger(
-    log_file: Path | str,
-    console_log_level: int = logging.INFO,
-    file_log_level: int = logging.INFO,
+    path: Path | str,
+    log_level: int = logging.INFO,
+    *,
+    file_mode: str = "wt+",
+    log_as_json: bool = False,
+    log_to_console: bool = True,
 ):
     """Setup a file logger.
 
@@ -123,84 +129,41 @@ def setup_file_logger(
 
     Parameters
     ----------
-    log_file : Path | str
+    path : Path | str
         The path to the log file.
-    console_log_level : int, optional
-        The log level to use for the console, by default `logging.INFO`
-    file_log_level : int, optional
-        The log level to use for the file, by default `logging.INFO`
+    log_level : int, optional
+        The log level to use for the file, by default `logging.NOTSET`
+    file_mode : str, optional
+        The mode to open the log file in, by default `"wt+"`
+    log_as_json : bool, optional
+        Whether to log to the file in JSON format, by default `False`
+    log_to_console : bool, optional
+        Whether to log to the console, by default `True`
 
     """
-    log_file = Path(log_file)
+    file = cast("TextIO", Path(path).open(file_mode))  # noqa: SIM115
 
-    timestamper = structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S")
-    pre_chain = [
-        structlog.stdlib.filter_by_level,
-        # Add the log level and a timestamp to the event_dict if the log entry
-        # is not from structlog.
-        structlog.stdlib.add_log_level,
-        # Add extra attributes of LogRecord objects to the event dictionary
-        # so that values passed in the extra parameter of log methods pass
-        # through to log output.
-        structlog.stdlib.ExtraAdder(),
-        timestamper,
+    processors = [
+        structlog.contextvars.merge_contextvars,
+        structlog.processors.add_log_level,
+        structlog.processors.StackInfoRenderer(),
+        structlog.dev.set_exc_info,
+        structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=False),
     ]
 
-    logging.config.dictConfig({
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "plain": {
-                "()": structlog.stdlib.ProcessorFormatter,
-                "processors": [
-                    structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-                    structlog.dev.ConsoleRenderer(colors=False, sort_keys=False),
-                ],
-                "foreign_pre_chain": pre_chain,
-            },
-            "colored": {
-                "()": structlog.stdlib.ProcessorFormatter,
-                "processors": [
-                    structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-                    structlog.dev.ConsoleRenderer(colors=True, sort_keys=False),
-                ],
-                "foreign_pre_chain": pre_chain,
-            },
-        },
-        "handlers": {
-            "default": {
-                "level": console_log_level,
-                "class": "logging.StreamHandler",
-                "formatter": "colored",
-            },
-            "file": {
-                "level": file_log_level,
-                "class": "logging.handlers.WatchedFileHandler",
-                "mode": "w",
-                "filename": log_file.as_posix(),
-                "formatter": "plain",
-            },
-        },
-        "loggers": {
-            "": {
-                "handlers": ["default", "file"],
-                "level": console_log_level,
-                "propagate": True,
-            },
-        },
-    })
+    if log_to_console:
+        processors.append(_ConsoleOutPutProcessor())
+
+    if log_as_json:
+        processors.append(structlog.processors.JSONRenderer())
+    else:
+        processors.append(structlog.dev.ConsoleRenderer(sort_keys=False, colors=False))
+
     structlog.configure(
-        processors=[
-            structlog.stdlib.filter_by_level,
-            structlog.stdlib.add_log_level,
-            structlog.stdlib.PositionalArgumentsFormatter(),
-            timestamper,
-            structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
-            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
-        ],
-        logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.BoundLogger,
+        processors=processors,
+        wrapper_class=structlog.make_filtering_bound_logger(log_level),
+        context_class=dict,
+        logger_factory=structlog.WriteLoggerFactory(file),
         cache_logger_on_first_use=True,
     )
 

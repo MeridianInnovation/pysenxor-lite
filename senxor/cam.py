@@ -1,15 +1,14 @@
 """RGB camera related utilities."""
 
-import logging
 from typing import TYPE_CHECKING
 
 from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras
 from cv2_enumerate_cameras import supported_backends
 
+from senxor.log import get_logger
+
 if TYPE_CHECKING:
     from cv2_enumerate_cameras.camera_info import CameraInfo
-
-logger = logging.getLogger(__name__)
 
 
 def list_camera_info(
@@ -105,7 +104,7 @@ def list_camera() -> list[str]:
     You can use `cv2.VideoCapture(index)` to open a camera.
 
     """
-    logger.warning("`list_camera` is deprecated. Use `list_camera_info` instead.")
+    get_logger().warning("`list_camera` is deprecated. Use `list_camera_info` instead.")
 
     all_cams = list_camera_info()
     return [cam.name for cam in all_cams]

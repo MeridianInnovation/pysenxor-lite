@@ -3,13 +3,11 @@ from __future__ import annotations
 import functools
 import threading
 import time
-from typing import Any, Callable, ClassVar
+from typing import TYPE_CHECKING, Any, Callable, ClassVar
 
-import numpy as np
 from serial import Serial, SerialException
 from serial.tools import list_ports
 from serial.tools.list_ports_common import ListPortInfo
-from structlog import get_logger
 
 from senxor._error import (
     ChecksumError,
@@ -22,8 +20,10 @@ from senxor._error import (
 from senxor._interface.parser import SenxorMsgParser
 from senxor._interface.protocol import SenxorInterfaceProtocol
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
+from senxor.log import get_logger
 
-logger = get_logger("senxor.interface.serial")
+if TYPE_CHECKING:
+    import numpy as np
 
 
 def is_senxor_usb(port: ListPortInfo | str) -> bool:
@@ -167,7 +167,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
             Whether to fail on checksum error.
 
         """
-        self._logger = get_logger("senxor.interface.serial")
+        self._logger = get_logger()
         self._logger.debug(
             "init serial interface",
             port=port,
