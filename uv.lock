@@ -1282,6 +1282,7 @@ dependencies = [
     { name = "numpy", version = "2.3.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pyserial" },
     { name = "structlog" },
+    { name = "tomli", marker = "python_full_version < '3.10'" },
 ]
 
 [package.dev-dependencies]
@@ -1319,6 +1320,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.19.5" },
     { name = "pyserial", specifier = ">=3.5" },
     { name = "structlog", specifier = ">=25.4.0" },
+    { name = "tomli", marker = "python_full_version < '3.10'", specifier = ">=2.2.1" },
 ]
 
 [package.metadata.requires-dev]
