@@ -16,6 +16,7 @@ nav:
   - Tutorials:
       - Getting Started: guides/getting_started.md
       - Device Control: guides/device_control.md
+      - Loading Settings From File: guides/loading_settings.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
       - Use Thread to Stream Frames: examples/thread_stream.md
@@ -23,6 +24,7 @@ nav:
       - senxor: api/senxor.md
       - senxor.proc: api/proc.md
       - senxor.log: api/log.md
+      - senxor.settings: api/settings.md
       - senxor.consts: api/consts.md
       - senxor.utils: api/utils.md
       - senxor.thread: api/thread.md

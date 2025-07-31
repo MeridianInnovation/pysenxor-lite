@@ -2,5 +2,5 @@
 
 ## Next Steps
 
-- [Getting Started](guides/getting_started.md)
+- [Tutorials](guides/getting_started.md)
 - [API Reference](api/regmap.md)
