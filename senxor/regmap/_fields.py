@@ -11,7 +11,7 @@ from senxor.log import get_logger
 from senxor.regmap._field import Field, _FieldDef, _FieldDescriptor
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterator, Sequence
 
     from senxor.regmap._regmap import _RegMap
 
@@ -1584,9 +1584,9 @@ class Fields:
         field = field if isinstance(field, Field) else self[field]
         return self._get_field(field)
 
-    def get_fields(self, fields: list[str | Field]) -> dict[str, int]:
+    def get_fields(self, fields: Sequence[str]) -> dict[str, int]:
         """Get multiple field values."""
-        fields_ = [field if isinstance(field, Field) else self[field] for field in fields]
+        fields_ = [self[field] for field in fields]
         return self._get_fields(fields_)
 
     def set_field(self, field: str | Field, value: int):
@@ -1594,9 +1594,9 @@ class Fields:
         field = field if isinstance(field, Field) else self[field]
         self._set_field(field, value)
 
-    def set_fields(self, fields_values: dict[str | Field, int]):
+    def set_fields(self, fields_values: dict[str, int]):
         """Set multiple field values."""
-        fields_ = [field if isinstance(field, Field) else self[field] for field in fields_values]
+        fields_ = [self[field] for field in fields_values]
         values = list(fields_values.values())
         self._set_fields(fields_, values)
 
