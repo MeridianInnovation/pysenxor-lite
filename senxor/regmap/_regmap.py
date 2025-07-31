@@ -88,12 +88,16 @@ class _RegMap:
         It will read the registers if the field.auto_reset flag is set or the register is not in the cache, but ignore
         the reg.auto_reset flag.
         """
-        need_read = {
-            addr for field in fields for addr in field.addr_map if field.auto_reset or addr not in self._regs_cache
-        }
+        fields_regs = set()
+        need_read = set()
+        for field in fields:
+            for addr in field.addr_map:
+                if addr not in self._regs_cache or field.auto_reset:
+                    need_read.add(addr)
+                fields_regs.add(addr)
         if need_read:
             self.read_regs(list(need_read))
-        return self._regs_cache
+        return {addr: self._regs_cache[addr] for addr in fields_regs}
 
     def _fresh_fields_cache_by_read(self, regs_values: dict[int, int]):
         """Refresh the cache by reading the registers."""
