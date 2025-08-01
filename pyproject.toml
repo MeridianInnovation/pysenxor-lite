@@ -1,6 +1,6 @@
 [project]
 name = "pysenxor"
-version = "2.0.0"
+version = "3.0.0"
 authors = [{ name = "Merididan Innovation", email = "info@meridianinno.com" }]
 description = "Python library for interaction with Meridian Innovation's SenXor(TM)"
 readme = "README.md"
