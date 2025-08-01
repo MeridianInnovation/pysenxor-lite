@@ -26,8 +26,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+  "commitizen>=4.8.3",
   "pillow>=11.2.1",
-  "pre-commit>=4.2.0",
   "rich>=10.11.0",
 ]
 
@@ -104,3 +104,8 @@ unfixable = ["F401"]
 preview = true
 skip-magic-trailing-comma = false
 docstring-code-format = true
+
+[tool.commitizen]
+
+version_provider = "uv"
+tag_format = "v$version"
