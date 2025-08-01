@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 """Constants related to Senxor devices."""
 
 # --- Physical Constants ---

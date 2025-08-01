@@ -238,7 +238,14 @@ These examples provide a set of actual use cases of the `senxor` library.
 ## License
 
 This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 You may freely use, modify, and distribute this software for both open-source and commercial purposes, subject to the terms of the license.
+
+## Copyright
+
+Unless otherwise specified, all files in the source code directory(`senxor/`) are copyrighted by Meridian Innovation.
+
+Copyright (c) 2025 Meridian Innovation. All rights reserved.
 
 ## Contributing
 

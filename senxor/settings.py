@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 from __future__ import annotations
 
 from pathlib import Path

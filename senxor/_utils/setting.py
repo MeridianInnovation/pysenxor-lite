@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 """A settings manager utility."""
 
 from __future__ import annotations

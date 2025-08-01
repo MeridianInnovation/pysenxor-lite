@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 from senxor.regmap._field import Field
 from senxor.regmap._fields import Fields
 from senxor.regmap._reg import Register

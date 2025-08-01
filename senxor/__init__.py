@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 """Top-level package for Senxor devices."""
 
 import senxor.log

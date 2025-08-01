@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 """RGB camera related utilities."""
 
 from typing import TYPE_CHECKING

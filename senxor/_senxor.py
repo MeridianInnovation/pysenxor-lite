@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 """The core class for Senxor devices."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
 import numpy as np
 
 from senxor._error import ChecksumError, InvalidAckBodyError
