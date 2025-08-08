@@ -380,6 +380,44 @@ class Senxor:
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
 
+    def get_senxor_id_hex(self) -> str:
+        """Get the senxor id(SN code) string in hex format.
+
+        The senxor id is a hex string of 12 characters, the format is:
+        `YYWWLLSSSSSS`, where:
+        - `YY` is the production year (from 2000 to 2099).
+        - `WW` is the production week.
+        - `LL` is the manufacturing location.
+        - `SSSSSS` is the serial number (from 000000 to 999999).
+
+        Returns
+        -------
+        str
+            The senxor id.
+
+        """
+        production_year = self.fields.PRODUCTION_YEAR.get()
+        production_week = self.fields.PRODUCTION_WEEK.get()
+        manuf_location = self.fields.MANUF_LOCATION.get()
+        serial_number = self.fields.SERIAL_NUMBER.get()
+        return f"{production_year:02X}{production_week:02X}{manuf_location:02X}{serial_number:06X}"
+
+    def get_sn(self) -> str:
+        """Get the SN code string. Same as `get_senxor_id_hex`.
+
+        Returns
+        -------
+        str
+            The SN code string.
+
+        """
+        return self.get_senxor_id_hex()
+
+    def get_module_type(self) -> str:
+        """Get the module type."""
+        module_type = self.fields.MODULE_TYPE.display()
+        return module_type
+
     def __repr__(self):
         return f"Senxor(address={self.address}, type={self.type})"
 
