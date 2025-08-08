@@ -151,7 +151,11 @@ class Field:
         """Parse field value from register bytes."""
         val = 0
         shift = 0
-        for addr, (start, end) in self.addr_map.items():
+
+        # Respect insertion order defined in `addr_map` and process in reverse
+        # so that earlier entries contribute more significant bits.
+        for addr in reversed(list(self.addr_map.keys())):
+            start, end = self.addr_map[addr]
             length = end - start
             mask = (1 << length) - 1
             part = (regs_values[addr] >> start) & mask
@@ -170,7 +174,8 @@ class Field:
 
         updates: dict[int, int] = {}
         shift = 0
-        for addr, (start, end) in self.addr_map.items():
+        for addr in reversed(list(self.addr_map.keys())):
+            start, end = self.addr_map[addr]
             length = end - start
             mask_bits = (1 << length) - 1
             part = (value >> shift) & mask_bits

@@ -1265,8 +1265,8 @@ class Fields:
             type="uint32",
             desc="Serial number of the camera module",
             help=_help_serial_number,
-            addr="0xE3:0-0xE6:8",
-            addr_map={0xE3: (0, 8), 0xE4: (0, 8), 0xE5: (0, 8), 0xE6: (0, 8)},
+            addr="0xE3:0-0xE5:8",
+            addr_map={0xE3: (0, 8), 0xE4: (0, 8), 0xE5: (0, 8)},
         ),
     )
 
