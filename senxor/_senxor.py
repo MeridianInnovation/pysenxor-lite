@@ -114,6 +114,10 @@ class Senxor:
         if self.get_status_on_connect:
             self.refresh_regmap()
 
+        if self.fields.NO_HEADER.get() == 1:
+            self._logger.warning("disable_no_header_mode", msg="No header mode is not supported now.")
+            self.fields.NO_HEADER.set(0)
+
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
 
