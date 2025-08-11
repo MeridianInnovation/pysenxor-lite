@@ -380,6 +380,18 @@ class Senxor:
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
 
+    def get_production_year(self) -> int:
+        """Get the production year.
+
+        Returns
+        -------
+        int
+            The production year.
+
+        """
+        production_year = self.fields.PRODUCTION_YEAR.get() + 2000
+        return production_year
+
     def get_senxor_id_hex(self) -> str:
         """Get the senxor id(SN code) string in hex format.
 
@@ -417,6 +429,20 @@ class Senxor:
         """Get the module type."""
         module_type = self.fields.MODULE_TYPE.display()
         return module_type
+
+    def get_fw_version(self) -> str:
+        """Get the firmware version string.
+
+        Returns
+        -------
+        str
+            The firmware version string.
+
+        """
+        major = self.fields.FW_VERSION_MAJOR.get()
+        minor = self.fields.FW_VERSION_MINOR.get()
+        build = self.fields.FW_VERSION_BUILD.get()
+        return f"{major}.{minor}.{build}"
 
     def __repr__(self):
         return f"Senxor(address={self.address}, type={self.type})"
