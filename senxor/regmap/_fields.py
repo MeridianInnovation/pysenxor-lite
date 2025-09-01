@@ -230,6 +230,10 @@ Setting this bit to 1 eliminates the Header from the Thermal Data Frame transfer
 Resetting this bit to 0 includes the HEADER in the Thermal Data Frame.
 """
 
+_help_adc_enable = """
+Enable the output of raw ADC data.
+"""
+
 _help_frame_rate_divider = """
 The value of these bits establishes the rate at which the host controller can read out thermal data frame from the
 Output Frame Buffer through the SPI interface.
@@ -774,6 +778,22 @@ class Fields:
             help=_help_no_header,
             addr="0xB1:5-0xB1:6",
             addr_map={0xB1: (5, 6)},
+        ),
+        validator=_validator_bool,
+        repr_func=_repr_bool,
+    )
+
+    ADC_ENABLE = _FieldDescriptor(
+        _FieldDef(
+            name="ADC_ENABLE",
+            group="FRAME_MODE",
+            readable=True,
+            writable=True,
+            type="bool",
+            desc="output raw ADC data",
+            help=_help_adc_enable,
+            addr="0xB1:7-0xB1:8",
+            addr_map={0xB1: (7, 8)},
         ),
         validator=_validator_bool,
         repr_func=_repr_bool,

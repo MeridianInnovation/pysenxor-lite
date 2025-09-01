@@ -246,7 +246,7 @@ class Senxor:
             return None, None
         else:
             header, data = resp
-            if celsius:
+            if celsius and not self.fields.ADC_ENABLE.get():
                 data = dk_to_celsius(data)
             if not raw:
                 data = raw_to_frame(data)
