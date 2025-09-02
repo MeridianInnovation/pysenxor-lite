@@ -554,7 +554,7 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
         self._error_policy: dict[type[Exception], Policy] = {
             InvalidAckHeaderError: Policy(callback=self._on_ack_error),
             InvalidAckBodyError: Policy(callback=self._on_ack_error, retry_times=10),
-            SenxorReadTimeoutError: Policy(callback=None, retry_times=0),
+            SenxorReadTimeoutError: Policy(callback=self._on_read_timeout_error, retry_times=3),
             SerialException: Policy(callback=self._on_lost_connection_error, retry_times=0),
         }
 
@@ -567,7 +567,17 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
     ) -> Any:
         policy = self._error_policy.get(type(err), None)
 
-        if policy is None:
+        if policy and policy.callback is not None:
+            for _ in range(policy.retry_times):
+                try:
+                    res = self._retry_operation(err, policy.callback, func, *func_args, **func_kwargs)
+                    self._logger.debug("retry success", func=func.__name__)
+                    return res
+                except Exception as retry_err:  # noqa: PERF203
+                    err = retry_err
+                    self._logger.error("retry failed", error=str(err))
+                    time.sleep(0.01)
+        else:
             self._logger.error(
                 "unhandled error",
                 error=str(err),
@@ -575,30 +585,21 @@ class SenxorInterfaceSerial(SenxorInterfaceProtocol):
                 func_args=func_args,
                 func_kwargs=func_kwargs,
             )
-            raise err
-        else:
-            if policy.callback is not None:
-                policy.callback(err)
-            retry_times = policy.retry_times
 
-        for _ in range(retry_times):
-            try:
-                if hasattr(func, "__self__"):
-                    res = func(*func_args, **func_kwargs)
-                else:
-                    res = func(self, *func_args, **func_kwargs)
-                self._logger.debug("retry success", func=func.__name__)
-                return res
-            except Exception as retry_err:  # noqa: PERF203
-                err = retry_err
-                time.sleep(0.01)
+        self.close()
+        raise err
 
-        raise err from None
+    def _retry_operation(self, err: Exception, error_handler: Callable, func: Callable, *args, **kwargs) -> Any:
+        error_handler(err)
+        res = func(*args, **kwargs) if hasattr(func, "__self__") else func(self, *args, **kwargs)
+        return res
+
+    def _on_read_timeout_error(self, _: Exception) -> None:
+        time.sleep(0.05)
 
     def _on_ack_error(self, _: Exception) -> None:
         self._align_buffer()
 
     def _on_lost_connection_error(self, _: Exception) -> None:
-        self._is_connected = False
         self._logger.error("lost connection")
         raise SenxorNotConnectedError
