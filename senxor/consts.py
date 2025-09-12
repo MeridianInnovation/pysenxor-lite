@@ -4,6 +4,9 @@
 
 # --- Physical Constants ---
 KELVIN = 273.15
+FAHRENHEIT_OFFSET = 32
+CELSIUS_TO_FAHRENHEIT_RATIO = 9 / 5
+FAHRENHEIT_TO_CELSIUS_RATIO = 5 / 9
 
 # --- Sensor Constants ---
 SENXOR_VENDER_ID = 0x0416

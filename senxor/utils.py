@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 
-from senxor._interface import SENXOR_CONNECTION_TYPES, is_senxor_usb, list_senxor_usb
+from senxor._interface import SENXOR_INTERFACES, is_senxor_usb, list_senxor_usb
 from senxor._senxor import Senxor
 from senxor.cam import list_camera
 
@@ -56,13 +56,13 @@ def list_senxor(type: Literal["serial"] | None = None, exclude: list[str] | str 
         exclude = [exclude]
 
     if type is None:
-        for t, connection_class in SENXOR_CONNECTION_TYPES.items():
+        for t, connection_class in SENXOR_INTERFACES.items():
             if t in exclude:
                 continue
             devices.extend(connection_class.discover())
 
     else:
-        devices = SENXOR_CONNECTION_TYPES[type].discover()
+        devices = SENXOR_INTERFACES[type].discover()
 
     return devices
 

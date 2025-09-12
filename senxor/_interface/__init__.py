@@ -1,40 +1,42 @@
 # Copyright (c) 2025 Meridian Innovation. All rights reserved.
+from typing import Literal, overload
 
-from typing import Literal
-
-from .protocol import SenxorInterfaceProtocol
-from .usb_serial import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID, SenxorInterfaceSerial, is_senxor_usb, list_senxor_usb
+from senxor._interface.protocol import InterfaceProtocol
+from senxor._interface.serial_ import (
+    SENXOR_PRODUCT_ID,
+    SENXOR_VENDER_ID,
+    SerialInterface,
+    is_senxor_usb,
+    list_senxor_usb,
+)
 
 __all__ = [
-    "SENXOR_CONNECTION_TYPES",
     "SENXOR_PRODUCT_ID",
     "SENXOR_VENDER_ID",
-    "SenxorInterfaceProtocol",
-    "SenxorInterfaceSerial",
+    "InterfaceProtocol",
+    "SerialInterface",
     "is_senxor_usb",
     "list_senxor_usb",
-    "register_senxor_connection_type",
+    "register_senxor_interface",
 ]
 
-SENXOR_CONNECTION_TYPES: dict[str, type[SenxorInterfaceProtocol]] = {
-    "serial": SenxorInterfaceSerial,
-    # TODO: "tcp": SenxorInterfaceTCP,
-    # TODO:"gpio": SenxorInterfaceGPIO,
+SENXOR_INTERFACES: dict[str, type[InterfaceProtocol]] = {
+    "serial": SerialInterface,
 }
 
 
-def register_senxor_connection_type(type_: Literal["serial"], interface_class: type[SenxorInterfaceProtocol]) -> None:
-    """Register a new connection type for Senxor devices.
+def register_senxor_interface(type_: str, interface_class: type[InterfaceProtocol]) -> None:
+    """Register a new interface for Senxor devices.
 
     Parameters
     ----------
-    type_ : Literal["serial"]
-        The type of connection to register.
-    interface_class : type[SenxorInterfaceProtocol]
-        The class to use for the connection. Must be a subclass of SenxorInterfaceProtocol.
+    type_ : str
+        The type of interface to register.
+    interface_class : type[InterfaceProtocol]
+        The class to use for the connection. Must be a subclass of InterfaceProtocol.
 
     """
-    if type_ in SENXOR_CONNECTION_TYPES:
-        msg = f"Connection type {type_} already registered"
+    if type_ in SENXOR_INTERFACES:
+        msg = f"Interface {type_} already registered"
         raise ValueError(msg)
-    SENXOR_CONNECTION_TYPES[type_] = interface_class
+    SENXOR_INTERFACES[type_] = interface_class
