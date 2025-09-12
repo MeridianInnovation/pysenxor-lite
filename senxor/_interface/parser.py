@@ -86,11 +86,16 @@ class SenxorMsgParser:
     #        |   CMD  |   RESERVED   |  HEADER |     DATA      | CHECKSUM |
     # MI08   |  GFRA  |    80 * 2    |  80 * 2 |  80 * 62 * 2  |    4     | total: 10248(0x2808)
     # MI16   |  GFRA  |  3 * 160 * 2 | 160 * 2 | 160 * 120 * 2 |    4     | total: 39688(0x9B08)
+    # MI05   |  GFRA  |    50 * 2    |  50 * 2 |  50 * 50 * 2  |    4     | total: 5208(0x1458)
     #
     # ------------------------------------------------
 
+    ACK_GFRA_LEN_MI05 = 0x1458 - LEN_BODY_CMD - LEN_BODY_CHECKSUM
     ACK_GFRA_LEN_MI08 = 0x2808 - LEN_BODY_CMD - LEN_BODY_CHECKSUM
     ACK_GFRA_LEN_MI16 = 0x9B08 - LEN_BODY_CMD - LEN_BODY_CHECKSUM
+
+    ACK_GFRA_MI05_HEADER_SLICE = slice(100, 200)
+    ACK_GFRA_MI05_DATA_SLICE = slice(200, 5200)
 
     ACK_GFRA_MI08_HEADER_SLICE = slice(160, 320)
     ACK_GFRA_MI08_DATA_SLICE = slice(320, 10240)
@@ -125,7 +130,10 @@ class SenxorMsgParser:
     def _parse_ack_gfra(ack: bytes) -> tuple[np.ndarray, np.ndarray]:
         # The ack does not contain the cmd.
         ack_len = len(ack)
-        if ack_len == SenxorMsgParser.ACK_GFRA_LEN_MI08:
+        if ack_len == SenxorMsgParser.ACK_GFRA_LEN_MI05:
+            header = ack[SenxorMsgParser.ACK_GFRA_MI05_HEADER_SLICE]
+            data = ack[SenxorMsgParser.ACK_GFRA_MI05_DATA_SLICE]
+        elif ack_len == SenxorMsgParser.ACK_GFRA_LEN_MI08:
             header = ack[SenxorMsgParser.ACK_GFRA_MI08_HEADER_SLICE]
             data = ack[SenxorMsgParser.ACK_GFRA_MI08_DATA_SLICE]
         elif ack_len == SenxorMsgParser.ACK_GFRA_LEN_MI16:
