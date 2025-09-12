@@ -42,7 +42,7 @@ if TYPE_CHECKING:
 # then enter the error handling flow.
 
 
-class SenxorInterfaceProtocol(Protocol):
+class InterfaceProtocol(Protocol):
     """Protocol class for the Senxor devices.
 
     This class is used to provide a uniform interface for the communication with
@@ -114,7 +114,7 @@ class SenxorInterfaceProtocol(Protocol):
         ...
 
     @abstractmethod
-    def read(self, block: bool = True, **kwargs) -> tuple[np.ndarray, np.ndarray] | None:
+    def read(self, block: bool = True, **kwargs) -> tuple[bytes | None, bytes] | None:
         """Read a frame from the senxor.
 
         In block mode, the method should raise `SenxorReadTimeoutError` if no frame is available after the timeout.
@@ -130,8 +130,8 @@ class SenxorInterfaceProtocol(Protocol):
 
         Returns
         -------
-        tuple[np.ndarray, np.ndarray] | None
-            A tuple of two numpy arrays containing the frame header and the frame data.
+        tuple[bytes | None, bytes] | None
+            A tuple of two bytes containing the frame header and the frame data.
             If no frame is available, the function will return None.
 
         """
@@ -188,18 +188,15 @@ class SenxorInterfaceProtocol(Protocol):
 
         """
 
-    # def hw_reset(self) -> None:
-    #     """
-    #     Perform a hardware reset of the device.
+    @abstractmethod
+    def write_regs(self, regs: dict[int, int]) -> None:
+        """Write multiple registers to the senxor.
 
-    #     Note: Only SPI/I2C communication interfaces support this feature.
-    #     """
-    #     ...
+        If this operation fails, this function should raise an exception depending on the error.
 
-    # def data_ready_callback(self, **kwargs) -> None:
-    #     """
-    #     Callback function for when a new frame is available.
+        Parameters
+        ----------
+        regs : dict[int, int]
+            The dictionary of register addresses and their values to write.
 
-    #     Note: Only SPI/I2C communication interfaces support this feature.
-    #     """
-    #     ...
+        """
