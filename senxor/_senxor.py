@@ -327,7 +327,7 @@ class Senxor:
         regs_values = self.regs.read_regs(regs_addrs)
         return regs_values
 
-    def write_reg(self, reg: str | int | Register, value: int):
+    def write_reg(self, reg: str | int | Register, value: int, check_addr: bool = True) -> Any:
         """Write a value to a register.
 
         Parameters
@@ -359,7 +359,7 @@ class Senxor:
         if value < 0 or value > 0xFF:
             raise ValueError(f"Value must be between 0 and 0xFF, got {value}")
         addr = self.regs.get_addr(reg)
-        self.regs.write_reg(addr, value)
+        self.regs.write_reg(addr, value, check_addr=check_addr)
 
     def get_shape(self) -> tuple[int, int]:
         """Get the frame shape(height, width) of the senxor.
@@ -457,8 +457,8 @@ class Senxor:
     def regread(self, reg: str | int) -> int:
         return self.read_reg(reg)
 
-    def regwrite(self, reg: str | int, value: int):
-        return self.write_reg(reg, value)
+    def regwrite(self, reg: str | int, value: int, check_addr: bool = True):
+        return self.write_reg(reg, value, check_addr)
 
     def start(self):
         return self.start_stream()

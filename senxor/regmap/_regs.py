@@ -527,7 +527,12 @@ class Registers:
         """
         if isinstance(key, Register):
             return key.addr
-        return self[key].addr
+        try:
+            return self[key].addr
+        except KeyError as exc:
+            assert isinstance(key, int)
+            self._log.warn("Unknown register address", addr=key)
+            return key
 
     def read_all(self) -> dict[int, int]:
         """Read all registers from the device."""
@@ -567,15 +572,16 @@ class Registers:
             self.read_regs(need_read)
         return {addr: self._regs_cache[addr] for addr in addrs}
 
-    def write_reg(self, addr: int, value: int):
+    def write_reg(self, addr: int, value: int, check_addr: bool = True):
         """Write a single register to the device."""
         if value < 0 or value > 255:
             raise ValueError(f"Register value must be in [0, 0xFF], got {value}")
 
-        register_name = self.__addr2name__[addr]
-        if register_name not in self.__writable_list__:
-            self._log.error("write protection violation", name=register_name, addr=addr, value=value)
-            raise AttributeError(f"Register {register_name} (0x{addr:02X}) is read-only")
+        if check_addr:
+            register_name = self.__addr2name__[addr]
+            if register_name not in self.__writable_list__:
+                self._log.error("write protection violation", name=register_name, addr=addr, value=value)
+                raise AttributeError(f"Register {register_name} (0x{addr:02X}) is read-only")
 
         self._regmap.write_reg(addr, value)
 
