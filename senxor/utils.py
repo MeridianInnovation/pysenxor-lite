@@ -86,8 +86,10 @@ def connect(
         If not provided, will attempt to auto-detect from address.
     auto_open : bool, optional
         Whether to automatically open the device.
-    stop_stream : bool, optional
+    stop_stream : bool, optional(deprecated)
         Whether to stop the stream when the device is opened.
+        .. deprecated:: 3.1.0
+            This parameter is deprecated and will be removed in future versions.
     **kwargs
         Additional arguments passed to the interface constructor.
 
@@ -122,7 +124,10 @@ def connect(
         address = addrs[0]
         type = "serial"
 
-    return Senxor(address, type, auto_open, stop_stream, **kwargs)
+    senx = Senxor(address, type, auto_open=auto_open, **kwargs)
+    if stop_stream:
+        senx.stop_stream()
+    return senx
 
 
 def connect_senxor(

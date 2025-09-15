@@ -26,9 +26,8 @@ class Senxor:
         self,
         address: Any,
         interface_type: Literal["serial"] | None = None,
+        *,
         auto_open: bool = True,
-        stop_stream_on_connect: bool | None = None,
-        get_status_on_connect: bool | None = None,
         **kwargs,
     ):
         """Initialize the senxor.
@@ -41,10 +40,6 @@ class Senxor:
             The type of the interface, by default None.
         auto_open : bool, optional
             Whether to open the senxor automatically, by default True.
-        stop_stream_on_connect : bool, optional
-            Whether to stop the stream automatically on connect, by default None.
-        get_status_on_connect : bool, optional
-            Whether to get the status of the senxor automatically on connect, by default None.
         kwargs : Any
             The extra keyword arguments for the interface.
 
@@ -60,8 +55,6 @@ class Senxor:
             address=address,
             type=interface_type,
             auto_open=auto_open,
-            stop_stream=stop_stream_on_connect,
-            get_status=get_status_on_connect,
             **kwargs,
         )
 
@@ -78,17 +71,6 @@ class Senxor:
                 raise ValueError(
                     f"{address} could be one of the following types: {possible_types}, please specify the type.",
                 )
-
-        if get_status_on_connect is not None:
-            logger.warning(
-                "deprecated_param",
-                msg="The `get_status_on_connect` parameter is deprecated and will be removed in future versions.",
-            )
-        if stop_stream_on_connect is not None:
-            logger.warning(
-                "deprecated_param",
-                msg="The `stop_stream_on_connect` parameter is deprecated and will be removed in future versions.",
-            )
 
         self.type = interface_type
         self.interface = SENXOR_INTERFACES[interface_type](address, **kwargs)  # type: ignore[call-arg]
