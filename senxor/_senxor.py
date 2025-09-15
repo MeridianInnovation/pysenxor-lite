@@ -222,17 +222,17 @@ class Senxor:
 
         """
         try:
-            resp = self.interface.read(block)
+            header_bytes, data_bytes = self.interface.read(block)
         except SenxorResponseTimeoutError as e:
             if not self.is_streaming:
-                raise RuntimeError("Senxor is not in the stream mode or single capture mode") from None
+                raise SenxorResponseTimeoutError("Senxor is not in the stream mode or single capture mode") from None
             else:
                 raise e
-        if resp is None:
+
+        if data_bytes is None:
             return None, None
         else:
-            header, data_bytes = resp
-            header = np.frombuffer(header, dtype=np.uint16) if header is not None else None
+            header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
             data = np.frombuffer(data_bytes, dtype=np.uint16)
             if celsius and not self.fields.ADC_ENABLE.get():
                 data = dk_to_celsius(data)

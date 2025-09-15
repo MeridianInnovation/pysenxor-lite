@@ -114,7 +114,7 @@ class InterfaceProtocol(Protocol):
         ...
 
     @abstractmethod
-    def read(self, block: bool = True, **kwargs) -> tuple[bytes | None, bytes] | None:
+    def read(self, block: bool = True, **kwargs) -> tuple[bytes | None, bytes | None]:
         """Read a frame from the senxor.
 
         In block mode, the method should raise `SenxorReadTimeoutError` if no frame is available after the timeout.
@@ -130,9 +130,9 @@ class InterfaceProtocol(Protocol):
 
         Returns
         -------
-        tuple[bytes | None, bytes] | None
+        tuple[bytes | None, bytes | None]
             A tuple of two bytes containing the frame header and the frame data.
-            If no frame is available, the function will return None.
+            If no frame is available, the function will return (None, None).
 
         """
 

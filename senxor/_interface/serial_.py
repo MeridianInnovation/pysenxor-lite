@@ -193,7 +193,7 @@ class SerialInterface(InterfaceProtocol):
         return wrapper
 
     @_op_wrapper
-    def read(self, block: bool = True) -> tuple[bytearray | None, bytearray] | None:
+    def read(self, block: bool = True) -> tuple[bytearray | None, bytearray | None]:
         if self.receiver.gfra_queue:
             return self.receiver.gfra_queue.popleft()
         elif self.receiver.no_module_event.is_set():
@@ -202,7 +202,7 @@ class SerialInterface(InterfaceProtocol):
             data = self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, self.read_timeout)
             return data
         else:
-            return None
+            return None, None
 
     @_op_wrapper
     def read_reg(self, reg: int) -> int:
