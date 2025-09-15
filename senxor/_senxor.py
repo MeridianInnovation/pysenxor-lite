@@ -4,21 +4,20 @@
 
 from __future__ import annotations
 
-import contextlib
 import time
 from typing import TYPE_CHECKING, Any, Literal
 
-from senxor._error import SenxorNotConnectedError, SenxorReadTimeoutError
-from senxor._interface import SENXOR_CONNECTION_TYPES
+import numpy as np
+
+from senxor._interface import SENXOR_INTERFACES
 from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
+from senxor.error import SenxorResponseTimeoutError
 from senxor.log import get_logger
 from senxor.proc import dk_to_celsius, raw_to_frame
 from senxor.regmap import Register
 from senxor.regmap._regmap import _RegMap
 
 if TYPE_CHECKING:
-    import numpy as np
-
     from senxor.regmap import Register
 
 
@@ -28,8 +27,8 @@ class Senxor:
         address: Any,
         interface_type: Literal["serial"] | None = None,
         auto_open: bool = True,
-        stop_stream_on_connect: bool = True,
-        get_status_on_connect: bool = True,
+        stop_stream_on_connect: bool | None = None,
+        get_status_on_connect: bool | None = None,
         **kwargs,
     ):
         """Initialize the senxor.
@@ -43,9 +42,9 @@ class Senxor:
         auto_open : bool, optional
             Whether to open the senxor automatically, by default True.
         stop_stream_on_connect : bool, optional
-            Whether to stop the stream automatically on connect, by default True.
+            Whether to stop the stream automatically on connect, by default None.
         get_status_on_connect : bool, optional
-            Whether to get the status of the senxor automatically on connect, by default True.
+            Whether to get the status of the senxor automatically on connect, by default None.
         kwargs : Any
             The extra keyword arguments for the interface.
 
@@ -68,7 +67,7 @@ class Senxor:
 
         if interface_type is None:
             possible_types = []
-            for t, interface_class in SENXOR_CONNECTION_TYPES.items():
+            for t, interface_class in SENXOR_INTERFACES.items():
                 if interface_class.is_valid_address(address):
                     possible_types.append(t)
             if len(possible_types) == 1:
@@ -80,10 +79,19 @@ class Senxor:
                     f"{address} could be one of the following types: {possible_types}, please specify the type.",
                 )
 
+        if get_status_on_connect is not None:
+            logger.warning(
+                "deprecated_param",
+                msg="The `get_status_on_connect` parameter is deprecated and will be removed in future versions.",
+            )
+        if stop_stream_on_connect is not None:
+            logger.warning(
+                "deprecated_param",
+                msg="The `stop_stream_on_connect` parameter is deprecated and will be removed in future versions.",
+            )
+
         self.type = interface_type
-        self.interface = SENXOR_CONNECTION_TYPES[interface_type](address, **kwargs)  # type: ignore[call-arg]
-        self.get_status_on_connect = get_status_on_connect
-        self.stop_stream_on_connect = stop_stream_on_connect
+        self.interface = SENXOR_INTERFACES[interface_type](address, **kwargs)  # type: ignore[call-arg]
 
         self._regmap = _RegMap(self)
         self.regs = self._regmap.regs
@@ -108,15 +116,7 @@ class Senxor:
         self.interface.open()
         self._logger = get_logger(address=self.address)
 
-        if self.stop_stream_on_connect:
-            self.stop_stream()
-
-        if self.get_status_on_connect:
-            self.refresh_regmap()
-
-        if self.fields.NO_HEADER.get() == 1:
-            self._logger.warning("disable_no_header_mode", msg="No header mode is not supported now.")
-            self.fields.NO_HEADER.set(0)
+        self.refresh_regmap()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
@@ -125,8 +125,6 @@ class Senxor:
         """Close the senxor. If the senxor is not connected, do nothing."""
         if not self.is_connected:
             return
-        with contextlib.suppress(SenxorNotConnectedError):
-            self.stop_stream()
 
         self._logger.info("closing senxor")
         self.interface.close()
@@ -154,19 +152,13 @@ class Senxor:
 
     def start_stream(self):
         """Start the stream mode."""
-        if self.is_connected:
-            self.fields.CONTINUOUS_STREAM.set(1)
-            self._logger.info("start stream")
-        else:
-            raise SenxorNotConnectedError
+        self.fields.CONTINUOUS_STREAM.set(1)
+        self._logger.info("start stream")
 
     def stop_stream(self):
         """Stop the stream mode."""
-        if self.is_connected:
-            self.fields.CONTINUOUS_STREAM.set(0)
-            self._logger.info("stop stream")
-        else:
-            raise SenxorNotConnectedError
+        self.fields.CONTINUOUS_STREAM.set(0)
+        self._logger.info("stop stream")
 
     def refresh_regmap(self):
         """Refresh the regmap cache. This method will read all registers and update all fields.
@@ -182,8 +174,6 @@ class Senxor:
         {"SW_RESET": 0, "DMA_TIMEOUT_ENABLE": 0, ...}
 
         """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
         self._regmap.read_all()
 
     def read(
@@ -192,7 +182,7 @@ class Senxor:
         *,
         raw: bool = False,
         celsius: bool = True,
-    ) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
+    ) -> tuple[np.ndarray | None, np.ndarray | None]:
         """Read the frame data from the senxor, return (header: np.ndarray[uint16], frame: np.ndarray).
 
         The header is a 1D numpy array of uint16, check documentation for more details.
@@ -217,7 +207,7 @@ class Senxor:
 
         Returns
         -------
-        tuple[np.ndarray, np.ndarray] | tuple[None, None]
+        tuple[np.ndarray | None, np.ndarray | None]
             The frame data, as a tuple of two numpy arrays.
             The first array is the header data, the second array is the frame data.
 
@@ -225,19 +215,15 @@ class Senxor:
 
         Raises
         ------
-        SenxorNotConnectedError
-            If the senxor is not connected.
         RuntimeError
             If the senxor is not in the stream mode or single capture mode.
-        SenxorReadTimeoutError
+        SenxorAckTimeoutError
             If the read operation timeout due to other reasons.
 
         """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
         try:
             resp = self.interface.read(block)
-        except SenxorReadTimeoutError as e:
+        except SenxorResponseTimeoutError as e:
             if not self.is_streaming:
                 raise RuntimeError("Senxor is not in the stream mode or single capture mode") from None
             else:
@@ -245,7 +231,9 @@ class Senxor:
         if resp is None:
             return None, None
         else:
-            header, data = resp
+            header, data_bytes = resp
+            header = np.frombuffer(header, dtype=np.uint16) if header is not None else None
+            data = np.frombuffer(data_bytes, dtype=np.uint16)
             if celsius and not self.fields.ADC_ENABLE.get():
                 data = dk_to_celsius(data)
             if not raw:
@@ -289,8 +277,6 @@ class Senxor:
         95
 
         """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
         addr = self.regs.get_addr(reg)
         return self.regs.read_reg(addr)
 
@@ -321,8 +307,6 @@ class Senxor:
         {177: 0, 178: 0, 179: 0, 180: 0}
 
         """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
         regs_addrs = [self.regs.get_addr(reg) for reg in regs]
         regs_values = self.regs.read_regs(regs_addrs)
         return regs_values
@@ -354,8 +338,6 @@ class Senxor:
         >>> senxor.write_reg(senxor.regs.EMISSIVITY, 0x5F)
 
         """
-        if not self.is_connected:
-            raise SenxorNotConnectedError
         if value < 0 or value > 0xFF:
             raise ValueError(f"Value must be between 0 and 0xFF, got {value}")
         addr = self.regs.get_addr(reg)
@@ -372,9 +354,6 @@ class Senxor:
         """
         # Although the frame shape depends on the senxor type, but the internal implementation of `read` method
         # do not rely on this method.
-
-        if not self.is_connected:
-            raise SenxorNotConnectedError
 
         senxor_type = self.fields.SENXOR_TYPE.get()
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
