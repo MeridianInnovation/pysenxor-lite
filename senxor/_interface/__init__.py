@@ -1,5 +1,4 @@
 # Copyright (c) 2025 Meridian Innovation. All rights reserved.
-from typing import Literal, overload
 
 from senxor._interface.protocol import InterfaceProtocol
 from senxor._interface.serial_ import (

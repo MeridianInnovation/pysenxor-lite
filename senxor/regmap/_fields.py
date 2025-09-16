@@ -56,12 +56,12 @@ _map_lut_selector_fw = {
 }
 
 _map_temp_units = {
-    0: "0.1 K",
-    1: "0.1 °C",
-    2: "0.1 °F",
-    4: "1 K",
-    5: "1 °C",
-    6: "1 °F",
+    0: "dK",
+    1: "dC",
+    2: "dF",
+    4: "K",
+    5: "C",
+    6: "F",
 }
 
 _map_stark_type = {

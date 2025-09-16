@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
         while True:
             # Call the `read` function to get the next frame.
-            header, frame = dev.read(block=True, celsius=True)
+            header, frame = dev.read(block=True)
 
             if frame is not None:
                 # Let's say we're looking at a typical thermal image where temps are around 20-70°C.

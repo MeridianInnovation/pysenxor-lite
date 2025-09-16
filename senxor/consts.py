@@ -60,6 +60,11 @@ SENXOR_TYPE2FRAME_SHAPE = {
     9: (50, 50),
 }
 
+FRAME_SHAPE2MODULE_CATEGORY = {
+    (62, 80): "Cougar",
+    (120, 160): "Panther",
+}
+
 MCU_TYPE = {
     0: "MI48D4",
     1: "MI48D5",

@@ -5,15 +5,15 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 
 from senxor._interface import SENXOR_INTERFACES
-from senxor.consts import SENXOR_TYPE2FRAME_SHAPE
+from senxor.consts import FRAME_SHAPE2MODULE_CATEGORY, SENXOR_TYPE2FRAME_SHAPE
 from senxor.error import SenxorResponseTimeoutError
 from senxor.log import get_logger
-from senxor.proc import dk_to_celsius, raw_to_frame
+from senxor.proc import bytes_to_adc, bytes_to_raw, raw_to_frame, raw_to_temp
 from senxor.regmap import Register
 from senxor.regmap._regmap import _RegMap
 
@@ -28,6 +28,7 @@ class Senxor:
         interface_type: Literal["serial"] | None = None,
         *,
         auto_open: bool = True,
+        read_temp_units: Literal["K", "C", "F"] = "C",
         **kwargs,
     ):
         """Initialize the senxor.
@@ -40,6 +41,8 @@ class Senxor:
             The type of the interface, by default None.
         auto_open : bool, optional
             Whether to open the senxor automatically, by default True.
+        read_temp_units : Literal["K", "C", "F"], optional
+            The temperature units to use for the `read` method, by default "C".
         kwargs : Any
             The extra keyword arguments for the interface.
 
@@ -74,7 +77,7 @@ class Senxor:
 
         self.type = interface_type
         self.interface = SENXOR_INTERFACES[interface_type](address, **kwargs)  # type: ignore[call-arg]
-
+        self.read_temp_units: Literal["K", "C", "F"] = read_temp_units
         self._regmap = _RegMap(self)
         self.regs = self._regmap.regs
         self.fields = self._regmap.fields
@@ -165,7 +168,7 @@ class Senxor:
         block: bool = True,
         *,
         raw: bool = False,
-        celsius: bool = True,
+        celsius: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None]:
         """Read the frame data from the senxor, return (header: np.ndarray[uint16], frame: np.ndarray).
 
@@ -217,11 +220,22 @@ class Senxor:
             return None, None
         else:
             header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
-            data = np.frombuffer(data_bytes, dtype=np.uint16)
-            if celsius and not self.fields.ADC_ENABLE.get():
-                data = dk_to_celsius(data)
+            frame_units = self.get_temp_units()
+            if frame_units == "adc":
+                data = bytes_to_adc(data_bytes)
+            else:
+                data = bytes_to_raw(data_bytes, unit=frame_units)
+                if celsius:
+                    self._logger.warning(
+                        "`senxor.read(celsius=True)` will be deprecated, use `senxor.set_read_temp_units` instead.",
+                    )
+                    data = raw_to_temp(data, in_unit=frame_units, out_unit="C")
+                else:
+                    data = raw_to_temp(data, in_unit=frame_units, out_unit=self.read_temp_units)
+
             if not raw:
                 data = raw_to_frame(data)
+
             return header, data
 
     def read_reg(self, reg: int | str | Register) -> int:
@@ -343,6 +357,53 @@ class Senxor:
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
 
+    def get_temp_units(self) -> Literal["dK", "dC", "dF", "K", "C", "F", "adc"]:
+        """Get the temperature units configured on the device.
+
+        The temperature units of the frame is determined by two fields: `ADC_ENABLE` and `TEMP_UNITS`.
+        If `ADC_ENABLE` is set to `1`, the temperature units is `adc`.
+        Otherwise, the temperature units is determined by `TEMP_UNITS`.
+
+        For Panther Module, the temperature units is always `dK` whatever the `TEMP_UNITS` field is.
+
+        Note: The `read` method may convert temperature units based on input parameters and may not
+        follow the device's configuration.
+
+        Returns
+        -------
+        Literal["dK", "dC", "dF", "K", "C", "F", "adc"]
+            The temperature units of the frame.
+            - `dK`: 0.1 K
+            - `dC`: 0.1 °C
+            - `dF`: 0.1 °F
+            - `K`: 1 K
+            - `C`: 1 °C
+            - `F`: 1 °F
+            - `adc`: ADC data(uint16)
+
+        """
+        if self.fields.ADC_ENABLE.get():
+            return "adc"
+
+        if self.get_module_category() == "Panther":
+            return "dK"
+        else:
+            temp_units = cast("Literal['dK', 'dC', 'dF', 'K', 'C', 'F']", self.fields.TEMP_UNITS.display())
+            return temp_units
+
+    def set_read_temp_units(self, temp_units: Literal["K", "C", "F"]):
+        """Set the temperature units to use for the `read` method.
+
+        Parameters
+        ----------
+        temp_units : Literal["K", "C", "F"]
+            The temperature units to use for the `read` method.
+
+        """
+        if temp_units not in ["K", "C", "F"]:
+            raise ValueError(f"Invalid temperature units: {temp_units}")
+        self.read_temp_units = temp_units
+
     def get_production_year(self) -> int:
         """Get the production year.
 
@@ -392,6 +453,12 @@ class Senxor:
         """Get the module type."""
         module_type = self.fields.MODULE_TYPE.display()
         return module_type
+
+    def get_module_category(self) -> Literal["Cougar", "Panther"]:
+        """Get the module category."""
+        frame_shape = self.get_shape()
+        module_category = cast("Literal['Cougar', 'Panther']", FRAME_SHAPE2MODULE_CATEGORY.get(frame_shape))
+        return module_category
 
     def get_fw_version(self) -> str:
         """Get the firmware version string.

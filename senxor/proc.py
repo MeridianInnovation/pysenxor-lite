@@ -6,12 +6,18 @@ from __future__ import annotations
 
 import importlib.resources
 import json
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 from colormap_tool import get_colormaps, resample_lut
 
-from senxor.consts import KELVIN, SENXOR_FRAME_SHAPE
+from senxor.consts import (
+    CELSIUS_TO_FAHRENHEIT_RATIO,
+    FAHRENHEIT_OFFSET,
+    FAHRENHEIT_TO_CELSIUS_RATIO,
+    KELVIN,
+    SENXOR_FRAME_SHAPE,
+)
 
 __all__ = [
     "apply_colormap",
@@ -53,22 +59,63 @@ for k, v in _custom_cmaps.items():
     colormaps[k] = lut
 
 
-def dk_to_celsius(raw: np.ndarray) -> np.ndarray:
-    """Convert raw data from `Senxor.read()` to Celsius degrees data.
+def bytes_to_raw(bytes_data: bytes, unit: Literal["dK", "dC", "dF", "K", "C", "F"]) -> np.ndarray:
+    """Convert bytes data to raw data."""
+    if unit == "dK":
+        raw = np.frombuffer(bytes_data, dtype=np.uint16)
+    elif unit in ["dC", "dF"]:
+        raw = np.frombuffer(bytes_data, dtype=np.int16)
+    elif unit in ["K", "C", "F"]:
+        raw = np.frombuffer(bytes_data, dtype=np.float16)
+    else:
+        raise ValueError(f"Invalid unit: {unit}")
+    return raw
 
-    The senxor device returns data in uint16 format, which is 1/10 Kelvin.
-    This function converts the data to Celsius degrees.
 
-    Parameters
-    ----------
-    raw : np.ndarray
-        The raw data.
+def raw_to_temp(
+    raw: np.ndarray,
+    in_unit: Literal["dK", "dC", "dF", "K", "C", "F"],
+    out_unit: Literal["K", "C", "F"],
+) -> np.ndarray:
+    """Convert raw data to temperature data."""
+    if in_unit == "dK":
+        data = raw / 10
+        in_unit = "K"
+    elif in_unit == "dC":
+        data = raw / 10
+        in_unit = "C"
+    elif in_unit == "dF":
+        data = raw / 10
+        in_unit = "F"
+    else:
+        data = raw
 
-    """
-    kelvin = raw / 10
-    celsius = kelvin - KELVIN
-    celsius = np.round(celsius, 1)
-    return celsius
+    if out_unit == in_unit:
+        temp = data
+    else:
+        if in_unit == "K" and out_unit == "C":
+            temp = _kelvin_to_celsius(data)
+        elif in_unit == "K" and out_unit == "F":
+            temp = _kelvin_to_fahrenheit(data)
+        elif in_unit == "C" and out_unit == "K":
+            temp = _celsius_to_kelvin(data)
+        elif in_unit == "C" and out_unit == "F":
+            temp = _celsius_to_fahrenheit(data)
+        elif in_unit == "F" and out_unit == "K":
+            temp = _fahrenheit_to_kelvin(data)
+        elif in_unit == "F" and out_unit == "C":
+            temp = _fahrenheit_to_celsius(data)
+        else:
+            raise ValueError(f"Invalid output unit: {out_unit}")
+
+    temp = np.round(temp, 2)
+
+    return temp
+
+
+def bytes_to_adc(bytes_data: bytes) -> np.ndarray:
+    """Convert bytes data to ADC data."""
+    return np.frombuffer(bytes_data, dtype=np.uint16)
 
 
 def raw_to_frame(raw: np.ndarray) -> np.ndarray:
@@ -338,3 +385,61 @@ def apply_colormap(
         raise TypeError(f"Unsupported image dtype: {image_dtype}")
 
     return color_image
+
+
+# ===============================
+# Private functions
+# ===============================
+
+
+def _kelvin_to_celsius(kelvin: np.ndarray) -> np.ndarray:
+    """Convert Kelvin to Celsius."""
+    return kelvin - KELVIN
+
+
+def _celsius_to_kelvin(celsius: np.ndarray) -> np.ndarray:
+    """Convert Celsius to Kelvin."""
+    return celsius + KELVIN
+
+
+def _kelvin_to_fahrenheit(kelvin: np.ndarray) -> np.ndarray:
+    """Convert Kelvin to Fahrenheit."""
+    return (kelvin - KELVIN) * CELSIUS_TO_FAHRENHEIT_RATIO + FAHRENHEIT_OFFSET
+
+
+def _fahrenheit_to_kelvin(fahrenheit: np.ndarray) -> np.ndarray:
+    """Convert Fahrenheit to Kelvin."""
+    return (fahrenheit - FAHRENHEIT_OFFSET) * FAHRENHEIT_TO_CELSIUS_RATIO + KELVIN
+
+
+def _celsius_to_fahrenheit(celsius: np.ndarray) -> np.ndarray:
+    """Convert Celsius to Fahrenheit."""
+    return celsius * CELSIUS_TO_FAHRENHEIT_RATIO + FAHRENHEIT_OFFSET
+
+
+def _fahrenheit_to_celsius(fahrenheit: np.ndarray) -> np.ndarray:
+    """Convert Fahrenheit to Celsius."""
+    return (fahrenheit - FAHRENHEIT_OFFSET) * FAHRENHEIT_TO_CELSIUS_RATIO
+
+
+# ===============================
+# Deprecated functions
+# ===============================
+
+
+def dk_to_celsius(raw: np.ndarray) -> np.ndarray:
+    """Convert raw data from `Senxor.read()` to Celsius degrees data.
+
+    The senxor device returns data in uint16 format, which is 1/10 Kelvin.
+    This function converts the data to Celsius degrees.
+
+    Parameters
+    ----------
+    raw : np.ndarray
+        The raw data.
+
+    """
+    kelvin = raw / 10
+    celsius = kelvin - KELVIN
+    celsius = np.round(celsius, 1)
+    return celsius
