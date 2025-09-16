@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from senxor._error import SenxorNotConnectedError
+from senxor.error import SenxorNotConnectedError
 from senxor.regmap._field import Field
 from senxor.regmap._fields import Fields
 from senxor.regmap._regmap import _RegMap

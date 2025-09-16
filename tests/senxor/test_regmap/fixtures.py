@@ -11,7 +11,7 @@ import threading
 import time
 from typing import TYPE_CHECKING
 
-from senxor._error import SenxorNotConnectedError
+from senxor.error import SenxorNotConnectedError
 
 if TYPE_CHECKING:
     from senxor.regmap._regmap import _RegMap

@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from senxor._error import SenxorNotConnectedError
+from senxor.error import SenxorNotConnectedError
 
 from .fixtures import EnhancedMockInterface, TestDataGenerator
 
