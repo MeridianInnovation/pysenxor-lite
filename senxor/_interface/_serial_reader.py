@@ -4,7 +4,10 @@ import queue
 import threading
 import time
 from collections import deque
+from collections.abc import Callable
 from enum import Enum, auto
+from itertools import count
+from typing import Literal
 
 from serial import PortNotOpenError, Serial, SerialException
 
@@ -70,7 +73,7 @@ class SenxorSerialReader:
             raise RuntimeError("Serial port not open", self.ser.port)
         if self.ser.timeout != 0:
             raise ValueError("Serial read timeout must be 0")
-        self._reset_stats()
+        self._reset_statis()
         self.stop_event.clear()
         self.state = SenxorSerialState.UNKNOWN
         self.worker_thread = threading.Thread(target=self._worker_loop, daemon=True)
@@ -108,14 +111,12 @@ class SenxorSerialReader:
         self.rrse_queue: deque[dict[int, int]] = deque(maxlen=1)
         self.rrse_ready = threading.Condition()
 
-    def _reset_stats(self) -> None:
-        """Reset the receiver statistics."""
-        self.misaligned_count = 0
-        self.misaligned_bytes = 0
-        self.ack_error_count = 0
-        self.has_ack_error = False
-        self.ack_error_bytes = 0
-        self.pending_count = 0
+    def _reset_statis(self) -> None:
+        self._ack_error_count = 0
+        self._misaligned_count = 0
+
+        self._max_ack_error_count = 4
+        self._max_misaligned_count = 4
 
     def _set_error(self, error: Exception, msg: str) -> None:
         self.error_queue.put((msg, error))
@@ -144,7 +145,6 @@ class SenxorSerialReader:
             self.logger.debug("serial_closed")
         except Exception as e:
             self.logger.warning("close_serial_failed", error=e)
-        return
 
     def _read_data(self) -> None:
         """Read data from the serial port. Called in the worker thread."""
@@ -161,17 +161,12 @@ class SenxorSerialReader:
                 self._on_invalid_ack()
             self._check_state()
             if self.state == SenxorSerialState.ALIGNED:
-                self._reset_stats()
                 self._parse_ack()
             elif self.state == SenxorSerialState.MISALIGNED:
-                self.misaligned_count += 1
                 self._on_buffer_misaligned()
             elif self.state == SenxorSerialState.ACK_ERROR:
-                self.has_ack_error = True
-                self.ack_error_count += 1
                 self._on_invalid_ack()
             elif self.state == SenxorSerialState.PENDING or self.state == SenxorSerialState.EMPTY:
-                self.pending_count += 1
                 break
             else:
                 raise RuntimeError(f"Invalid state: {self.state}")
@@ -187,6 +182,7 @@ class SenxorSerialReader:
             self.state == SenxorSerialState.UNKNOWN
             or self.state == SenxorSerialState.PENDING
             or self.state == SenxorSerialState.EMPTY
+            or self.state == SenxorSerialState.MISALIGNED
         ):
             # For development purpose, this should not happen.
             self.logger.warning(
@@ -199,6 +195,12 @@ class SenxorSerialReader:
             self.state = SenxorSerialState.EMPTY
         elif self._parser.is_buffer_unaligned(self._buffer.buf):
             self.state = SenxorSerialState.MISALIGNED
+            self._misaligned_count += 1
+            if self._misaligned_count >= self._max_misaligned_count:
+                self._set_error(
+                    SenxorAckInvalidError("Can not recover from misaligned buffer"),
+                    "serial_misaligned_count_exceeded",
+                )
         elif self._parser.is_buffer_pending(self._buffer.buf):
             self.state = SenxorSerialState.PENDING
         else:
@@ -228,10 +230,6 @@ class SenxorSerialReader:
             self._buffer.discard(discarded)
             self.logger.debug("realign_buffer", state="aligned", discarded=discarded)
         self.state = SenxorSerialState.UNKNOWN
-        self.misaligned_bytes += discarded
-        if self.has_ack_error:
-            self.ack_error_bytes += discarded
-        return
 
     def _on_invalid_ack(self) -> None:
         """On invalid ACK received.
@@ -253,7 +251,6 @@ class SenxorSerialReader:
         discarded = self._parser.ACK_HEADER_IDX.stop
         self._buffer.discard(discarded)
         self.logger.info("discard_invalid_ack", state="discarded_header_and_realign", discarded=discarded)
-        self.ack_error_bytes += discarded
         self.state = SenxorSerialState.MISALIGNED
 
     def _parse_ack(self) -> None:
@@ -270,9 +267,16 @@ class SenxorSerialReader:
             self.logger.debug("ack_received", cmd=cmd, ack_len=total_len)
             self._buffer.discard(total_len)
             self.state = SenxorSerialState.UNKNOWN
+            self._reset_statis()
         except SenxorAckInvalidError as e:
             self.state = SenxorSerialState.ACK_ERROR
             self.logger.error("parse_ack_failed", state="invalid_ack", error=e)
+            self._ack_error_count += 1
+            if self._ack_error_count >= self._max_ack_error_count:
+                self._set_error(
+                    SenxorAckInvalidError("Parse ACK continuously failed, last error: " + str(e)),
+                    "parse_ack_failed_too_many_times",
+                )
         except Exception as e:
             # Unexpected error, maybe the ack is corrupted or something else.
             # Not sure if this will hang the program.
