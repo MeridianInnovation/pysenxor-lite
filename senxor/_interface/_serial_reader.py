@@ -213,7 +213,7 @@ class SenxorSerialReader:
 
         State transition: MISALIGNED -> UNKNOWN.
         """
-        if not self.state == SenxorSerialState.MISALIGNED:
+        if self.state != SenxorSerialState.MISALIGNED:
             raise RuntimeError("Unexpected state")
 
         prefix_idx = self._buffer.buf.find(SenxorAckParser.ACK_HEADER)
@@ -236,7 +236,7 @@ class SenxorSerialReader:
 
         State transition: ACK_ERROR -> MISALIGNED.
         """
-        if not self.state == SenxorSerialState.ACK_ERROR:
+        if self.state != SenxorSerialState.ACK_ERROR:
             raise RuntimeError(f"Unexpected state ({self.state})")
 
         if not self._buffer.buf.startswith(SenxorAckParser.ACK_HEADER):
@@ -258,7 +258,7 @@ class SenxorSerialReader:
 
         State transition: ALIGNED -> UNKNOWN | ACK_ERROR.
         """
-        if not self.state == SenxorSerialState.ALIGNED:
+        if self.state != SenxorSerialState.ALIGNED:
             raise RuntimeError(f"Unexpected state ({self.state})")
 
         try:

@@ -127,7 +127,7 @@ class SenxorAckParser:
 
 
 @dataclass
-class GFRA_DATA:
+class GFRAData:
     header_slice: slice | None
     data_slice: slice
     data_len: int
@@ -166,10 +166,10 @@ class SenxorAckDecoder:
     #
     # ------------------------------------------------
 
-    MI08_NOHEADER = GFRA_DATA(None, slice(160, 10080), 10080)
-    MI08 = GFRA_DATA(slice(160, 320), slice(320, 10240), 10240)
-    MI16_NOHEADER = GFRA_DATA(None, slice(960, 39360), 39360)
-    MI16 = GFRA_DATA(slice(960, 1280), slice(1280, 39680), 39680)
+    MI08_NOHEADER = GFRAData(None, slice(160, 10080), 10080)
+    MI08 = GFRAData(slice(160, 320), slice(320, 10240), 10240)
+    MI16_NOHEADER = GFRAData(None, slice(960, 39360), 39360)
+    MI16 = GFRAData(slice(960, 1280), slice(1280, 39680), 39680)
 
     GFRA_DATA_MAP: ClassVar = {
         MI08_NOHEADER.data_len: MI08_NOHEADER,
@@ -188,7 +188,7 @@ class SenxorAckDecoder:
 
     @staticmethod
     def _parse_ack_wreg(data: bytearray) -> bool:
-        if not data == b"":
+        if data != b"":
             raise SenxorAckInvalidError(f"Invalid ack wreg: {data}")
         return True
 
