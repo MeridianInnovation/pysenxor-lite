@@ -235,12 +235,8 @@ class TestPublicMethods:
         with pytest.raises(KeyError):
             registers.get_addr("INVALID_REGISTER")
 
-        # Test with invalid address
-        with pytest.raises(KeyError):
-            registers.get_addr(0x999)
-
         # Test with invalid type
-        with pytest.raises(KeyError):
+        with pytest.raises((KeyError, TypeError)):
             registers.get_addr(1.5)  # type: ignore
 
     def test_read_all_comprehensive(self, regmap: _RegMap, mock_interface: EnhancedMockInterface) -> None:

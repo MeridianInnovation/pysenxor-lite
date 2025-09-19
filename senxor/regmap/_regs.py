@@ -527,7 +527,12 @@ class Registers:
         """
         if isinstance(key, Register):
             return key.addr
-        return self[key].addr
+        elif isinstance(key, str):
+            return self[key].addr
+        elif isinstance(key, int):
+            return key
+        else:
+            raise TypeError(f"Invalid key type: {type(key)}")
 
     def read_all(self) -> dict[int, int]:
         """Read all registers from the device."""
@@ -572,8 +577,9 @@ class Registers:
         if value < 0 or value > 255:
             raise ValueError(f"Register value must be in [0, 0xFF], got {value}")
 
-        register_name = self.__addr2name__[addr]
-        if register_name not in self.__writable_list__:
+        register_name = self.__addr2name__.get(addr, None)
+
+        if register_name is not None and register_name not in self.__writable_list__:
             self._log.error("write protection violation", name=register_name, addr=addr, value=value)
             raise AttributeError(f"Register {register_name} (0x{addr:02X}) is read-only")
 
