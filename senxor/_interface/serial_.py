@@ -233,8 +233,7 @@ class SerialInterface(InterfaceProtocol):
     def read_reg(self, reg: int) -> int:
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_rreg(reg)
-            self.ser.write(cmd)
-            self.logger.debug("serial_write", cmd=cmd)
+            self.receiver.write(cmd)
             data = self._wait_for_ack("RREG", self.receiver.rreg_queue, self.receiver.rreg_ready, self.op_timeout)
             return data
 
@@ -242,8 +241,7 @@ class SerialInterface(InterfaceProtocol):
     def write_reg(self, reg: int, value: int) -> None:
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_wreg(reg, value)
-            self.ser.write(cmd)
-            self.logger.debug("serial_write", cmd=cmd)
+            self.receiver.write(cmd)
             data = self._wait_for_ack("WREG", self.receiver.wreg_queue, self.receiver.wreg_ready, self.op_timeout)
             return data
 
@@ -251,8 +249,7 @@ class SerialInterface(InterfaceProtocol):
     def read_regs(self, regs: list[int]) -> dict[int, int]:
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_rrse(regs)
-            self.ser.write(cmd)
-            self.logger.debug("serial_write", cmd=cmd)
+            self.receiver.write(cmd)
             data = self._wait_for_ack("RRSE", self.receiver.rrse_queue, self.receiver.rrse_ready, self.op_timeout)
             return data
 

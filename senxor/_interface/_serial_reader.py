@@ -59,6 +59,8 @@ class SenxorSerialReader:
         self._parser = SenxorAckParser(logger)
         self._init_ack_pipe()
 
+        self._write_queue: queue.Queue[bytes] = queue.Queue()
+
         self.state: SenxorSerialState = SenxorSerialState.CLOSED
         self.worker_thread: threading.Thread | None = None
 
@@ -98,6 +100,10 @@ class SenxorSerialReader:
             self.stop()
             raise error
 
+    def write(self, data: bytes) -> None:
+        # Raise error if the queue is full.
+        self._write_queue.put_nowait(data)
+
     def _init_ack_pipe(self) -> None:
         """Initialize the ACK pipe."""
         self.gfra_queue: deque[tuple[bytearray | None, bytearray]] = deque(maxlen=5)
@@ -127,6 +133,7 @@ class SenxorSerialReader:
         try:
             while not self.stop_event.is_set():
                 self._read_data()
+                self._write_data()
                 time.sleep(self.read_interval)
         except PortNotOpenError as e:
             e_ = SenxorNotConnectedError()
@@ -154,6 +161,16 @@ class SenxorSerialReader:
         if chunk:
             self._buffer.put(chunk)
             self._on_data_received()
+
+    def _write_data(self) -> None:
+        """Write data to the serial port. Called in the worker thread."""
+        try:
+            data = self._write_queue.get_nowait()
+        except queue.Empty:
+            return
+        self.ser.write(data)
+        self.logger.debug("serial_write", data=data)
+        self._write_queue.task_done()
 
     def _on_data_received(self) -> None:
         """On data received from the serial port."""
