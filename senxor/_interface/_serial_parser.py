@@ -163,6 +163,7 @@ class SenxorAckDecoder:
     #        |   CMD  |   RESERVED   |  HEADER |     DATA      | CHECKSUM |
     # MI08   |  GFRA  |    80 * 2    |  80 * 2 |  80 * 62 * 2  |    4     | data_len: 10240 body_len: 10248(0x2808)
     # MI16   |  GFRA  |  3 * 160 * 2 | 160 * 2 | 160 * 120 * 2 |    4     | data_len: 39680 body_len: 39688(0x9B08)
+    # MI05   |  GFRA  |    50 * 2    |  50 * 2 |  50 * 50 * 2  |    4     | data_len:  5200 body_len: 5208(0x1458)
     #
     # ------------------------------------------------
 
@@ -170,12 +171,16 @@ class SenxorAckDecoder:
     MI08 = GFRAData(slice(160, 320), slice(320, 10240), 10240)
     MI16_NOHEADER = GFRAData(None, slice(960, 39360), 39360)
     MI16 = GFRAData(slice(960, 1280), slice(1280, 39680), 39680)
+    MI05_NOHEADER = GFRAData(None, slice(100, 5200), 5200)
+    MI05 = GFRAData(slice(100, 200), slice(200, 5200), 5200)
 
     GFRA_DATA_MAP: ClassVar = {
         MI08_NOHEADER.data_len: MI08_NOHEADER,
         MI08.data_len: MI08,
         MI16_NOHEADER.data_len: MI16_NOHEADER,
         MI16.data_len: MI16,
+        MI05_NOHEADER.data_len: MI05_NOHEADER,
+        MI05.data_len: MI05,
     }
 
     @staticmethod
