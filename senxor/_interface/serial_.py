@@ -130,7 +130,9 @@ class SerialInterface(InterfaceProtocol):
         port: str | ListPortInfo,
         *,
         read_timeout: float = 1.5,
-        op_timeout: float = 1.5,
+        op_timeout: float = 3,
+        op_retry_times: int = 3,
+        op_retry_interval: float = 0.1,
     ):
         if isinstance(port, ListPortInfo):
             port = port.device
@@ -138,6 +140,8 @@ class SerialInterface(InterfaceProtocol):
 
         self.read_timeout = read_timeout
         self.op_timeout = op_timeout
+        self.op_retry_times = op_retry_times
+        self.op_retry_interval = op_retry_interval
 
         self.logger = get_logger().bind(address=port)
         self.logger.debug("init_serial_interface")
@@ -182,13 +186,34 @@ class SerialInterface(InterfaceProtocol):
 
     @staticmethod
     def _op_wrapper(func: Callable) -> Callable:
-        @functools.wraps(func)
-        def wrapper(self: SerialInterface, *args, **kwargs) -> Any:
+        def operation(self: SerialInterface, *args, **kwargs) -> Any:
             if not self.is_connected:
+                self.close()
                 raise SenxorNotConnectedError
             self.receiver.raise_if_error()
-            res = func(self, *args, **kwargs)
-            return res
+            return func(self, *args, **kwargs)
+
+        @functools.wraps(func)
+        def wrapper(self: SerialInterface, *args, **kwargs) -> Any:
+            # first try
+            try:
+                return operation(self, *args, **kwargs)
+            except Exception as e:
+                self.logger.error("op_failed", error=e)
+
+            # if first try failed, retry
+            for i in range(2, self.op_retry_times):
+                try:
+                    self.logger.debug("retry_operation", try_count=i, func_name=func.__name__)
+                    return operation(self, *args, **kwargs)
+                except Exception as e:  # noqa: PERF203
+                    if i < self.op_retry_times:
+                        self.logger.error("retry_failed", try_count=i, func_name=func.__name__, error=e)
+                        time.sleep(self.op_retry_interval)
+                    else:
+                        self.logger.exception("last_retry_failed", try_count=i, func_name=func.__name__, error=e)
+                        self.close()
+                        raise e
 
         return wrapper
 
@@ -243,7 +268,6 @@ class SerialInterface(InterfaceProtocol):
                 remaining = timeout - (time.time() - start_time)
                 if remaining <= 0:
                     self.receiver.raise_if_error()
-                    self.logger.error("wait_for_ack_timeout", cmd=cmd)
                     raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")
                 ready.wait(remaining)
             return queue.popleft()

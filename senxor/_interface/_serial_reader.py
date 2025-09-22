@@ -94,7 +94,8 @@ class SenxorSerialReader:
         if self.error_event.is_set():
             self.error_event.clear()
             msg, error = self.error_queue.get()
-            self.logger.error(msg, error=error)
+            self.logger.exception(msg, error=error)
+            self.stop()
             raise error
 
     def _init_ack_pipe(self) -> None:
@@ -126,6 +127,7 @@ class SenxorSerialReader:
         try:
             while not self.stop_event.is_set():
                 self._read_data()
+                time.sleep(self.read_interval)
         except PortNotOpenError as e:
             e_ = SenxorNotConnectedError()
             self._set_error(e, "serial_port_not_open")
@@ -152,7 +154,6 @@ class SenxorSerialReader:
         if chunk:
             self._buffer.put(chunk)
             self._on_data_received()
-        time.sleep(self.read_interval)
 
     def _on_data_received(self) -> None:
         """On data received from the serial port."""

@@ -98,6 +98,8 @@ class Senxor:
         self.interface.open()
         self._logger = get_logger(address=self.address)
 
+        self.stop_stream()
+
         self.refresh_regmap()
 
         time_cost = int((time.time() - time_start) * 1000)
