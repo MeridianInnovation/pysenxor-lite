@@ -31,7 +31,7 @@ def main():
     try:
         # Create and start a SenxorThread instance using context manager
         senx = Senxor(address)
-        with SenxorThread(senx, frame_unit="C") as senxor_thread:
+        with SenxorThread(senx) as senxor_thread:
             print(f"Started streaming from {address}. Press Ctrl+C to stop.")
 
             # Track frame statistics

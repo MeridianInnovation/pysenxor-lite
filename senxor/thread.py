@@ -224,7 +224,7 @@ class SenxorThread:
         self,
         senxor: Senxor,
         *,
-        frame_unit: Literal["C", "dK"] = "C",
+        frame_unit: Literal["C"] | None = None,
         allow_listener: bool = True,
     ) -> None:
         """Initialize the SenxorThread.
@@ -233,16 +233,22 @@ class SenxorThread:
         ----------
         senxor : Senxor
             A Senxor instance.
-        frame_unit : {"C", "dK"}, default "C"
-            The unit of the frame data. "C" for Celsius (float32), "dK" for
-            deci-Kelvin (uint16).
+        frame_unit : {"C"}, default None
+            The unit of the frame data. "C" for Celsius (float32)
         allow_listener : bool, optional
             Whether to enable the listener pattern. Defaults to True.
+
+        .. deprecated:: 3.1.0
+            `frame_unit` is deprecated and will be removed in future versions, use `senxor.set_read_temp_units` instead.
 
         """
         self._started = False
         self._senxor = senxor
-        self._celsius = frame_unit == "C"
+        if frame_unit is not None:
+            logger = get_logger()
+            logger.warning("`frame_unit` is deprecated, use `senxor.set_read_temp_units` instead.")
+            self._senxor.set_read_temp_units(frame_unit)
+
         self._reader = _BackgroundReader(self._read_senxor, self._senxor.address, allow_listener=allow_listener)
         self._log = get_logger(address=self._senxor.address)
 
@@ -331,7 +337,7 @@ class SenxorThread:
         self._log.info("senxor thread stopped")
 
     def _read_senxor(self) -> tuple[np.ndarray, np.ndarray] | None:
-        header, frame = self._senxor.read(block=True, celsius=self._celsius)
+        header, frame = self._senxor.read(block=True)
         # The reader is expected to return None if no data is available.
         if header is None or frame is None:
             return None
