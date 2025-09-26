@@ -5,7 +5,6 @@
 from typing import TYPE_CHECKING
 
 from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras
-from cv2_enumerate_cameras import supported_backends
 
 from senxor.log import get_logger
 
@@ -15,8 +14,6 @@ if TYPE_CHECKING:
 
 def list_camera_info(
     backend: int = 0,
-    *,
-    exclude_same_index: bool = True,
 ) -> list["CameraInfo"]:
     """List available camera information.
 
@@ -24,9 +21,6 @@ def list_camera_info(
     ----------
     backend : int, optional
         The backend to use for camera enumeration. If 0, all supported backends are used.
-    exclude_same_index : bool, optional
-        If backend is 0, True means exclude cameras with the same index across backends.
-        Some cameras are available on multiple backends. If you are not interested in this, set it to False.
 
     Returns
     -------
@@ -35,54 +29,18 @@ def list_camera_info(
 
     Examples
     --------
-    1. List all cameras available and exclude duplicate indices.
+    1. Print all cameras information available.
     >>> for camera in list_camera_info():
     ...     print(camera.index, camera.name, camera.backend)
-    0 GENERAL - VIDEO 700
-    1 Integrated Camera 700
+    ...     print(camera.path, camera.vid, camera.pid)
 
-    2. List all cameras available and include duplicate indices.
-    >>> for camera in list_camera_info(exclude_same_index=False):
-    ...     print(camera.index, camera.name, camera.backend)
-    0 GENERAL - VIDEO 700
-    1 Integrated Camera 700
-    0 GENERAL - VIDEO 1400
-    1 Integrated Camera 1400
-
-    3. Connect to a specific camera.
-    >>> camera = list_camera_info()[0]
-    >>> cap = cv2.VideoCapture(camera.index, camera.backend)
-
-    4. View the camera information.
-    >>> cam_info = list_camera_info()[0]
-    >>> print(cam_info.index)
-    0
-    >>> print(cam_info.name)
-    GENERAL - VIDEO
-    >>> print(cam_info.backend)
-    700
-    >>> print(cam_info.vid)
-    1234
-    >>> print(cam_info.pid)
-    5678
-    >>> print(cam_info.path)
-    /dev/video0
+    2. Connect to a specific camera.
+    >>> camera_info = list_camera_info()[0]
+    >>> cap = cv2.VideoCapture(camera_info.index, camera_info.backend)
 
     """
-    if backend == 0:
-        cameras = []
-        if exclude_same_index:
-            seen_indices = set()
-            for b in sorted(supported_backends):
-                for cam in _enumerate_cameras(b):
-                    if cam.index not in seen_indices:
-                        cameras.append(cam)
-                        seen_indices.add(cam.index)
-        else:
-            [cameras.extend(_enumerate_cameras(b)) for b in sorted(supported_backends)]
-    else:
-        cameras = _enumerate_cameras(backend)
-
+    # 3.1.0: remove the exclude_same_index parameter and related logic
+    cameras = _enumerate_cameras(backend)
     return cameras
 
 
