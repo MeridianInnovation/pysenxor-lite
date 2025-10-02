@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast, overload
 
 import numpy as np
 
@@ -163,10 +163,36 @@ class Senxor:
         """
         self._regmap.read_all()
 
+    @overload
     def read(
         self,
-        block: bool = True,
         *,
+        raw: bool = False,
+        celsius: bool | None = None,
+    ) -> tuple[np.ndarray | None, np.ndarray]: ...
+
+    @overload
+    def read(
+        self,
+        *,
+        block: Literal[False],
+        raw: bool = False,
+        celsius: bool | None = None,
+    ) -> tuple[np.ndarray | None, np.ndarray | None]: ...
+
+    @overload
+    def read(
+        self,
+        *,
+        block: Literal[True] = True,
+        raw: bool = False,
+        celsius: bool | None = None,
+    ) -> tuple[np.ndarray | None, np.ndarray]: ...
+
+    def read(
+        self,
+        *,
+        block: bool = True,
         raw: bool = False,
         celsius: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None]:
