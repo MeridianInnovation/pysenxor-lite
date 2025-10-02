@@ -6,7 +6,7 @@ import numpy as np
 import senxor
 from senxor.log import setup_console_logger
 from senxor.proc import enlarge, normalize
-from senxor.thread import CVCamThread, SenxorThread
+from senxor.thread import CVCamThread
 
 if __name__ == "__main__":
     setup_console_logger()
@@ -14,9 +14,7 @@ if __name__ == "__main__":
     # Initialize the Senxor device
     senxor_device = senxor.connect_senxor()
     senxor_device.fields.FRAME_RATE_DIVIDER.set(0)
-
-    # Create threaded wrappers
-    senxor_thread = SenxorThread(senxor_device)
+    senxor_device.start_stream()
 
     # Initialize the OpenCV camera
     cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -29,7 +27,6 @@ if __name__ == "__main__":
     cam_thread = CVCamThread(cam)
 
     # Start the threads
-    senxor_thread.start()
     cam_thread.start()
 
     thermal_image = None
@@ -37,15 +34,15 @@ if __name__ == "__main__":
 
     try:
         while True:
-            # Read from SenxorThread (non-blocking)
-            thermal_header, thermal_raw = senxor_thread.read()
+            # Read from SenxorDevice (non-blocking)
+            thermal_header, thermal_raw = senxor_device.read(block=False)
             if thermal_raw is not None:
                 thermal_image = normalize(thermal_raw, dtype=np.float32)
                 thermal_image = enlarge(thermal_image, 3)
 
             # Read from CVCamThread (non-blocking)
-            ret, rgb_raw = cam_thread.read()
-            if ret and rgb_raw is not None:
+            rgb_raw = cam_thread.read()
+            if rgb_raw is not None:
                 rgb_image = rgb_raw
                 rgb_image = cv2.resize(rgb_image, (640, 360))
 
@@ -58,5 +55,5 @@ if __name__ == "__main__":
     finally:
         # Clean up resources
         cv2.destroyAllWindows()
-        senxor_thread.stop()
+        senxor_device.close()
         cam_thread.stop()

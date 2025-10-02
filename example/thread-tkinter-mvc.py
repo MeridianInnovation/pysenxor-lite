@@ -367,10 +367,7 @@ class SenxorController:
         try:
             # Create and initialize the device model (SenxorThread)
             self.senxor = Senxor(address)
-            self.thermal_model = SenxorThread(self.senxor, frame_unit="C")
-
-            # Add listener for frame updates
-            self.thermal_model.add_listener(self._frame_listener, "temp_listener")
+            self.thermal_model = SenxorThread(self.senxor, self._frame_listener)
 
             # Start the device model
             self.thermal_model.start()
