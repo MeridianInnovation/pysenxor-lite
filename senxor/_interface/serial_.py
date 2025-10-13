@@ -110,6 +110,39 @@ def list_senxor_usb(exclude_open_ports: bool = True) -> list[ListPortInfo]:
     return senxor_ports
 
 
+def _op_wrapper(func: Callable) -> Callable:
+    def operation(self: SerialInterface, *args, **kwargs) -> Any:
+        if not self.is_connected:
+            self.close()
+            raise SenxorNotConnectedError
+        self.receiver.raise_if_error()
+        return func(self, *args, **kwargs)
+
+    @functools.wraps(func)
+    def wrapper(self: SerialInterface, *args, **kwargs) -> Any:
+        # first try
+        try:
+            return operation(self, *args, **kwargs)
+        except Exception as e:
+            self.logger.error("op_failed", error=e)
+
+        # if first try failed, retry
+        for i in range(2, self.op_retry_times):
+            try:
+                self.logger.debug("retry_operation", try_count=i, func_name=func.__name__)
+                return operation(self, *args, **kwargs)
+            except Exception as e:  # noqa: PERF203
+                if i < self.op_retry_times:
+                    self.logger.error("retry_failed", try_count=i, func_name=func.__name__, error=e)
+                    time.sleep(self.op_retry_interval)
+                else:
+                    self.logger.exception("last_retry_failed", try_count=i, func_name=func.__name__, error=e)
+                    self.close()
+                    raise e
+
+    return wrapper
+
+
 class SerialInterface(InterfaceProtocol):
     # The parameters for the serial port, should not be changed.
     SENXOR_SERIAL_PARAMS: ClassVar[dict[str, Any]] = {
@@ -183,39 +216,6 @@ class SerialInterface(InterfaceProtocol):
 
     def close(self):
         self.receiver.stop()
-
-    @staticmethod
-    def _op_wrapper(func: Callable) -> Callable:
-        def operation(self: SerialInterface, *args, **kwargs) -> Any:
-            if not self.is_connected:
-                self.close()
-                raise SenxorNotConnectedError
-            self.receiver.raise_if_error()
-            return func(self, *args, **kwargs)
-
-        @functools.wraps(func)
-        def wrapper(self: SerialInterface, *args, **kwargs) -> Any:
-            # first try
-            try:
-                return operation(self, *args, **kwargs)
-            except Exception as e:
-                self.logger.error("op_failed", error=e)
-
-            # if first try failed, retry
-            for i in range(2, self.op_retry_times):
-                try:
-                    self.logger.debug("retry_operation", try_count=i, func_name=func.__name__)
-                    return operation(self, *args, **kwargs)
-                except Exception as e:  # noqa: PERF203
-                    if i < self.op_retry_times:
-                        self.logger.error("retry_failed", try_count=i, func_name=func.__name__, error=e)
-                        time.sleep(self.op_retry_interval)
-                    else:
-                        self.logger.exception("last_retry_failed", try_count=i, func_name=func.__name__, error=e)
-                        self.close()
-                        raise e
-
-        return wrapper
 
     @_op_wrapper
     def read(self, block: bool = True) -> tuple[bytearray | None, bytearray | None]:
