@@ -24,6 +24,12 @@ dependencies = [
   "tomli>=2.2.1 ; python_full_version < '3.10'",
 ]
 
+[project.optional-dependencies]
+# This defines an optional group named 'examples' or 'cv'
+visualization = [
+    "opencv-python",
+]
+
 [dependency-groups]
 dev = [
   "commitizen>=4.8.3",
@@ -109,3 +115,4 @@ docstring-code-format = true
 
 version_provider = "uv"
 tag_format = "v$version"
+

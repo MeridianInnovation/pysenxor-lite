@@ -1,11 +1,6 @@
 # pysenxor
 
-[![Python](https://img.shields.io/badge/python-%3E%3D3.9-blue)](https://img.shields.io/badge/python-%3E%3D3.9-blue)
-
 A Python Library for Meridian Innovation's thermal imaging devices.
-
-- **Github repository**: <https://github.com/MeridianInnovation/pysenxor-lite/>
-- **Documentation** <https://MeridianInnovation.github.io/pysenxor-lite/>
 
 ## Overview
 
@@ -14,23 +9,23 @@ This package can let users interact with Meridian Innovation's thermal imaging d
 ## Features
 
 - Device discovery and listing
-- Multiple interfaces supported(USB serial, TCP/IP, GPIO, etc.)(Coming soon)
+- Multiple interfaces supported (USB serial, TCP/IP, GPIO, etc.) (Coming soon)
 - Easy device connection and management
 - Configuration and status read and write
 - Non-blocking mode for frame reading
 - Thermal data processing utilities
 - Thread-safe for multi-threaded use
-- Lightweight and minimal dependencies(no cv2 or matplotlib required)
+- Lightweight and minimal dependencies (no cv2 or matplotlib required)
 
 ## Installation
 
 To install the project, run the following command:
 
 ```bash
-python -m pip install git+https://github.com/MeridianInnovation/pysenxor-lite.git
+python -m pip install git+https://github.com/HefnySco/pysenxor-lite.git
 
 # Install from local:
-git clone https://github.com/MeridianInnovation/pysenxor-lite.git
+git clone https://github.com/HefnySco/pysenxor-lite.git
 cd pysenxor-lite
 python -m pip install .
 ```
@@ -65,7 +60,7 @@ Once you have the device address, you can connect to the device.
 
 There are several ways to connect to a Senxor device.
 
-1. Use the context manager provided by the `connect` function.
+0. Use the context manager provided by the `connect` function.
 
 ```python
 addr = addrs[0]
@@ -126,7 +121,7 @@ if frame is not None:
 dev.close() # Stop the stream and close the connection
 ```
 
-The `read` method will return a tuple of `(header, frame)` or `(None, None)` if the frame is not available(if block is False).
+The `read` method will return a tuple of `(header, frame)` or `(None, None)` if the frame is not available (if block is False).
 
 The `header` is a uint16 np.ndarray with some information about the frame.
 
@@ -189,8 +184,7 @@ Apply a colormap to the image.
 colored_image = senxor.proc.apply_colormap(frame, lut=cmap_cv_inferno)
 ```
 
-!!! tip
-    To keep the lightweight of the pysenxor, the `get_colormap` and `apply_colormap` doesn't need `cv2` or `matplotlib` as dependencies. They are based on the `colormap_tool` and `numpy` only.
+!!! tip To keep the lightweight of the pysenxor, the `get_colormap` and `apply_colormap` doesn't need `cv2` or `matplotlib` as dependencies. They are based on the `colormap_tool` and `numpy` only.
 
 ### Display or save the thermal image
 
@@ -221,29 +215,59 @@ You can interact with the device in multiple threads.
 
 For example, you can read the data in a background thread, and read/write registers in the main thread. Which is useful for GUI applications.
 
+### New Example: thermal_toolbox.py
+
+This fork includes an additional example, `thermal_toolbox.py`, which enhances the interaction with SenXor thermal imaging devices. This script provides a flexible tool for both local display and streaming of thermal camera feeds, with advanced processing capabilities.
+
+**Features of `thermal_toolbox.py`:**
+- **Flexible Output Options**: Supports local display of thermal images or streaming to a virtual video device (e.g., `/dev/video1`) using FFmpeg for integration with applications like Zoom, OBS, or VLC.
+- **Advanced Image Processing**: Includes temporal smoothing, spatial median blur, and optional CLAHE (Contrast Limited Adaptive Histogram Equalization) for enhanced image quality.
+- **Customizable Parameters**: Allows configuration of colormap, emissivity, scaling factor, and smoothing levels via command-line arguments.
+- **Min/Max Temperature Annotation**: Automatically annotates the minimum and maximum temperature points on the displayed or streamed image.
+- **Clean Exit Handling**: Gracefully handles interruptions (e.g., Ctrl+C) to ensure proper cleanup of camera resources and windows.
+
+**Usage Examples**:
+- **Local Display**:
+  ```bash
+  python thermal_toolbox.py --scale 6 --colormap viridis --smoothing-level 7
+  ```
+- **Streaming to Virtual Camera** (requires FFmpeg and v4l2loopback):
+  ```bash
+  python thermal_toolbox.py --stream | ffmpeg -f rawvideo -pixel_format rgb24 -video_size 640x480 -framerate 5 -i - -f v4l2 /dev/video1
+  ```
+
+**Advantages**:
+- **Versatility**: Seamlessly switch between local visualization and streaming, making it ideal for diverse use cases like live monitoring or video conferencing.
+- **Enhanced Image Quality**: Advanced processing options improve clarity and reduce noise in thermal images.
+- **User-Friendly**: Intuitive command-line interface with sensible defaults for quick setup.
+- **Integration with C++ Version**: This Python example complements the C++ MI48Dx Serial Driver ([HefnySco/mi48dx-serial-driver](https://github.com/HefnySco/mi48dx-serial-driver)), which offers a lightweight alternative for processing raw binary data streams and converting 16-bit pixel values into Kelvin temperatures with frame statistics (MIN/MAX/AVG). The C++ version is ideal for performance-critical applications or environments where Python dependencies are a constraint.
+
+**C++ Alternative**: For a lower-level, high-performance interface to the MI48 thermal imaging sensor, check out the [C++ MI48Dx Serial Driver](https://github.com/HefnySco/mi48dx-serial-driver). It provides direct access to raw data streams and is optimized for minimal overhead, making it suitable for embedded systems or real-time applications.
+
 ### More usage
 
-For more usage and API reference, please refer to the [Documentation](https://MeridianInnovation.github.io/pysenxor-lite/).
+For more usage and API reference, please refer to the Documentation.
 
 ## Examples
 
-For beginners, there are some examples in the [examples](./example) folder.
+For beginners, there are some examples in the examples folder.
 
 These examples provide a set of actual use cases of the `senxor` library.
 
-- Connect device, read thermal data, convert data to image, use cv2 to display the image stream.
-- Use thread to read data in background.
-- Create a simple GUI application to display the thermal camera stream.
+* Connect device, read thermal data, convert data to image, use cv2 to display the image stream.
+* Use thread to read data in background.
+* Create a simple GUI application to display the thermal camera stream.
+* `thermal_toolbox.py`: A versatile tool for displaying or streaming thermal camera feeds with advanced processing (see above).
 
 ## License
 
-This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+This project is licensed under the Apache License 2.0.
 
 You may freely use, modify, and distribute this software for both open-source and commercial purposes, subject to the terms of the license.
 
 ## Copyright
 
-Unless otherwise specified, all files in the source code directory(`senxor/`) are copyrighted by Meridian Innovation.
+Unless otherwise specified, all files in the source code directory (`senxor/`) are copyrighted by Meridian Innovation.
 
 Copyright (c) 2025 Meridian Innovation. All rights reserved.
 
@@ -251,21 +275,27 @@ Copyright (c) 2025 Meridian Innovation. All rights reserved.
 
 We welcome contributions from the community.
 
-By submitting a pull request, you certify compliance with the [Developer Certificate of Origin (DCO)](https://developercertificate.org/). This means you assert that:
+By submitting a pull request, you certify compliance with the Developer Certificate of Origin (DCO). This means you assert that:
 
-- You wrote the code or have the right to submit it;
-- You grant us the right to use your contribution under the project license.
+* You wrote the code or have the right to submit it;
+* You grant us the right to use your contribution under the project license.
 
 Please add the following line to your Git commit message to confirm DCO compliance:
 
-`Signed-off-by: Your Name your.email@example.com`
+`Signed-off-by: mohammad.hefny@gmail.com`
 
 You can automate this with `git commit -s`.
 
-See more details in [Contributing Guide](./CONTRIBUTING.md).
+See more details in Contributing Guide.
 
 ## Contact
 
 For support or inquiries, please contact:
 
-- Email: info@meridianinno.com
+## About
+
+A python library to interact with SenXor thermal imaging devices.
+
+## Footer
+
+© 2025 GitHub, Inc.
