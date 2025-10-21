@@ -41,6 +41,7 @@ Usage
 
 -------------------------------------------------------------------------------
 """
+
 import argparse
 import logging
 import signal
@@ -81,6 +82,7 @@ class RollingAverageFilter:
             self.buffer.pop(0)
         return np.mean(self.buffer, axis=0)
 
+
 def signal_handler(_sig, _frame):
     """Handles Ctrl+C and other termination signals for a clean exit."""
     # Unpack state variables from the container
@@ -98,6 +100,7 @@ def signal_handler(_sig, _frame):
         cv.destroyAllWindows()
 
     sys.exit(0)
+
 
 def parse_args():
     """Parses command-line arguments."""
@@ -183,13 +186,14 @@ def parse_args():
 
     return args
 
+
 # --- Main Application Logic ---
+
 
 def main():
     # Setup logging to stderr
     logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO, handlers=[
-                        StreamHandler(sys.stderr)])
+    logging.basicConfig(level=logging.INFO, handlers=[StreamHandler(sys.stderr)])
 
     # Handle signals for a clean exit
     signal.signal(signal.SIGINT, signal_handler)
@@ -206,8 +210,7 @@ def main():
     try:
         serials = senxor.list_senxor("serial")
         if not serials:
-            logger.critical(
-                "No SenXor devices found. Please ensure the camera is connected.")
+            logger.critical("No SenXor devices found. Please ensure the camera is connected.")
             sys.exit(1)
 
         # Connect to the first available device
@@ -221,8 +224,7 @@ def main():
 
         # Give the device a moment to initialize after connection
         time.sleep(0.1)
-        logger.info("Successfully connected to SenXor device: %s",
-                    mi48.get_sn())
+        logger.info("Successfully connected to SenXor device: %s", mi48.get_sn())
 
     except Exception as e:
         logger.critical("Cannot connect to SenXor: %s", e)
@@ -236,8 +238,7 @@ def main():
 
     # Initialize processing tools
     temporal_filter = RollingAverageFilter(N=args.temporal_smooth)
-    clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(
-        8, 8)) if args.clahe else None
+    clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)) if args.clahe else None
     cmap = get_colormaps(args.colormap, namespace="cv")
     window_name = f"Thermal Image - {mi48.get_sn()}"
     stream_size = (640, 480)
@@ -280,24 +281,36 @@ def main():
         min_val = min_val / 10.0
         max_val = max_val / 10.0
         cv.putText(img_enlarged_rgb, "+", min_loc_scaled, CVFONT, CVFONT_SIZE, WHITE, 2)
-        cv.putText(img_enlarged_rgb, f"{min_val:.1f}C", (min_loc_scaled[0] + 10, min_loc_scaled[1]),
-                   CVFONT, CVFONT_SIZE, WHITE, 1)
+        cv.putText(
+            img_enlarged_rgb,
+            f"{min_val:.1f}C",
+            (min_loc_scaled[0] + 10, min_loc_scaled[1]),
+            CVFONT,
+            CVFONT_SIZE,
+            WHITE,
+            1,
+        )
         cv.putText(img_enlarged_rgb, "+", max_loc_scaled, CVFONT, CVFONT_SIZE, WHITE, 2)
-        cv.putText(img_enlarged_rgb, f"{max_val:.1f}C", (max_loc_scaled[0] + 10, max_loc_scaled[1]),
-                   CVFONT, CVFONT_SIZE, WHITE, 1)
+        cv.putText(
+            img_enlarged_rgb,
+            f"{max_val:.1f}C",
+            (max_loc_scaled[0] + 10, max_loc_scaled[1]),
+            CVFONT,
+            CVFONT_SIZE,
+            WHITE,
+            1,
+        )
 
         # --- Output Frame ---
         if args.stream:
             # Resize the RGB image and write directly to stdout for FFmpeg
-            img_resized_rgb = cv.resize(
-                img_enlarged_rgb, stream_size, interpolation=cv.INTER_LINEAR)
+            img_resized_rgb = cv.resize(img_enlarged_rgb, stream_size, interpolation=cv.INTER_LINEAR)
             sys.stdout.write(img_resized_rgb.tobytes())
             sys.stdout.flush()
         else:
             # For local display, convert the RGB image to BGR for OpenCV
             img_bgr = cv.cvtColor(img_enlarged_rgb, cv.COLOR_RGB2BGR)
-            img_resized_bgr = cv.resize(
-                img_bgr, stream_size, interpolation=cv.INTER_LINEAR)
+            img_resized_bgr = cv.resize(img_bgr, stream_size, interpolation=cv.INTER_LINEAR)
             cv.imshow(window_name, img_resized_bgr)
             key = cv.waitKey(1)
             if key in [ord("q"), 27]:  # 'q' or Esc key
