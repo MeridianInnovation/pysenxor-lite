@@ -20,6 +20,7 @@ nav:
   - Examples:
       - Basic Stream: examples/basic_stream.md
       - Use Thread to Stream Frames: examples/thread_stream.md
+      - Stream to Virtual Camera using FFmpeg and v4l2loopback: examples/v4l2-virtual-camera.md
   - API Reference:
       - senxor: api/senxor.md
       - senxor.proc: api/proc.md
