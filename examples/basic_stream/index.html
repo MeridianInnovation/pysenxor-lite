@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -636,6 +584,29 @@
   
   <span class="md-ellipsis">
     Use Thread to Stream Frames
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
     
   </span>
   
@@ -995,7 +966,7 @@
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># Call the `read` function to get the next frame.</span>
-            <span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Let&#39;s say we&#39;re looking at a typical thermal image where temps are around 20-70°C.</span>

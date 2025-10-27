@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -621,6 +569,29 @@
   
   <span class="md-ellipsis">
     Use Thread to Stream Frames
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
     
   </span>
   
@@ -1150,7 +1121,7 @@
 
 
 <h3 id="senxor.log.get_logger" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_logger</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">get_logger</span><span class="p">(</span><span class="n">logger_name</span><span class="o">=</span><span class="s1">&#39;senxor&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#senxor.log.get_logger" class="headerlink" title="Permanent link">&para;</a></h3>
 
@@ -1171,6 +1142,22 @@
         </tr>
       </thead>
       <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>logger_name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the logger, by default <code>"senxor"</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;senxor&#39;</code>
+            </td>
+          </tr>
           <tr class="doc-section-item">
             <td>
                 <code>*args</code>
@@ -1218,7 +1205,7 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="structlog.BoundLogger">BoundLogger</span></code>
+                  <code><span title="senxor.log.SenxorLogger">SenxorLogger</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1246,7 +1233,7 @@
 
 
 <h3 id="senxor.log.setup_console_logger" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">setup_console_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">setup_console_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="s1">&#39;senxor&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">add_logger_name</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 <a href="#senxor.log.setup_console_logger" class="headerlink" title="Permanent link">&para;</a></h3>
 
@@ -1274,7 +1261,7 @@ and formatted messages.</p>
                 <code>log_level</code>
             </td>
             <td>
-                  <code><span title="int">int</span></code>
+                  <code><span title="int">int</span> | <span title="str">str</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1282,7 +1269,39 @@ and formatted messages.</p>
               </div>
             </td>
             <td>
-                  <code><span title="logging.INFO">INFO</span></code>
+                  <code>&#39;INFO&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>logger_name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the logger, by default <code>"senxor"</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;senxor&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>add_logger_name</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to add the logger name to the console output, by default <code>False</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
             </td>
           </tr>
       </tbody>
@@ -1297,7 +1316,7 @@ and formatted messages.</p>
 
 
 <h3 id="senxor.log.setup_file_logger" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">setup_file_logger</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">file_mode</span><span class="o">=</span><span class="s1">&#39;wt+&#39;</span><span class="p">,</span> <span class="n">log_as_json</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_to_console</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">setup_file_logger</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="s1">&#39;senxor&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">watch_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">json_format</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 <a href="#senxor.log.setup_file_logger" class="headerlink" title="Permanent link">&para;</a></h3>
 
@@ -1305,8 +1324,7 @@ and formatted messages.</p>
     <div class="doc doc-contents ">
 
         <p>Setup a file logger.</p>
-<p>This logger is used to log messages to the console and a file, can output
-formatted messages.</p>
+<p>This logger is used to log messages to a file, can output formatted messages.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1322,7 +1340,7 @@ formatted messages.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>path</code>
+                <code>file_path</code>
             </td>
             <td>
                   <code><span title="pathlib.Path">Path</span> | <span title="str">str</span></code>
@@ -1338,22 +1356,6 @@ formatted messages.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>log_level</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The log level to use for the file, by default <code>logging.NOTSET</code></p>
-              </div>
-            </td>
-            <td>
-                  <code><span title="logging.INFO">INFO</span></code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
                 <code>file_mode</code>
             </td>
             <td>
@@ -1361,23 +1363,55 @@ formatted messages.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The mode to open the log file in, by default <code>"wt+"</code></p>
+                <p>The mode to use for the log file, by default <code>"w"</code></p>
               </div>
             </td>
             <td>
-                  <code>&#39;wt+&#39;</code>
+                  <code>&#39;w&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>log_as_json</code>
+                <code>log_level</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | <span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The log level to use, by default <code>logging.INFO</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;INFO&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>logger_name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the logger, by default <code>"senxor"</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;senxor&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>watch_file</code>
             </td>
             <td>
                   <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to log to the file in JSON format, by default <code>False</code></p>
+                <p>Whether to use the <code>logging.handlers.WatchedFileHandler</code> handler, by default <code>False</code></p>
               </div>
             </td>
             <td>
@@ -1386,18 +1420,18 @@ formatted messages.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>log_to_console</code>
+                <code>json_format</code>
             </td>
             <td>
                   <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to log to the console, by default <code>True</code></p>
+                <p>Whether to use the <code>structlog.processors.JSONRenderer</code> formatter, by default <code>False</code></p>
               </div>
             </td>
             <td>
-                  <code>True</code>
+                  <code>False</code>
             </td>
           </tr>
       </tbody>

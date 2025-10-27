@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -621,6 +569,29 @@
   
   <span class="md-ellipsis">
     Use Thread to Stream Frames
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
     
   </span>
   
@@ -1279,11 +1250,13 @@ If not provided, will attempt to auto-detect from address.</p>
                 <code>stop_stream</code>
             </td>
             <td>
-                  <code><span title="bool">bool</span></code>
+                  <code>(<span title="bool">bool</span>, <span title="optional">optional</span>(<span title="deprecated">deprecated</span>))</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to stop the stream when the device is opened.</p>
+                <p>Whether to stop the stream when the device is opened.
+.. deprecated:: 3.1.0
+    This parameter is deprecated and will be removed in future versions.</p>
               </div>
             </td>
             <td>

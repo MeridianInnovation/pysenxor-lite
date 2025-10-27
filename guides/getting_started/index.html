@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -572,6 +520,24 @@
   <a href="#display-or-save-the-thermal-image" class="md-nav__link">
     <span class="md-ellipsis">
       Display or save the thermal image
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Device Control
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging
     </span>
   </a>
   
@@ -736,6 +702,29 @@
   
   <span class="md-ellipsis">
     Use Thread to Stream Frames
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
     
   </span>
   
@@ -1089,6 +1078,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#device-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Device Control
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#multi-threading" class="md-nav__link">
     <span class="md-ellipsis">
       Multi-threading
@@ -1251,6 +1258,39 @@
 
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colored_image</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="device-control">Device Control<a class="headerlink" href="#device-control" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">senxor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">senxor</span><span class="o">.</span><span class="n">list_senxor</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<p>You can access device registers and fields through the <code>regs</code> and <code>fields</code> properties of the device object.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get the MCU type value and display string</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;MI48G&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set the frame rate divider to 4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># print the help string of a field</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+
+<span class="c1"># Get all fields value as a dictionary</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">status</span>
+<span class="p">{</span><span class="s1">&#39;MCU_TYPE&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;FW_VERSION_MAJOR&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;FW_VERSION_MINOR&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+</code></pre></div>
+<h3 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h3>
+<p>You can enable logging to see debug information.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_console_logger</span>
+
+<span class="c1"># Must be called before any other code.</span>
+<span class="n">setup_console_logger</span><span class="p">()</span>
+</code></pre></div>
+<p>Example output:</p>
+<div class="highlight"><pre><span></span><code>2025-10-27T11:34:17+0800 [info     ] init Senxor                    address=&lt;serial.tools.list_ports_common.ListPortInfo object at 0x000001458BC88320&gt; type=serial auto_open=True
+2025-10-27T11:34:17+0800 [info     ] registers read                 address=COM4 addrs=[177] values={177: 32}
+2025-10-27T11:34:17+0800 [info     ] refresh fields by reg-read     address=COM4 fields={&#39;NO_HEADER&#39;: 1, &#39;ADC_ENABLE&#39;: 0, &#39;GET_SINGLE_FRAME&#39;: 0, &#39;READOUT_MODE&#39;: 0, &#39;CONTINUOUS_STREAM&#39;: 0}
+2025-10-27T11:34:17+0800 [info     ] registers write                address=COM4 updates={177: 32}
+2025-10-27T11:34:17+0800 [info     ] stop stream                    address=COM4
 </code></pre></div>
 <h3 id="multi-threading">Multi-threading<a class="headerlink" href="#multi-threading" title="Permanent link">&para;</a></h3>
 <p><code>senxor</code> is designed to be thread-safe.</p>

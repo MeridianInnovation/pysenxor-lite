@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/api/senxor/">
       
       
-        <link rel="prev" href="../../examples/thread_stream/">
+        <link rel="prev" href="../../examples/v4l2-virtual-camera/">
       
       
         <link rel="next" href="../proc/">
@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -631,6 +579,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -786,9 +757,72 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_fw_version" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_fw_version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_module_category" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_module_category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_module_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_module_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_production_year" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_production_year
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_senxor_id_hex" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_senxor_id_hex
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#senxor.Senxor.get_shape" class="md-nav__link">
     <span class="md-ellipsis">
       get_shape
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_sn" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_sn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_temp_units" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_temp_units
     </span>
   </a>
   
@@ -834,6 +868,15 @@
   <a href="#senxor.Senxor.refresh_regmap" class="md-nav__link">
     <span class="md-ellipsis">
       refresh_regmap
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.set_read_temp_units" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_read_temp_units
     </span>
   </a>
   
@@ -1166,9 +1209,72 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_fw_version" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_fw_version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_module_category" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_module_category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_module_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_module_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_production_year" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_production_year
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_senxor_id_hex" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_senxor_id_hex
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#senxor.Senxor.get_shape" class="md-nav__link">
     <span class="md-ellipsis">
       get_shape
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_sn" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_sn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.get_temp_units" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_temp_units
     </span>
   </a>
   
@@ -1214,6 +1320,15 @@
   <a href="#senxor.Senxor.refresh_regmap" class="md-nav__link">
     <span class="md-ellipsis">
       refresh_regmap
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.Senxor.set_read_temp_units" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_read_temp_units
     </span>
   </a>
   
@@ -1374,7 +1489,7 @@
 
 
 <h4 id="senxor.Senxor.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">interface_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">auto_open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stop_stream_on_connect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_status_on_connect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">interface_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">auto_open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">read_temp_units</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#senxor.Senxor.__init__" class="headerlink" title="Permanent link">&para;</a></h4>
 
@@ -1445,34 +1560,18 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>stop_stream_on_connect</code>
+                <code>read_temp_units</code>
             </td>
             <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to stop the stream automatically on connect, by default True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>get_status_on_connect</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
+                  <code><span title="typing.Literal">Literal</span>[&#39;K&#39;, &#39;C&#39;, &#39;F&#39;]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to get the status of the senxor automatically on connect, by default True.</p>
+                <p>The temperature units to use for the <code>read</code> method, by default "C".</p>
               </div>
             </td>
             <td>
-                  <code>True</code>
+                  <code>&#39;C&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1543,6 +1642,171 @@
 <div class="doc doc-object doc-function">
 
 
+<h4 id="senxor.Senxor.get_fw_version" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_fw_version</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_fw_version" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the firmware version string.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The firmware version string.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.Senxor.get_module_category" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_module_category</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_module_category" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the module category.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.Senxor.get_module_type" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_module_type</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_module_type" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the module type.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.Senxor.get_production_year" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_production_year</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_production_year" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the production year.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The production year.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.Senxor.get_senxor_id_hex" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_senxor_id_hex</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_senxor_id_hex" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the senxor id(SN code) string in hex format.</p>
+<p>The senxor id is a hex string of 12 characters, the format is:
+<code>YYWWLLSSSSSS</code>, where:
+- <code>YY</code> is the production year (from 2000 to 2099).
+- <code>WW</code> is the production week.
+- <code>LL</code> is the manufacturing location.
+- <code>SSSSSS</code> is the serial number (from 000000 to 999999).</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The senxor id.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="senxor.Senxor.get_shape" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">get_shape</span><span class="p">()</span></code>
 
@@ -1584,6 +1848,101 @@
 <div class="doc doc-object doc-function">
 
 
+<h4 id="senxor.Senxor.get_sn" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_sn</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_sn" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the SN code string. Same as <code>get_senxor_id_hex</code>.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The SN code string.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.Senxor.get_temp_units" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_temp_units</span><span class="p">()</span></code>
+
+<a href="#senxor.Senxor.get_temp_units" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the temperature units configured on the device.</p>
+<p>The temperature units of the frame is determined by two fields: <code>ADC_ENABLE</code> and <code>TEMP_UNITS</code>.
+If <code>ADC_ENABLE</code> is set to <code>1</code>, the temperature units is <code>adc</code>.
+Otherwise, the temperature units is determined by <code>TEMP_UNITS</code>.</p>
+<p>For Panther Module, the temperature units is always <code>dK</code> whatever the <code>TEMP_UNITS</code> field is.</p>
+<p>Note: The <code>read</code> method may convert temperature units based on input parameters and may not
+follow the device's configuration.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Literal">Literal</span>[&#39;dK&#39;, &#39;dC&#39;, &#39;dF&#39;, &#39;K&#39;, &#39;C&#39;, &#39;F&#39;, &#39;adc&#39;]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The temperature units of the frame.
+- <code>dK</code>: 0.1 K
+- <code>dC</code>: 0.1 °C
+- <code>dF</code>: 0.1 °F
+- <code>K</code>: 1 K
+- <code>C</code>: 1 °C
+- <code>F</code>: 1 °F
+- <code>adc</code>: ADC data(uint16)</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="senxor.Senxor.open" class="doc doc-heading">
             <code class="highlight language-python"><span class="nb">open</span><span class="p">()</span></code>
 
@@ -1603,9 +1962,26 @@
 
 
 <h4 id="senxor.Senxor.read" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">read</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 <a href="#senxor.Senxor.read" class="headerlink" title="Permanent link">&para;</a></h4>
+          <div class="doc-overloads">
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">read</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">celsius</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+</code></pre></div><div class="doc-signature highlight"><pre><span></span><code><span class="nf">read</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">block</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">celsius</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</code></pre></div><div class="doc-signature highlight"><pre><span></span><code><span class="nf">read</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">block</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">celsius</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+</code></pre></div>          </div>
 
 
     <div class="doc doc-contents ">
@@ -1679,7 +2055,7 @@ If False, the frame data will be returned in 1/10 Kelvin, uint16.</p>
               </div>
             </td>
             <td>
-                  <code>True</code>
+                  <code>None</code>
             </td>
           </tr>
       </tbody>
@@ -1697,7 +2073,7 @@ If False, the frame data will be returned in 1/10 Kelvin, uint16.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="numpy.ndarray">ndarray</span>] | <span title="tuple">tuple</span>[None, None]</code>
+                  <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span> | None, <span title="numpy.ndarray">ndarray</span> | None]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1722,16 +2098,6 @@ The first array is the header data, the second array is the frame data.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="senxor._error.SenxorNotConnectedError">SenxorNotConnectedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the senxor is not connected.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
                   <code><span title="RuntimeError">RuntimeError</span></code>
             </td>
             <td>
@@ -1742,7 +2108,7 @@ The first array is the header data, the second array is the frame data.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="senxor._error.SenxorReadTimeoutError">SenxorReadTimeoutError</span></code>
+                  <code><span title="SenxorAckTimeoutError">SenxorAckTimeoutError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2009,6 +2375,55 @@ instances.</p>
 <div class="doc doc-object doc-function">
 
 
+<h4 id="senxor.Senxor.set_read_temp_units" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_read_temp_units</span><span class="p">(</span><span class="n">temp_units</span><span class="p">)</span></code>
+
+<a href="#senxor.Senxor.set_read_temp_units" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Set the temperature units to use for the <code>read</code> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>temp_units</code>
+            </td>
+            <td>
+                  <code><span title="typing.Literal">Literal</span>[&#39;K&#39;, &#39;C&#39;, &#39;F&#39;]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The temperature units to use for the <code>read</code> method.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="senxor.Senxor.start_stream" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">start_stream</span><span class="p">()</span></code>
 
@@ -2248,11 +2663,13 @@ If not provided, will attempt to auto-detect from address.</p>
                 <code>stop_stream</code>
             </td>
             <td>
-                  <code><span title="bool">bool</span></code>
+                  <code>(<span title="bool">bool</span>, <span title="optional">optional</span>(<span title="deprecated">deprecated</span>))</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to stop the stream when the device is opened.</p>
+                <p>Whether to stop the stream when the device is opened.
+.. deprecated:: 3.1.0
+    This parameter is deprecated and will be removed in future versions.</p>
               </div>
             </td>
             <td>
@@ -2455,7 +2872,7 @@ If not provided, all devices will be listed.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../examples/thread_stream/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Use Thread to Stream Frames">
+          <a href="../../examples/v4l2-virtual-camera/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Stream to Virtual Camera using FFmpeg and v4l2loopback">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2465,7 +2882,7 @@ If not provided, all devices will be listed.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Use Thread to Stream Frames
+                Stream to Virtual Camera using FFmpeg and v4l2loopback
               </div>
             </div>
           </a>

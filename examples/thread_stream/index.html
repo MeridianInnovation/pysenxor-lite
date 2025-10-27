@@ -18,7 +18,7 @@
         <link rel="prev" href="../basic_stream/">
       
       
-        <link rel="next" href="../../api/senxor/">
+        <link rel="next" href="../v4l2-virtual-camera/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -641,6 +589,29 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -962,81 +933,48 @@
 
 <h1 id="use-thread-to-stream-frames">Use Thread to Stream Frames<a class="headerlink" href="#use-thread-to-stream-frames" title="Permanent link">&para;</a></h1>
 <p>This example shows how to use threads to stream frames from a Senxor device and display them in a window using cv2.</p>
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Basic example demonstrating SenxorThread&#39;s read functionality.</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Basic example demonstrating senxor.thread.SenxorThread.&quot;&quot;&quot;</span>
 
-<span class="sd">This example shows how to use SenxorThread to read data from a Senxor device</span>
-<span class="sd">in a background thread without using listeners.</span>
-
-<span class="sd">Note that in most basic use cases, using Senxor.read(block=False) is simpler and introduces</span>
-<span class="sd">negligible latency compared to using SenxorThread. This example demonstrates SenxorThread</span>
-<span class="sd">for cases where background thread processing is specifically needed.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">Senxor</span><span class="p">,</span> <span class="n">list_senxor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">senxor.thread</span><span class="w"> </span><span class="kn">import</span> <span class="n">SenxorThread</span>
 
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_senxor_data</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Temperature: max: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, min: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, mean: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="c1"># Search for available Senxor devices</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Searching for Senxor devices...&quot;</span><span class="p">)</span>
     <span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Senxor devices found.&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span><span class="si">}</span><span class="s2"> device(s): </span><span class="si">{</span><span class="n">devices</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">address</span> <span class="o">=</span> <span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Create and start a SenxorThread instance using context manager</span>
+        <span class="c1"># Create and start a SenxorThread</span>
         <span class="n">senx</span> <span class="o">=</span> <span class="n">Senxor</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">SenxorThread</span><span class="p">(</span><span class="n">senx</span><span class="p">,</span> <span class="n">frame_unit</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">senxor_thread</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Started streaming from </span><span class="si">{</span><span class="n">address</span><span class="si">}</span><span class="s2">. Press Ctrl+C to stop.&quot;</span><span class="p">)</span>
+        <span class="n">senxor_thread</span> <span class="o">=</span> <span class="n">SenxorThread</span><span class="p">(</span><span class="n">senx</span><span class="p">,</span> <span class="n">on_senxor_data</span><span class="p">)</span>
+        <span class="n">senxor_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-            <span class="c1"># Track frame statistics</span>
-            <span class="n">frame_count</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="n">last_stats_time</span> <span class="o">=</span> <span class="n">start_time</span>
-
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="c1"># Read the latest frame (non-blocking)</span>
-                <span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">senxor_thread</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-                <span class="c1"># Process the frame if available</span>
-                <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">frame_count</span> <span class="o">+=</span> <span class="mi">1</span>
-
-                    <span class="c1"># Calculate temperature statistics</span>
-                    <span class="n">min_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-                    <span class="n">max_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-                    <span class="n">avg_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-
-                    <span class="c1"># Print frame information occasionally</span>
-                    <span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">current_time</span> <span class="o">-</span> <span class="n">last_stats_time</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>  <span class="c1"># Print stats every second</span>
-                        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">current_time</span> <span class="o">-</span> <span class="n">start_time</span>
-                        <span class="n">fps</span> <span class="o">=</span> <span class="n">frame_count</span> <span class="o">/</span> <span class="n">elapsed</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">frame_count</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;Temperature (°C): Min=</span><span class="si">{</span><span class="n">min_temp</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, Max=</span><span class="si">{</span><span class="n">max_temp</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, Avg=</span><span class="si">{</span><span class="n">avg_temp</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;FPS: </span><span class="si">{</span><span class="n">fps</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="n">last_stats_time</span> <span class="o">=</span> <span class="n">current_time</span>
-
-                <span class="c1"># Small sleep to prevent CPU hogging</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stopping stream...&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Program finished.&quot;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -1094,13 +1032,13 @@
         
         
           
-          <a href="../../api/senxor/" class="md-footer__link md-footer__link--next" aria-label="Next: senxor">
+          <a href="../v4l2-virtual-camera/" class="md-footer__link md-footer__link--next" aria-label="Next: Stream to Virtual Camera using FFmpeg and v4l2loopback">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                senxor
+                Stream to Virtual Camera using FFmpeg and v4l2loopback
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -222,18 +222,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -356,49 +355,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -411,14 +367,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -631,6 +579,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -790,6 +761,24 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#senxor.proc.bytes_to_adc" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytes_to_adc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.proc.bytes_to_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytes_to_raw
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#senxor.proc.dk_to_celsius" class="md-nav__link">
     <span class="md-ellipsis">
       dk_to_celsius
@@ -820,6 +809,15 @@
   <a href="#senxor.proc.raw_to_frame" class="md-nav__link">
     <span class="md-ellipsis">
       raw_to_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.proc.raw_to_temp" class="md-nav__link">
+    <span class="md-ellipsis">
+      raw_to_temp
     </span>
   </a>
   
@@ -1060,6 +1058,24 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#senxor.proc.bytes_to_adc" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytes_to_adc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.proc.bytes_to_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytes_to_raw
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#senxor.proc.dk_to_celsius" class="md-nav__link">
     <span class="md-ellipsis">
       dk_to_celsius
@@ -1090,6 +1106,15 @@
   <a href="#senxor.proc.raw_to_frame" class="md-nav__link">
     <span class="md-ellipsis">
       raw_to_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.proc.raw_to_temp" class="md-nav__link">
+    <span class="md-ellipsis">
+      raw_to_temp
     </span>
   </a>
   
@@ -1307,6 +1332,42 @@ depends on the characteristics of the input image. Default is 256.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color_image</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 <span class="go">float32</span>
 </code></pre></div>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="senxor.proc.bytes_to_adc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">bytes_to_adc</span><span class="p">(</span><span class="n">bytes_data</span><span class="p">)</span></code>
+
+<a href="#senxor.proc.bytes_to_adc" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert bytes data to ADC data.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="senxor.proc.bytes_to_raw" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">bytes_to_raw</span><span class="p">(</span><span class="n">bytes_data</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span></code>
+
+<a href="#senxor.proc.bytes_to_raw" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert bytes data to raw data.</p>
 
 
     </div>
@@ -1715,6 +1776,24 @@ intermediate steps. Only normalize to <code>np.uint8</code> as the <strong>very 
           </tr>
       </tbody>
     </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="senxor.proc.raw_to_temp" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">raw_to_temp</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">in_unit</span><span class="p">,</span> <span class="n">out_unit</span><span class="p">)</span></code>
+
+<a href="#senxor.proc.raw_to_temp" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert raw data to temperature data.</p>
 
 
     </div>

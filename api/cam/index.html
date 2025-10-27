@@ -220,18 +220,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
   
   
-  Home
+    
+  
+  Overview
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -354,49 +353,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Home
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -409,14 +365,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -619,6 +567,29 @@
   
   <span class="md-ellipsis">
     Use Thread to Stream Frames
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stream to Virtual Camera using FFmpeg and v4l2loopback
     
   </span>
   
@@ -1154,7 +1125,7 @@
 
 
 <h3 id="senxor.cam.list_camera_info" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">list_camera_info</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">exclude_same_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">list_camera_info</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
 
 <a href="#senxor.cam.list_camera_info" class="headerlink" title="Permanent link">&para;</a></h3>
 
@@ -1191,23 +1162,6 @@
                   <code>0</code>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>exclude_same_index</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If backend is 0, True means exclude cameras with the same index across backends.
-Some cameras are available on multiple backends. If you are not interested in this, set it to False.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -1237,45 +1191,17 @@ Some cameras are available on multiple backends. If you are not interested in th
 
 <p><span class="doc-section-title">Examples:</span></p>
     <ol>
-<li>List all cameras available and exclude duplicate indices.</li>
+<li>Print all cameras information available.</li>
 </ol>
     <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">camera</span> <span class="ow">in</span> <span class="n">list_camera_info</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
-<span class="go">0 GENERAL - VIDEO 700</span>
-<span class="go">1 Integrated Camera 700</span>
-</code></pre></div>
-    <ol>
-<li>List all cameras available and include duplicate indices.</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">camera</span> <span class="ow">in</span> <span class="n">list_camera_info</span><span class="p">(</span><span class="n">exclude_same_index</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
-<span class="go">0 GENERAL - VIDEO 700</span>
-<span class="go">1 Integrated Camera 700</span>
-<span class="go">0 GENERAL - VIDEO 1400</span>
-<span class="go">1 Integrated Camera 1400</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">vid</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
 </code></pre></div>
     <ol>
 <li>Connect to a specific camera.</li>
 </ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">camera</span> <span class="o">=</span> <span class="n">list_camera_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
-</code></pre></div>
-    <ol>
-<li>View the camera information.</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">cam_info</span> <span class="o">=</span> <span class="n">list_camera_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="go">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="go">GENERAL - VIDEO</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
-<span class="go">700</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">vid</span><span class="p">)</span>
-<span class="go">1234</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
-<span class="go">5678</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cam_info</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-<span class="go">/dev/video0</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">camera_info</span> <span class="o">=</span> <span class="n">list_camera_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">camera_info</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera_info</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
 </code></pre></div>
 
 
