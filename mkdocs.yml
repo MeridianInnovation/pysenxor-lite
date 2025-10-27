@@ -8,11 +8,7 @@ repo_name: MeridianInnovation/pysenxor-lite
 copyright: Maintained by <a href="https://www.meridianinno.com/">MeridianInnovation</a>.
 
 nav:
-  - Home:
-      - Overview: index.md
-      # - Usage: home/usage.md
-      # - Changelog: home/changelog.md
-      # - License: home/license.md
+  - Overview: index.md
   - Tutorials:
       - Getting Started: guides/getting_started.md
       - Device Control: guides/device_control.md
