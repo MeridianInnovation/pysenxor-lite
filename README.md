@@ -213,6 +213,53 @@ plt.imshow(colored_image)
 plt.show()
 ```
 
+### Device Control
+
+```python
+>>> import senxor
+>>> dev = senxor.connect(senxor.list_senxor()[0])
+```
+
+You can access device registers and fields through the `regs` and `fields` properties of the device object.
+
+```python
+# Get the MCU type value and display string
+>>> dev.fields.MCU_TYPE.get(), dev.fields.MCU_TYPE.display()
+(3, 'MI48G')
+
+# Set the frame rate divider to 4
+>>> dev.fields.FRAME_RATE_DIVIDER.set(4)
+
+# print the help string of a field
+>>> print(dev.fields.FRAME_RATE_DIVIDER.help)
+
+# Get all fields value as a dictionary
+>>> dev.fields.status
+{'MCU_TYPE': 3, 'FW_VERSION_MAJOR': 4, 'FW_VERSION_MINOR': 5, ...}
+```
+
+### Logging
+
+You can enable logging to see debug information.
+
+```python
+from senxor.log import setup_console_logger
+
+# Must be called before any other code.
+setup_console_logger()
+```
+
+Example output:
+
+```log
+2025-10-27T11:34:17+0800 [info     ] init Senxor                    address=<serial.tools.list_ports_common.ListPortInfo object at 0x000001458BC88320> type=serial auto_open=True
+2025-10-27T11:34:17+0800 [info     ] registers read                 address=COM4 addrs=[177] values={177: 32}
+2025-10-27T11:34:17+0800 [info     ] refresh fields by reg-read     address=COM4 fields={'NO_HEADER': 1, 'ADC_ENABLE': 0, 'GET_SINGLE_FRAME': 0, 'READOUT_MODE': 0, 'CONTINUOUS_STREAM': 0}
+2025-10-27T11:34:17+0800 [info     ] registers write                address=COM4 updates={177: 32}
+2025-10-27T11:34:17+0800 [info     ] stop stream                    address=COM4
+```
+
+
 ### Multi-threading
 
 `senxor` is designed to be thread-safe.
