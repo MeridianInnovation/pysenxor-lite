@@ -82,7 +82,7 @@ def raw_to_temp(
         data = raw / 10
         in_unit = "K"
     elif in_unit == "dC":
-        data = raw / 10
+        data = (raw / 10) -273.15
         in_unit = "C"
     elif in_unit == "dF":
         data = raw / 10
