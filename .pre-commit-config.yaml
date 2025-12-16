@@ -29,14 +29,13 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
+    rev: v0.12.4
     hooks:
-      - id: ruff
-        name: ruff (imports)
-        args: [--select, I, --fix]
+      - id: ruff-check
+        args:
+          - --exit-zero
+          - --fix
       - id: ruff-format
-        name: ruff (format)
-        args: [--config=pyproject.toml]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
