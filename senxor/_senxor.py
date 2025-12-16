@@ -103,7 +103,36 @@ class Senxor:
 
         self.stop_stream()
 
-        self.refresh_regmap()
+        try:
+            self.read_regs(
+                [
+                    "FRAME_MODE",
+                    "FW_VERSION_1",
+                    "FW_VERSION_2",
+                    "FRAME_RATE",
+                    "SLEEP_MODE",
+                    "SENXOR_GAIN",
+                    "SENXOR_TYPE",
+                    "MODULE_TYPE",
+                    "MCU_TYPE",
+                    "TEMP_CONVERT_CTRL",
+                    "SENSITIVITY_FACTOR",
+                    "SELF_CALIBRATION",
+                    "EMISSIVITY",
+                    "OFFSET_CORR",
+                    "OBJECT_TEMP_FACTOR",
+                    "SENXOR_ID_0",
+                    "SENXOR_ID_1",
+                    "SENXOR_ID_2",
+                    "SENXOR_ID_3",
+                    "SENXOR_ID_4",
+                    "SENXOR_ID_5",
+                    "SENXOR_ID_6",
+                    "USER_FLASH_CTRL",
+                ],
+            )
+        except Exception as e:
+            self._logger.warning("refresh_regmap_failed", error=e)
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
