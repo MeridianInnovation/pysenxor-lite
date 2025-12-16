@@ -45,6 +45,7 @@ class SenxorAckParser:
 
     ACK_HEADER = b"   #"
 
+    ACK_HEADER_LENGTH = 4
     ACK_LENGTH_LENGTH = 4
     ACK_CMD_LENGTH = 4
     ACK_CHECKSUM_LENGTH = 4

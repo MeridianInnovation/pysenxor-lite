@@ -236,8 +236,11 @@ class SenxorSerialReader:
 
         prefix_idx = self._buffer.buf.find(SenxorAckParser.ACK_HEADER)
         if prefix_idx == -1:
-            discarded = len(self._buffer)
-            self._buffer.buf.clear()
+            # Consider there may partial prefix(1-3 bytes) in the buffer, keep the last 3 bytes to avoid losing data.
+            bytes_to_keep = self._parser.ACK_HEADER_LENGTH - 1
+            buf_len = len(self._buffer)
+            discarded = buf_len - bytes_to_keep if buf_len > bytes_to_keep else 0
+            self._buffer.discard(discarded)
             self.logger.debug("realign_buffer", state="no_prefix", discarded=discarded)
         elif prefix_idx == 0:
             # Should only happen when first communication.
@@ -323,4 +326,6 @@ class SenxorSerialReader:
         elif cmd == "SERR":
             self.no_module_event.set()
         else:
+            self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
+            self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
             self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
