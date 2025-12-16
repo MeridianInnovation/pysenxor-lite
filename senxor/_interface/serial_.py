@@ -15,11 +15,7 @@ from senxor._interface._serial_parser import SenxorCmdEncoder
 from senxor._interface._serial_reader import SenxorSerialReader
 from senxor._interface.protocol import InterfaceProtocol
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
-from senxor.error import (
-    SenxorNoModuleError,
-    SenxorNotConnectedError,
-    SenxorResponseTimeoutError,
-)
+from senxor.error import SenxorNoModuleError, SenxorNotConnectedError, SenxorResponseTimeoutError
 from senxor.log import get_logger
 
 if TYPE_CHECKING:
@@ -118,29 +114,28 @@ def _op_wrapper(func: Callable) -> Callable:
         self.receiver.raise_if_error()
         return func(self, *args, **kwargs)
 
+    def handle_error(self: SerialInterface, error: Exception, try_count: int) -> None:
+        if try_count == 0:
+            self.logger.error("op_failed", error=error, func_name=func.__name__)
+            time.sleep(self.op_retry_interval)
+        elif try_count < self.op_retry_times:
+            self.logger.error("retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
+            time.sleep(self.op_retry_interval)
+        else:
+            self.logger.exception("last_retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
+            self.close()
+            raise error
+
     @functools.wraps(func)
-    def wrapper(self: SerialInterface, *args, **kwargs) -> Any:
-        # first try
-        try:
-            return operation(self, *args, **kwargs)
-        except Exception as e:
-            self.logger.error("op_failed", error=e)
-
-        # if first try failed, retry
-        for i in range(2, self.op_retry_times):
+    def retry_wrapper(self: SerialInterface, *args, **kwargs) -> Any:
+        for try_count in range(self.op_retry_times + 1):
             try:
-                self.logger.debug("retry_operation", try_count=i, func_name=func.__name__)
-                return operation(self, *args, **kwargs)
+                op_result = operation(self, *args, **kwargs)
+                return op_result
             except Exception as e:  # noqa: PERF203
-                if i < self.op_retry_times:
-                    self.logger.error("retry_failed", try_count=i, func_name=func.__name__, error=e)
-                    time.sleep(self.op_retry_interval)
-                else:
-                    self.logger.exception("last_retry_failed", try_count=i, func_name=func.__name__, error=e)
-                    self.close()
-                    raise e
+                handle_error(self, e, try_count)
 
-    return wrapper
+    return retry_wrapper
 
 
 class SerialInterface(InterfaceProtocol):
@@ -164,7 +159,7 @@ class SerialInterface(InterfaceProtocol):
         *,
         read_timeout: float = 1.5,
         op_timeout: float = 3,
-        op_retry_times: int = 3,
+        op_retry_times: int = 1,
         op_retry_interval: float = 0.1,
     ):
         if isinstance(port, ListPortInfo):
