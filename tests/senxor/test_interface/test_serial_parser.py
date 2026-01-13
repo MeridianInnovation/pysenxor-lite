@@ -2,8 +2,8 @@ import logging
 
 import pytest
 
-from senxor._interface._serial_parser import SenxorAckDecoder, SenxorAckParser, SenxorCmdEncoder
 from senxor.error import SenxorAckInvalidError
+from senxor.interface.serial_port._parser import SenxorAckDecoder, SenxorAckParser, SenxorCmdEncoder
 
 
 class TestSenxorCmdEncoder:

@@ -4,15 +4,12 @@ import queue
 import threading
 import time
 from collections import deque
-from collections.abc import Callable
 from enum import Enum, auto
-from itertools import count
-from typing import Literal
 
 from serial import PortNotOpenError, Serial, SerialException
 
-from senxor._interface._serial_parser import SenxorAckDecoder, SenxorAckParser
 from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNotConnectedError
+from senxor.interface.serial_port._parser import SenxorAckDecoder, SenxorAckParser
 
 
 class ByteFIFO:

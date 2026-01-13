@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING, Any, Literal, overload
 
 import numpy as np
 
-from senxor._interface.registry import InterfaceRegistry
 from senxor._senxor import Senxor
 from senxor.cam import list_camera
+from senxor.interface.registry import InterfaceRegistry
 
 # To compatible with the old version
 from senxor.proc import normalize, raw_to_frame
@@ -18,8 +18,8 @@ from senxor.proc import normalize, raw_to_frame
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from senxor._interface.protocol import IDevice
-    from senxor._interface.serial_ import SerialPort
+    from senxor.interface.protocol import IDevice
+    from senxor.interface.serial_port.core import SerialPort
 
 __all__ = [
     "connect",

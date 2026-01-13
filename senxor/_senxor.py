@@ -9,16 +9,16 @@ from typing import TYPE_CHECKING, Generic, Literal, cast, overload
 
 import numpy as np
 
-from senxor._interface.protocol import TDevice
 from senxor.consts import FRAME_SHAPE2MODULE_CATEGORY, SENXOR_TYPE2FRAME_SHAPE
 from senxor.error import SenxorResponseTimeoutError
+from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
 from senxor.proc import bytes_to_adc, bytes_to_raw, raw_to_frame, raw_to_temp
 from senxor.regmap import Register
 from senxor.regmap._regmap import _RegMap
 
 if TYPE_CHECKING:
-    from senxor._interface import ISenxorInterface
+    from senxor.interface import ISenxorInterface
     from senxor.regmap import Register
 
 

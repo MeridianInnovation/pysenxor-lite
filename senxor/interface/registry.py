@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar
 
-from senxor._interface.serial_ import SerialInterface, SerialPort
+from senxor.interface.serial_port.core import SerialInterface, SerialPort
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from senxor._interface.protocol import IDevice, ISenxorInterface
+    from senxor.interface.protocol import IDevice, ISenxorInterface
 
 
 class InterfaceRegistry:

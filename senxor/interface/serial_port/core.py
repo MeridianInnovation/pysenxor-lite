@@ -10,11 +10,11 @@ from typing import TYPE_CHECKING, Any, Callable, ClassVar
 from serial import Serial, SerialException
 from serial.tools import list_ports
 
-from senxor._interface._serial_parser import SenxorCmdEncoder
-from senxor._interface._serial_reader import SenxorSerialReader
-from senxor._interface.protocol import IDevice, ISenxorInterface
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
 from senxor.error import SenxorNoModuleError, SenxorNotConnectedError, SenxorResponseTimeoutError
+from senxor.interface.protocol import IDevice, ISenxorInterface
+from senxor.interface.serial_port._parser import SenxorCmdEncoder
+from senxor.interface.serial_port._reader import SenxorSerialReader
 from senxor.log import get_logger
 
 if TYPE_CHECKING:
