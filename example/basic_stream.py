@@ -25,7 +25,7 @@ if __name__ == "__main__":
     serials = senxor.list_senxor("serial")
 
     # Use the `with` statement to ensure the connection is closed after the block.
-    with senxor.connect(serials[0], "serial") as dev:
+    with senxor.connect(serials[0]) as dev:
         # Start the stream.
         dev.start_stream()
 
