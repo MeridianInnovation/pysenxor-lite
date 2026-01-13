@@ -1,0 +1,125 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
+"""Core classes for the configuration of the senxor."""
+
+from __future__ import annotations
+
+from abc import ABC
+from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, cast, overload
+
+if TYPE_CHECKING:
+    from senxor.regmap.core import SenxorRegistersManager
+    from senxor.regmap.types import RegisterName
+
+
+class Register(ABC):
+    """Base class for all registers.
+
+    Attributes
+    ----------
+    name : ClassVar[str]
+        The name of the register.
+    description : ClassVar[str]
+        The description of the register.
+    address : ClassVar[int]
+        The address of the register.
+    writable : ClassVar[bool]
+        Whether the register is writable.
+    readable : ClassVar[bool]
+        Whether the register is readable.
+    self_reset : ClassVar[bool]
+        Whether the register value can be modified by the senxor itself.
+
+    default_value : int | None
+        The default value of the register. Depends on the module type and firmware version.
+
+    """
+
+    name: ClassVar[RegisterName]
+    description: ClassVar[str]
+    address: ClassVar[int]
+
+    writable: ClassVar[bool]
+    readable: ClassVar[bool]
+
+    self_reset: bool
+
+    default_value: int | None
+
+    def __init__(self, regmap: SenxorRegistersManager):
+        """Initialize the register instance.
+
+        Parameters
+        ----------
+        regmap : SenxorRegistersManager
+            The registers manager instance.
+
+        """
+        self.regmap = regmap
+        self._value: int | None = None
+
+    @property
+    def value(self) -> int:
+        """The value of the register."""
+        return self.get()
+
+    def __repr__(self) -> str:
+        return f"<Register(name={self.name}, address=0x{self.address:02X})>"
+
+    def __str__(self) -> str:
+        value_str = "" if self._value is None else f"= {self.value:02d}"
+        return f"{self.name}(0x{self.address:02X}){value_str}"
+
+    def get(self, *, refresh: bool = True) -> int:
+        """Get the value of the register."""
+        if self._value is None or (self.self_reset and refresh):
+            self.read()
+        return cast("int", self._value)
+
+    def set(self, value: int) -> None:
+        """Set the value of the register."""
+        # The regmap will validate the value, handle the error and update self._value.
+        self.regmap.write_reg(self.address, value)
+
+    def read(self) -> int:
+        """Read the value of the register."""
+        # The regmap will handle the error and update self._value.
+        return self.regmap.read_reg(self.address)
+
+    def reset(self) -> None:
+        """Reset the value of the register to the default value."""
+        # The regmap will handle the error and update self._value.
+        self.set(cast("int", self.default_value))
+
+    def _update_value(self, value: int) -> None:
+        # Called by the regmap to update the value of the register.
+        self._value = value
+
+
+TRegister = TypeVar("TRegister", bound=Register)
+
+
+class RegisterDescriptor(Generic[TRegister]):
+    def __init__(self, cls: type[TRegister]):
+        self.cls = cls
+
+    @overload
+    @overload
+    def __get__(self, instance: None, owner) -> type[TRegister]: ...
+    @overload
+    def __get__(self, instance: SenxorRegistersManager, owner) -> TRegister: ...
+    def __get__(self, instance: SenxorRegistersManager | None, owner):
+        if instance is None:
+            return self.cls
+        try:
+            return instance.get_reg(self.cls.name)  # type: ignore[reportArgumentType]
+        except KeyError:
+            raise AttributeError(f"Register '{self.cls.name}' not found in the register system") from None
+
+    def __set__(self, instance: SenxorRegistersManager, value: int) -> None:
+        raise AttributeError("Use '.set()' to set the value of a register")
+
+
+def describe(cls: type[TRegister]) -> RegisterDescriptor[TRegister]:
+    return RegisterDescriptor[TRegister](cls)
+

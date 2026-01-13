@@ -1,0 +1,46 @@
+# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+
+"""Types for the senxor registers system."""
+
+from typing import Literal
+
+RegisterName = Literal[
+    "MCU_RESET",
+    "HOST_XFER_CTRL",
+    "SPI_RTY",
+    "FRAME_MODE",
+    "FW_VERSION_1",
+    "FW_VERSION_2",
+    "FRAME_RATE",
+    "SLEEP_MODE",
+    "STATUS",
+    "CLK_SPEED",
+    "SENXOR_GAIN",
+    "SENXOR_TYPE",
+    "MODULE_TYPE",
+    "MCU_TYPE",
+    "TEMP_CONVERT_CTRL",
+    "SENSITIVITY_FACTOR",
+    "SELF_CALIBRATION",
+    "EMISSIVITY",
+    "OFFSET_CORR",
+    "OBJECT_TEMP_FACTOR",
+    "SENXOR_ID_0",
+    "SENXOR_ID_1",
+    "SENXOR_ID_2",
+    "SENXOR_ID_3",
+    "SENXOR_ID_4",
+    "SENXOR_ID_5",
+    "SENXOR_ID_6",
+    "USER_FLASH_CTRL",
+    "FRAME_FORMAT",
+    "STARK_CTRL",
+    "STARK_CUTOFF",
+    "STARK_GRAD",
+    "STARK_SCALE",
+    "MMS_CTRL",
+    "MEDIAN_CTRL",
+    "FILTER_CONTROL",
+    "FILTER_SETTING_1_0",
+    "FILTER_SETTING_1_1",
+]
