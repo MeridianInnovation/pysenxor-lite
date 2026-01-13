@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import Callable, Protocol, TypeVar
 
-if TYPE_CHECKING:
-    import numpy as np
+TDevice = TypeVar("TDevice", bound="IDevice")
+TInterface = TypeVar("TInterface", bound="ISenxorInterface")
 
 # The following is the protocol for the interface class.
-# The interface class must inherit from this protocol.
-# The interface class must implement the methods and properties defined in this protocol.
+# The interface class must implement the methods and properties defined in this protocol class.
 
 # Note:
 
@@ -42,20 +40,47 @@ if TYPE_CHECKING:
 # then enter the error handling flow.
 
 
-class InterfaceProtocol(Protocol):
+class IDevice(Protocol):
+    """Protocol class for the device.
+
+    This class is used to provide a uniform interface for the communication with
+    the device, e.g. serial port, socket, etc. It must have a `name` attribute for identification.
+
+    Attributes
+    ----------
+    name : str
+        The name of the device.
+
+    """
+
+    name: str
+
+
+class ISenxorInterface(Protocol[TDevice]):
     """Protocol class for the Senxor devices.
 
     This class is used to provide a uniform interface for the communication with
     the device, e.g. USB, TCP/IP, etc.
+
+    Attributes
+    ----------
+    device : TDevice
+        The device to communicate with.
+    is_connected : bool
+        Whether the device is connected.
+
     """
 
-    def __init__(self, address: Any, **kwargs) -> None:
+    device: TDevice
+    is_connected: bool
+
+    def __init__(self, device: TDevice) -> None:
         """Initialize the interface.
 
         Parameters
         ----------
-        address : Any
-            The address of the device to connect to.
+        device : TDevice
+            The device to connect to.
         **kwargs : Any
             Additional keyword arguments to pass to the interface.
 
@@ -65,39 +90,11 @@ class InterfaceProtocol(Protocol):
 
         """
 
-    @staticmethod
-    @abstractmethod
-    def discover(*args, **kwargs) -> list[Any]:
-        """Discover the devices on the network. Return a list of device objects."""
+    @classmethod
+    def list_devices(cls) -> list[TDevice]:
+        """List all the devices of this interface."""
         ...
 
-    @property
-    @abstractmethod
-    def is_connected(self) -> bool | None:
-        """Check if the device is connected.
-
-        Returns
-        -------
-        bool | None
-            True if the device is connected, False if the device is not connected,
-            None if the connection cannot be checked.
-
-        """
-        ...
-
-    @property
-    @abstractmethod
-    def address(self) -> Any:
-        """Get the address of the device."""
-        ...
-
-    @staticmethod
-    @abstractmethod
-    def is_valid_address(address: Any) -> bool:
-        """Validate if the address is valid for the interface."""
-        ...
-
-    @abstractmethod
     def open(self) -> None:
         """Open the connection to the device.
 
@@ -105,7 +102,6 @@ class InterfaceProtocol(Protocol):
         """
         ...
 
-    @abstractmethod
     def close(self) -> None:
         """Close the connection to the device.
 
@@ -113,8 +109,7 @@ class InterfaceProtocol(Protocol):
         """
         ...
 
-    @abstractmethod
-    def read(self, block: bool = True, **kwargs) -> tuple[bytes | None, bytes | None]:
+    def read(self, block: bool = True) -> tuple[bytes | None, bytes | None]:
         """Read a frame from the senxor.
 
         In block mode, the method should raise `SenxorReadTimeoutError` if no frame is available after the timeout.
@@ -125,8 +120,12 @@ class InterfaceProtocol(Protocol):
         block : bool, optional
             Whether to block the read operation until a frame is available, by default True
             If False, the function will return None immediately if no frame is available.
-        **kwargs : Any
-            Additional keyword arguments to pass to the read operation.
+
+        Raises
+        ------
+        SenxorReadTimeoutError
+            If no frame is available after the timeout.
+
 
         Returns
         -------
@@ -135,8 +134,8 @@ class InterfaceProtocol(Protocol):
             If no frame is available, the function will return (None, None).
 
         """
+        ...
 
-    @abstractmethod
     def read_reg(self, reg: int) -> int:
         """Read a register value from the senxor.
 
@@ -155,9 +154,8 @@ class InterfaceProtocol(Protocol):
         """
         ...
 
-    @abstractmethod
     def read_regs(self, regs: list[int]) -> dict[int, int]:
-        """Read multiple registers from the senxor.
+        """(Optional) Read multiple registers from the senxor.
 
         If this operation fails, this function should raise an exception depending on the error.
 
@@ -172,8 +170,8 @@ class InterfaceProtocol(Protocol):
             The dictionary of register addresses and their values.
 
         """
+        ...
 
-    @abstractmethod
     def write_reg(self, reg: int, value: int) -> None:
         """Write a value to a register.
 
@@ -187,10 +185,10 @@ class InterfaceProtocol(Protocol):
             The value to write to the register.
 
         """
+        ...
 
-    @abstractmethod
     def write_regs(self, regs: dict[int, int]) -> None:
-        """Write multiple registers to the senxor.
+        """(Optional) Write multiple registers to the senxor.
 
         If this operation fails, this function should raise an exception depending on the error.
 
@@ -200,3 +198,38 @@ class InterfaceProtocol(Protocol):
             The dictionary of register addresses and their values to write.
 
         """
+        ...
+
+    def on_open(self, callback: Callable[[], None]) -> None:
+        """Set a callback function to be called when the device is opened."""
+        ...
+
+    def on_close(self, callback: Callable[[], None]) -> None:
+        """Set a callback function to be called when the device is closed."""
+        ...
+
+    def on_data(self, callback: Callable[[bytes | None, bytes], None]) -> None:
+        """Set a callback function to be called when data is received from the device.
+
+        Parameters
+        ----------
+        callback : Callable[[bytes | None, bytes], None]
+            The callback function to call when data is received from the device.
+            The callback function should take two arguments:
+            - header: The header of the frame, None if no header is available.
+            - data: The data of the frame.
+
+        """
+        ...
+
+    def on_error(self, callback: Callable[[Exception], None]) -> None:
+        """Set a callback function to be called when an error occurs."""
+        ...
+
+    def __repr__(self) -> str:
+        """Return a string representation of the interface."""
+        return f"{self.__class__.__name__}(device={self.device})"
+
+    def __str__(self) -> str:
+        """Return a string representation of the interface."""
+        return f"{self.__class__.__name__} - {self.device.name}"
