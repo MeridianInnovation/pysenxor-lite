@@ -103,8 +103,7 @@ Conditional expressions can access the following device information:
 | Variable Name  | Type  | Description                               |
 |----------------|-------|-------------------------------------------|
 | `frame_shape`  | tuple | Device frame size, e.g., `(120, 160)`     |
-| `address`      | str   | Device address, e.g., `"COM3"`            |
-| `type`         | str   | Device type                               |
+| `name`         | str   | Device name, e.g., `"COM3"`               |
 | `[field_name]` | int   | Current value of any non-auto-reset field |
 
 ---

@@ -10,7 +10,7 @@ from senxor.log import get_logger
 from senxor.regmap import Fields
 
 if TYPE_CHECKING:
-    from senxor._senxor import Senxor
+    from senxor.core import Senxor
 
 
 class SenxorSettings(BaseSettings):
@@ -20,8 +20,7 @@ class SenxorSettings(BaseSettings):
     def _get_local_variables(cls, instance: Senxor) -> dict[str, Any]:
         local_vars = {}
         local_vars["frame_shape"] = instance.get_shape()
-        local_vars["address"] = str(instance.address)
-        local_vars["type"] = instance.type
+        local_vars["name"] = str(instance.name)
         allowed_fields = [name for name in Fields.__name_list__ if name not in Fields.__auto_reset_list__]
         local_vars.update(instance.fields.get_fields(allowed_fields))
         return local_vars
