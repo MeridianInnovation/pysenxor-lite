@@ -18,7 +18,7 @@ class _RegMap:
     def __init__(self, senxor: "Senxor"):
         self.senxor = senxor
 
-        self._log = get_logger(address=self.address)
+        self._log = get_logger(name=self.senxor.name)
 
         self._regs_cache: dict[int, int] = {}
         self._fields_cache: dict[str, int] = {}
@@ -30,10 +30,6 @@ class _RegMap:
         # It is used to protect the cache of the regmap.
         # ensures that the cache is consistent and that the cache is updated correctly.
         self._cache_lock = Lock()
-
-    @property
-    def address(self):
-        return self.senxor.address
 
     @property
     def interface(self):

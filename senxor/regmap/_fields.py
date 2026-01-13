@@ -1539,7 +1539,7 @@ class Fields:
 
     def __init__(self, regmap: _RegMap):
         self._regmap = regmap
-        self._log = get_logger(address=regmap.address)
+        self._log = get_logger(name=regmap.senxor.name)
 
         self._fields: dict[str, Field] = {k: getattr(self, k) for k in self.__name_list__}
 
