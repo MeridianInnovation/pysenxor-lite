@@ -13,16 +13,35 @@ if TYPE_CHECKING:
 
 
 class InterfaceRegistry:
+    """Registry for the interfaces."""
+
     _registry: ClassVar[dict[str, tuple[type[IDevice], type[ISenxorInterface]]]] = {
         "serial": (SerialPort, SerialInterface),
     }
 
     @classmethod
     def register(cls, name: str, device_class: type[IDevice], interface_class: type[ISenxorInterface]) -> None:
+        """Register a new interface.
+
+        Parameters
+        ----------
+        name : str
+            The name of the interface.
+        device_class : type[IDevice]
+            The class of the device.
+        interface_class : type[ISenxorInterface]
+            The class of the interface.
+
+        Returns
+        -------
+        None
+
+        """
         cls._registry[name] = (device_class, interface_class)
 
     @classmethod
     def get(cls, name: str) -> tuple[type[IDevice], type[ISenxorInterface]]:
+        """Get the interface class by name."""
         if name not in cls._registry:
             raise KeyError(f"Unknown interface type: {name}")
         return cls._registry[name]

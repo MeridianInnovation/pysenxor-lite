@@ -1,0 +1,3 @@
+## `senxor.error`
+
+::: senxor.error

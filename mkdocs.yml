@@ -20,13 +20,17 @@ nav:
   - API Reference:
       - senxor: api/senxor.md
       - senxor.proc: api/proc.md
+      - senxor.utils: api/utils.md
+      - senxor.error: api/error.md
       - senxor.log: api/log.md
       - senxor.settings: api/settings.md
-      - senxor.consts: api/consts.md
-      - senxor.utils: api/utils.md
       - senxor.thread: api/thread.md
-      - senxor.regmap: api/regmap.md
+      - senxor.consts: api/consts.md
       - senxor.cam: api/cam.md
+      - senxor.interface.protocol: api/interface/protocol.md
+      - senxor.interface.serial_port: api/interface/serial_port.md
+      - senxor.interface.registry: api/interface/registry.md
+      - senxor.regmap: api/regmap.md
 
 plugins:
   - search
@@ -35,12 +39,27 @@ plugins:
       handlers:
         python:
           paths: ["senxor"]
+          inventories:
+            - https://docs.python.org/3/objects.inv
+
           options:
-            show_source: false
             docstring_style: numpy
+            parameter_headings: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
             heading_level: 3
-            extra:
-              members_order: source
+            show_source: false
+            line_length: 88
+            merge_init_into_class: true
+            docstring_options:
+              ignore_init_summary: true
+            backlinks: tree
+            docstring_section_style: table
+            unwrap_annotated: true
+            relative_crossrefs: true
+            scoped_crossrefs: true
+            signature_crossrefs: true
+
   - include-markdown
 
 theme:

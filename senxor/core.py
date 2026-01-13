@@ -57,10 +57,12 @@ class Senxor(Generic[TDevice]):
 
     @property
     def device(self) -> TDevice:
+        """Get the device instance."""
         return self.interface.device
 
     @property
     def name(self):
+        """Get the name of the device."""
         return self.device.name
 
     def __enter__(self):
@@ -134,6 +136,7 @@ class Senxor(Generic[TDevice]):
 
     @property
     def is_streaming(self) -> bool:
+        """Whether the senxor is in the stream mode."""
         if self.is_connected:
             return bool(self.fields.CONTINUOUS_STREAM.get())
         else:
@@ -141,6 +144,7 @@ class Senxor(Generic[TDevice]):
 
     @property
     def is_connected(self) -> bool:
+        """Whether the senxor is connected."""
         is_connected = self.interface.is_connected
         if is_connected is None:
             # We assume the device is connected if the connection cannot be checked.
