@@ -4,11 +4,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 import numpy as np
 
-from senxor._interface import SENXOR_INTERFACES, is_senxor_usb, list_senxor_usb
+from senxor._interface.registry import InterfaceRegistry
 from senxor._senxor import Senxor
 from senxor.cam import list_camera
 
@@ -16,129 +16,96 @@ from senxor.cam import list_camera
 from senxor.proc import normalize, raw_to_frame
 
 if TYPE_CHECKING:
-    from serial.tools.list_ports_common import ListPortInfo
+    from collections.abc import Sequence
+
+    from senxor._interface.protocol import IDevice
+    from senxor._interface.serial_ import SerialPort
 
 __all__ = [
-    "connect_senxor",
-    "is_senxor_usb",
+    "connect",
+    "data_to_frame",
     "list_camera",
     "list_senxor",
-    "list_senxor_usb",
     "remap",
 ]
 
 
-def list_senxor(type: Literal["serial"] | None = None, exclude: list[str] | str | None = None) -> list[Any]:
-    """List all Senxor devices available.
-
-    The return value is a list of Senxor devices, use `senxor.connect` to connect to a device.
+@overload
+def list_senxor() -> list[SerialPort]: ...
+@overload
+def list_senxor(interface: Literal["serial"]) -> list[SerialPort]: ...
+def list_senxor(interface: Literal["serial"] = "serial", **kwargs) -> Sequence[IDevice]:
+    """List available Senxor devices.
 
     Parameters
     ----------
-    type : Literal["serial"] | None, optional
-        The type of device to list.
-        If not provided, all types will be listed.
-    exclude : list[str] | str | None, optional
-        If `type` is provided, this will be ignored.
-        A list of device names to exclude from the list.
-        If not provided, all devices will be listed.
+    interface : Literal["serial"], optional
+        The interface type to list devices for, by default "serial"
+
+    **kwargs
+        Additional arguments for backward compatibility.
 
     Returns
     -------
-    list
-        A list of Senxor devices, use `senxor.connect` to connect to a device.
+    Sequence[IDevice]
+        A list of available Senxor devices.
+
+    Raises
+    ------
+    ValueError
+        If the interface type is not supported.
 
     """
-    devices = []
-    if exclude is None:
-        exclude = []
-    if isinstance(exclude, str):
-        exclude = [exclude]
-
-    if type is None:
-        for t, connection_class in SENXOR_INTERFACES.items():
-            if t in exclude:
-                continue
-            devices.extend(connection_class.discover())
-
-    else:
-        devices = SENXOR_INTERFACES[type].discover()
-
-    return devices
+    interface = kwargs.pop("type", interface)  # Backward compatibility
+    return InterfaceRegistry.list_devices(interface)
 
 
-def connect(
-    address: str | ListPortInfo | None = None,
-    type: Literal["serial"] | None = None,
-    *,
-    auto_open: bool = True,
-    stop_stream: bool = True,
-    **kwargs,
-) -> Senxor:
+@overload
+def connect(device: SerialPort, *, auto_open: bool = True) -> Senxor[SerialPort]: ...
+@overload
+def connect(device: None, *, auto_open: bool = True) -> Senxor[SerialPort]: ...
+def connect(device=None, *, auto_open: bool = True, **kwargs) -> Senxor:
     """Connect to a Senxor device.
 
     Parameters
     ----------
-    address : str | ListPortInfo, optional
-        The address of the device to connect to.
-    type : Literal["serial"], optional
-        The type of device to connect to.
-        If not provided, will attempt to auto-detect from address.
+    device : ListPortInfo | None, optional
+        The device to connect to, by default None
+        If None, the first serial device is connected.
     auto_open : bool, optional
-        Whether to automatically open the device.
-    stop_stream : bool, optional(deprecated)
-        Whether to stop the stream when the device is opened.
-        .. deprecated:: 3.1.0
-            This parameter is deprecated and will be removed in future versions.
+        Whether to automatically open the device, by default True
     **kwargs
-        Additional arguments passed to the interface constructor.
+        Additional arguments to pass to the Senxor constructor.
 
     Returns
     -------
     Senxor
         The Senxor device.
 
+    Raises
+    ------
+    ValueError
+        If the device type is not supported.
+
     Examples
     --------
-    Use a context manager to connect to a device:
-
     >>> from senxor import list_senxor, connect
-    >>> addrs = list_senxor("serial")
-    >>> with connect(addrs[0]) as dev:
-    ...     print(f"Connected to device {dev.address}")
-    Connected to device COM3
-
-    Or connect to a device without a context manager:
-
-    >>> dev = connect(addrs[0])
-    >>> print(f"Connected to device {dev.address}")
-    Connected to device COM3
-
-    It's recommended to use a context manager because it will automatically close the device when the context is exited.
+    >>> devices = list_senxor("serial")
+    >>> senxor = connect(devices[0])
+    >>> senxor.open()
 
     """
-    if address is None:
-        addrs = list_senxor(type, **kwargs)
-        if len(addrs) == 0:
-            raise ValueError("No Senxor device found")
-        address = addrs[0]
-        type = "serial"
+    device = kwargs.pop("address", device)  # Backward compatibility
 
-    senx = Senxor(address, type, auto_open=auto_open, **kwargs)
-    if stop_stream:
-        senx.stop_stream()
-    return senx
+    if device is None:
+        devices = list_senxor()
+        if len(devices) == 0:
+            raise ValueError("No devices found")
+        device = devices[0]
 
-
-def connect_senxor(
-    address: str | ListPortInfo | None = None,
-    type: Literal["serial"] | None = None,
-    *,
-    auto_open: bool = True,
-    stop_stream: bool = True,
-    **kwargs,
-) -> Senxor:
-    return connect(address, type, auto_open=auto_open, stop_stream=stop_stream, **kwargs)
+    interface = InterfaceRegistry.create_interface(device)
+    senxor = Senxor(interface, auto_open=auto_open, **kwargs)
+    return senxor
 
 
 def remap(

@@ -4,6 +4,6 @@
 
 import senxor.log
 from senxor._senxor import Senxor
-from senxor.utils import connect, connect_senxor, list_senxor
+from senxor.utils import connect, list_senxor
 
-__all__ = ["Senxor", "connect", "connect_senxor", "list_senxor", "senxor"]
+__all__ = ["Senxor", "connect", "list_senxor", "senxor"]
