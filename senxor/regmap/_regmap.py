@@ -9,7 +9,7 @@ from senxor.regmap._fields import Fields
 from senxor.regmap._regs import Registers
 
 if TYPE_CHECKING:
-    from senxor._senxor import Senxor
+    from senxor.core import Senxor
 
 
 class _RegMap:

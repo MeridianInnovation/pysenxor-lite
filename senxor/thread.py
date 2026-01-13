@@ -4,14 +4,9 @@
 
 from __future__ import annotations
 
-import contextlib
-import copy
 import queue
 import threading
-from collections import deque
-from typing import TYPE_CHECKING, Any, Callable, Literal, cast
-
-from senxor.log import get_logger
+from typing import TYPE_CHECKING, Callable, cast
 
 if TYPE_CHECKING:
     import numpy as np

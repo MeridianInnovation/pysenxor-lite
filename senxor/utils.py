@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Any, Literal, overload
 
 import numpy as np
 
-from senxor._senxor import Senxor
 from senxor.cam import list_camera
+from senxor.core import Senxor
 from senxor.interface.registry import InterfaceRegistry
 
 # To compatible with the old version
