@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 """The core class for Senxor devices."""
 
@@ -129,10 +129,14 @@ class Senxor:
                     "SENXOR_ID_5",
                     "SENXOR_ID_6",
                     "USER_FLASH_CTRL",
+                    "ADC_ENABLE",
                 ],
             )
         except Exception as e:
             self._logger.warning("refresh_regmap_failed", error=e)
+
+        # Force the temperature units to `dK` to avoid compatibility issues.
+        self.write_reg("FRAME_FORMAT", 0)
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
@@ -412,39 +416,25 @@ class Senxor:
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
 
-    def get_temp_units(self) -> Literal["dK", "dC", "dF", "K", "C", "F", "adc"]:
+    def get_temp_units(self) -> Literal["dK", "adc"]:
         """Get the temperature units configured on the device.
 
-        The temperature units of the frame is determined by two fields: `ADC_ENABLE` and `TEMP_UNITS`.
-        If `ADC_ENABLE` is set to `1`, the temperature units is `adc`.
-        Otherwise, the temperature units is determined by `TEMP_UNITS`.
-
-        For Panther Module, the temperature units is always `dK` whatever the `TEMP_UNITS` field is.
-
-        Note: The `read` method may convert temperature units based on input parameters and may not
-        follow the device's configuration.
+        The temperature units of the frame is determined by 'ADC_ENABLE' field.
+        If 'ADC_ENABLE' is set to `1`, the temperature units is `adc`.
+        Otherwise, the temperature units is `dK`.
 
         Returns
         -------
-        Literal["dK", "dC", "dF", "K", "C", "F", "adc"]
+        Literal["dK", "adc"]
             The temperature units of the frame.
             - `dK`: 0.1 K
-            - `dC`: 0.1 °C
-            - `dF`: 0.1 °F
-            - `K`: 1 K
-            - `C`: 1 °C
-            - `F`: 1 °F
             - `adc`: ADC data(uint16)
 
         """
         if self.fields.ADC_ENABLE.get():
             return "adc"
-
-        if self.get_module_category() == "Panther":
-            return "dK"
         else:
-            temp_units = cast("Literal['dK', 'dC', 'dF', 'K', 'C', 'F']", self.fields.TEMP_UNITS.display())
-            return temp_units
+            return "dK"
 
     def set_read_temp_units(self, temp_units: Literal["K", "C", "F"]):
         """Set the temperature units to use for the `read` method.
