@@ -5,11 +5,11 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Any, Literal, cast, overload
+from typing import TYPE_CHECKING, Generic, Literal, cast, overload
 
 import numpy as np
 
-from senxor._interface import SENXOR_INTERFACES
+from senxor._interface.protocol import TDevice
 from senxor.consts import FRAME_SHAPE2MODULE_CATEGORY, SENXOR_TYPE2FRAME_SHAPE
 from senxor.error import SenxorResponseTimeoutError
 from senxor.log import get_logger
@@ -18,72 +18,50 @@ from senxor.regmap import Register
 from senxor.regmap._regmap import _RegMap
 
 if TYPE_CHECKING:
+    from senxor._interface import ISenxorInterface
     from senxor.regmap import Register
 
 
-class Senxor:
+class Senxor(Generic[TDevice]):
     def __init__(
         self,
-        address: Any,
-        interface_type: Literal["serial"] | None = None,
+        interface: ISenxorInterface[TDevice],
         *,
         auto_open: bool = True,
-        read_temp_units: Literal["K", "C", "F"] = "C",
-        **kwargs,
     ):
         """Initialize the senxor.
 
         Parameters
         ----------
-        address : Any
-            The address of the senxor.
-        interface_type : Literal["serial"] | None, optional
-            The type of the interface, by default None.
+        interface : TInterface
+            The interface of the senxor.
         auto_open : bool, optional
             Whether to open the senxor automatically, by default True.
-        read_temp_units : Literal["K", "C", "F"], optional
-            The temperature units to use for the `read` method, by default "C".
-        kwargs : Any
-            The extra keyword arguments for the interface.
-
-        Raises
-        ------
-        ValueError
-            If the address is not valid for any of the supported types.
 
         """
         logger = get_logger()
         logger.info(
             "init Senxor",
-            address=address,
-            type=interface_type,
-            auto_open=auto_open,
-            **kwargs,
+            name=interface.device.name,
+            interface=str(interface),
         )
+        self.interface = interface
 
-        if interface_type is None:
-            possible_types = []
-            for t, interface_class in SENXOR_INTERFACES.items():
-                if interface_class.is_valid_address(address):
-                    possible_types.append(t)
-            if len(possible_types) == 1:
-                interface_type = possible_types[0]
-            elif len(possible_types) == 0:
-                raise ValueError(f"{address} is not a valid address for any of the supported types.")
-            else:
-                raise ValueError(
-                    f"{address} could be one of the following types: {possible_types}, please specify the type.",
-                )
-
-        self.type = interface_type
-        self.interface = SENXOR_INTERFACES[interface_type](address, **kwargs)  # type: ignore[call-arg]
-        self.read_temp_units: Literal["K", "C", "F"] = read_temp_units
+        self.read_temp_units: Literal["K", "C", "F"] = "C"
         self._regmap = _RegMap(self)
         self.regs = self._regmap.regs
         self.fields = self._regmap.fields
 
         if auto_open:
             self.open()
+
+    @property
+    def device(self) -> TDevice:
+        return self.interface.device
+
+    @property
+    def name(self):
+        return self.device.name
 
     def __enter__(self):
         return self
@@ -99,7 +77,7 @@ class Senxor:
 
         time_start = time.time()
         self.interface.open()
-        self._logger = get_logger(address=self.address)
+        self._logger = get_logger(name=self.name)
 
         self.stop_stream()
 
@@ -139,7 +117,11 @@ class Senxor:
         self.write_reg("FRAME_FORMAT", 0)
 
         time_cost = int((time.time() - time_start) * 1000)
-        self._logger.info("open senxor success", address=self.address, type=self.type, startup_time=f"{time_cost}ms")
+        self._logger.info(
+            "open senxor success",
+            device=self.device,
+            startup_time=f"{time_cost}ms",
+        )
 
     def close(self):
         """Close the senxor. If the senxor is not connected, do nothing."""
@@ -165,10 +147,6 @@ class Senxor:
             return True
         else:
             return is_connected
-
-    @property
-    def address(self) -> Any:
-        return self.interface.address
 
     def start_stream(self):
         """Start the stream mode."""
@@ -520,7 +498,7 @@ class Senxor:
         return f"{major}.{minor}.{build}"
 
     def __repr__(self):
-        return f"Senxor(address={self.address}, type={self.type})"
+        return f"Senxor(interface={self.interface})"
 
     # ------------------------------------------------------------
     # Backward compatibility code
