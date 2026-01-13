@@ -9,11 +9,10 @@ from typing import TYPE_CHECKING, Any, Callable, ClassVar
 
 from serial import Serial, SerialException
 from serial.tools import list_ports
-from serial.tools.list_ports_common import ListPortInfo
 
 from senxor._interface._serial_parser import SenxorCmdEncoder
 from senxor._interface._serial_reader import SenxorSerialReader
-from senxor._interface.protocol import InterfaceProtocol
+from senxor._interface.protocol import IDevice, ISenxorInterface
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
 from senxor.error import SenxorNoModuleError, SenxorNotConnectedError, SenxorResponseTimeoutError
 from senxor.log import get_logger
@@ -21,89 +20,64 @@ from senxor.log import get_logger
 if TYPE_CHECKING:
     from collections import deque
 
-
-def is_senxor_usb(port: ListPortInfo | str) -> bool:
-    """Check if the port is a senxor port.
-
-    Parameters
-    ----------
-    port : ListPortInfo | str
-        The port to check. Use `list_ports.comports()` to get the list of ports.
+    from serial.tools.list_ports_common import ListPortInfo
 
 
-    Returns
-    -------
-    bool
-        True if the port is a senxor port, False otherwise.
-
-    Examples
-    --------
-    >>> ports = list_ports.comports()
-    >>> for port in ports:
-    >>>     if is_senxor_port(port):
-    >>>         print(port.device)
-
-    """
-    if isinstance(port, str):
-        ports: list[ListPortInfo] = list_ports.comports()
-        for p in ports:
-            if p.device == port:
-                port = p
-                break
-        else:
-            msg = f"Port not found: {port}"
-            raise ValueError(msg)
-
-    vid = port.vid
-    pid = port.pid
-
-    res = (vid == SENXOR_VENDER_ID) and (pid in SENXOR_PRODUCT_ID)
-    return res
+def is_serial_port_senxor(port: ListPortInfo) -> bool:
+    """Check if the serial port is a senxor device."""
+    return (port.vid == SENXOR_VENDER_ID) and (port.pid in SENXOR_PRODUCT_ID)
 
 
-def list_senxor_usb(exclude_open_ports: bool = True) -> list[ListPortInfo]:
-    """List all the senxor ports.
+def list_senxor_serial_ports(exclude_open_ports: bool = True) -> list[SerialPort]:
+    """List all the senxor serial ports.
 
     Parameters
     ----------
     exclude_open_ports : bool, optional
         If True, exclude the ports that are currently open (in use).
-        If False, include the ports that are currently open (in use).
         Default is True.
-
-    Returns
-    -------
-    list[ListPortInfo]
-        The list of senxor ports.
-
-    Examples
-    --------
-    >>> ports = list_senxor_ports()
-    >>> print([port.device for port in ports])
-    ['COM5', 'COM6']
 
     """
     ports = list_ports.comports()
     senxor_ports = []
     for port in ports:
-        if is_senxor_usb(port):
-            if not exclude_open_ports:
-                senxor_ports.append(port)
-            else:
-                try:
-                    # If we provide the port parameter, pyserial will try to open the port automatically.
-                    # On Linux, the serial port can be opened by multiple processes, but the senxor does not
-                    # support parallel communication.
-                    # So, we need to check if the port is in use by other processes.
-                    # We assume other programs using senxor properly lock the port.
-                    # On Linux, if we set exclusive=True, pyserial will try to lock the port,
-                    # so we can detect if the port is already in use.
-                    s = Serial(port.device, exclusive=True)
-                    s.close()
-                    senxor_ports.append(port)
-                except SerialException:
-                    pass
+        if not is_serial_port_senxor(port):
+            continue
+        if exclude_open_ports:
+            try:
+                s = Serial(port.device, exclusive=True)
+                s.close()
+            except SerialException:
+                continue
+        senxor_ports.append(SerialPort(port))
     return senxor_ports
+
+
+class SerialPort(IDevice):
+    def __init__(self, port: ListPortInfo):
+        self.port = port
+
+    @property
+    def name(self) -> str:
+        return self.port.name
+
+    @property
+    def device(self) -> str:
+        return self.port.device
+
+    @property
+    def vid(self) -> int:
+        return self.port.vid
+
+    @property
+    def pid(self) -> int:
+        return self.port.pid
+
+    def __repr__(self) -> str:
+        return f"SerialPort(port={self.port})"
+
+    def __str__(self) -> str:
+        return f"SerialPort {self.name}"
 
 
 def _op_wrapper(func: Callable) -> Callable:
@@ -117,10 +91,10 @@ def _op_wrapper(func: Callable) -> Callable:
     def handle_error(self: SerialInterface, error: Exception, try_count: int) -> None:
         if try_count == 0:
             self.logger.error("op_failed", error=error, func_name=func.__name__)
-            time.sleep(self.op_retry_interval)
-        elif try_count < self.op_retry_times:
+            time.sleep(self.OP_RETRY_INTERVAL)
+        elif try_count < self.OP_RETRY_TIMES:
             self.logger.error("retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
-            time.sleep(self.op_retry_interval)
+            time.sleep(self.OP_RETRY_INTERVAL)
         else:
             self.logger.exception("last_retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
             self.close()
@@ -128,7 +102,7 @@ def _op_wrapper(func: Callable) -> Callable:
 
     @functools.wraps(func)
     def retry_wrapper(self: SerialInterface, *args, **kwargs) -> Any:
-        for try_count in range(self.op_retry_times + 1):
+        for try_count in range(self.OP_RETRY_TIMES + 1):
             try:
                 op_result = operation(self, *args, **kwargs)
                 return op_result
@@ -138,7 +112,7 @@ def _op_wrapper(func: Callable) -> Callable:
     return retry_wrapper
 
 
-class SerialInterface(InterfaceProtocol):
+class SerialInterface(ISenxorInterface[SerialPort]):
     # The parameters for the serial port, should not be changed.
     SENXOR_SERIAL_PARAMS: ClassVar[dict[str, Any]] = {
         "baudrate": 115200,
@@ -153,54 +127,31 @@ class SerialInterface(InterfaceProtocol):
         "exclusive": True,
     }
 
-    def __init__(
-        self,
-        port: str | ListPortInfo,
-        *,
-        read_timeout: float = 1.5,
-        op_timeout: float = 3,
-        op_retry_times: int = 1,
-        op_retry_interval: float = 0.1,
-    ):
-        if isinstance(port, ListPortInfo):
-            port = port.device
-        self.port = port
+    READ_TIMEOUT: ClassVar[float] = 1.5
+    OP_TIMEOUT: ClassVar[float] = 3
+    OP_RETRY_TIMES: ClassVar[int] = 1
+    OP_RETRY_INTERVAL: ClassVar[float] = 0.1
 
-        self.read_timeout = read_timeout
-        self.op_timeout = op_timeout
-        self.op_retry_times = op_retry_times
-        self.op_retry_interval = op_retry_interval
-
-        self.logger = get_logger().bind(address=port)
-        self.logger.debug("init_serial_interface")
-
+    def __init__(self, device: SerialPort):
+        self.device = device
+        if not is_serial_port_senxor(device.port):
+            raise ValueError(f"The serial port {device.device} is not a senxor device.")
+        self.logger = get_logger().bind(name=device.name)
         self.ser: Serial = Serial()
         self.receiver = SenxorSerialReader(self.ser, self.logger)
-
         self._op_lock = threading.Lock()
 
     @property
     def is_connected(self) -> bool:
         return self.ser.is_open
 
-    @property
-    def address(self) -> str:
-        return self.port
-
-    @staticmethod
-    def is_valid_address(address: str) -> bool:
-        return is_senxor_usb(address)
-
-    @staticmethod
-    def discover(exclude_open_ports: bool = True) -> list[ListPortInfo]:
-        return list_senxor_usb(exclude_open_ports)
+    @classmethod
+    def list_devices(cls) -> list[SerialPort]:
+        return list_senxor_serial_ports()
 
     def open(self) -> None:
-        if not self.is_valid_address(self.port):
-            raise ValueError(f"Invalid serial port: {self.port}")
-
         try:
-            self.ser.port = self.port
+            self.ser.port = self.device.device
             self.ser.apply_settings(self.SENXOR_SERIAL_PARAMS)
             if not self.is_connected:
                 self.ser.open()
@@ -219,7 +170,7 @@ class SerialInterface(InterfaceProtocol):
         elif self.receiver.no_module_event.is_set():
             raise SenxorNoModuleError
         elif block:
-            data = self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, self.read_timeout)
+            data = self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, self.READ_TIMEOUT)
             return data
         else:
             return None, None
@@ -229,7 +180,7 @@ class SerialInterface(InterfaceProtocol):
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_rreg(reg)
             self.receiver.write(cmd)
-            data = self._wait_for_ack("RREG", self.receiver.rreg_queue, self.receiver.rreg_ready, self.op_timeout)
+            data = self._wait_for_ack("RREG", self.receiver.rreg_queue, self.receiver.rreg_ready, self.OP_TIMEOUT)
             return data
 
     @_op_wrapper
@@ -237,7 +188,7 @@ class SerialInterface(InterfaceProtocol):
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_wreg(reg, value)
             self.receiver.write(cmd)
-            data = self._wait_for_ack("WREG", self.receiver.wreg_queue, self.receiver.wreg_ready, self.op_timeout)
+            data = self._wait_for_ack("WREG", self.receiver.wreg_queue, self.receiver.wreg_ready, self.OP_TIMEOUT)
             return data
 
     @_op_wrapper
@@ -245,7 +196,7 @@ class SerialInterface(InterfaceProtocol):
         with self._op_lock:
             cmd = SenxorCmdEncoder.encode_ack_rrse(regs)
             self.receiver.write(cmd)
-            data = self._wait_for_ack("RRSE", self.receiver.rrse_queue, self.receiver.rrse_ready, self.op_timeout)
+            data = self._wait_for_ack("RRSE", self.receiver.rrse_queue, self.receiver.rrse_ready, self.OP_TIMEOUT)
             return data
 
     @_op_wrapper
