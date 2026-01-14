@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ from typing import IO, TYPE_CHECKING, Any, Literal
 
 from senxor._utils.setting import BaseSettings, Profile
 from senxor.log import get_logger
-from senxor.regmap import Fields
 
 if TYPE_CHECKING:
     from senxor.core import Senxor
@@ -21,20 +20,11 @@ class SenxorSettings(BaseSettings):
         local_vars = {}
         local_vars["frame_shape"] = instance.get_shape()
         local_vars["name"] = str(instance.name)
-        allowed_fields = [name for name in Fields.__name_list__ if name not in Fields.__auto_reset_list__]
-        local_vars.update(instance.fields.get_fields(allowed_fields))
-        return local_vars
-
-    @classmethod
-    def _apply_profile(cls, dst: Senxor, settings: dict[str, Any]) -> None:
-        try:
-            fields: dict[str, int] = {dst.fields[name].name: value for name, value in settings.items()}
-        except KeyError as e:
-            raise KeyError("Unsupported field name in settings.") from e
-        try:
-            dst.fields.set_fields(fields)
-        except Exception as e:
-            raise ValueError("Can't apply settings to senxor.") from e
+        fields_cache = instance.fields.cache
+        fields = {
+            field: fields_cache[field] for field in fields_cache if not instance.fields.get_field(field).self_reset
+        }
+        return fields
 
 
 def loads(

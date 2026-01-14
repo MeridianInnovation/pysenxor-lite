@@ -14,12 +14,11 @@ from senxor.error import SenxorResponseTimeoutError
 from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
 from senxor.proc import bytes_to_adc, bytes_to_raw, raw_to_frame, raw_to_temp
-from senxor.regmap import Register
-from senxor.regmap._regmap import _RegMap
+from senxor.regmap import SenxorRegistersManager
 
 if TYPE_CHECKING:
     from senxor.interface import ISenxorInterface
-    from senxor.regmap import Register
+    from senxor.regmap.types import RegisterName
 
 
 class Senxor(Generic[TDevice]):
@@ -48,9 +47,8 @@ class Senxor(Generic[TDevice]):
         self.interface = interface
 
         self.read_temp_units: Literal["K", "C", "F"] = "C"
-        self._regmap = _RegMap(self)
-        self.regs = self._regmap.regs
-        self.fields = self._regmap.fields
+        self.regs = SenxorRegistersManager[TDevice](interface)
+        self.fields = self.regs.fieldmap
 
         if auto_open:
             self.open()
@@ -83,40 +81,10 @@ class Senxor(Generic[TDevice]):
 
         self.stop_stream()
 
-        try:
-            self.read_regs(
-                [
-                    "FRAME_MODE",
-                    "FW_VERSION_1",
-                    "FW_VERSION_2",
-                    "FRAME_RATE",
-                    "SLEEP_MODE",
-                    "SENXOR_GAIN",
-                    "SENXOR_TYPE",
-                    "MODULE_TYPE",
-                    "MCU_TYPE",
-                    "TEMP_CONVERT_CTRL",
-                    "SENSITIVITY_FACTOR",
-                    "SELF_CALIBRATION",
-                    "EMISSIVITY",
-                    "OFFSET_CORR",
-                    "OBJECT_TEMP_FACTOR",
-                    "SENXOR_ID_0",
-                    "SENXOR_ID_1",
-                    "SENXOR_ID_2",
-                    "SENXOR_ID_3",
-                    "SENXOR_ID_4",
-                    "SENXOR_ID_5",
-                    "SENXOR_ID_6",
-                    "USER_FLASH_CTRL",
-                    "ADC_ENABLE",
-                ],
-            )
-        except Exception as e:
-            self._logger.warning("refresh_regmap_failed", error=e)
-
-        # Force the temperature units to `dK` to avoid compatibility issues.
-        self.write_reg("FRAME_FORMAT", 0)
+        if self.fields.TEMP_UNITS.value != 0:
+            self.fields.TEMP_UNITS.set(0, force=True)
+        if self.fields.NO_HEADER.value != 0:
+            self.fields.NO_HEADER.set(0, force=True)
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info(
@@ -162,21 +130,21 @@ class Senxor(Generic[TDevice]):
         self.fields.CONTINUOUS_STREAM.set(0)
         self._logger.info("stop stream")
 
-    def refresh_regmap(self):
-        """Refresh the regmap cache. This method will read all registers and update all fields.
+    def refresh_all(self):
+        """Refresh the all registers and fields. This method will read all registers and update all fields.
 
-        Then use `self.regs.status` and `self.fields.status` to get the status you want.
+        Then use `self.regs.cache` and `self.fields.cache` to get the cached values you want.
 
         Examples
         --------
-        >>> senxor.refresh_regmap()
-        >>> senxor.regs.status
+        >>> senxor.refresh_all()
+        >>> senxor.regs.cache
         {177: 0, 0: 0, 1: 0, ...}
-        >>> senxor.fields.status
+        >>> senxor.fields.cache
         {"SW_RESET": 0, "DMA_TIMEOUT_ENABLE": 0, ...}
 
         """
-        self._regmap.read_all()
+        self.regs.refresh_all()
 
     @overload
     def read(
@@ -279,7 +247,7 @@ class Senxor(Generic[TDevice]):
 
             return header, data
 
-    def read_reg(self, reg: int | str | Register) -> int:
+    def read_reg(self, reg: int | RegisterName) -> int:
         """Read the value from a register.
 
         Notes
@@ -291,8 +259,8 @@ class Senxor(Generic[TDevice]):
 
         Parameters
         ----------
-        reg : int | str | Register
-            The register to read from, specified as a Register instance, a register name, or an integer address.
+        reg : int | RegisterName
+            The register to read from, specified as an integer address or a register name.
 
         Returns
         -------
@@ -316,17 +284,20 @@ class Senxor(Generic[TDevice]):
         95
 
         """
-        addr = self.regs.get_addr(reg)
+        if isinstance(reg, str):
+            addr = self.regs.get_reg(reg).address
+        elif isinstance(reg, int):
+            addr = reg
         return self.regs.read_reg(addr)
 
-    def read_regs(self, regs: list[str | int | Register]) -> dict[int, int]:
+    def read_regs(self, regs: list[int | RegisterName]) -> dict[int, int]:
         """Read the values from multiple registers at once.
 
         Note: This method takes the almost same time as reading one register.
 
         Parameters
         ----------
-        regs : list[str | int | Register]
+        regs : list[int | RegisterName]
             The list of registers to read from, specified as a list of register names, integer addresses, or Register
             instances.
 
@@ -346,16 +317,16 @@ class Senxor(Generic[TDevice]):
         {177: 0, 178: 0, 179: 0, 180: 0}
 
         """
-        regs_addrs = [self.regs.get_addr(reg) for reg in regs]
+        regs_addrs = [self.regs.get_reg(reg).address if isinstance(reg, str) else reg for reg in regs]
         regs_values = self.regs.read_regs(regs_addrs)
         return regs_values
 
-    def write_reg(self, reg: str | int | Register, value: int):
+    def write_reg(self, reg: int | RegisterName, value: int):
         """Write a value to a register.
 
         Parameters
         ----------
-        reg : str | int | Register
+        reg : int | RegisterName
             The register to write to, specified as a register name, integer address, or Register instance.
         value : int
             The value to write to the register (0-0xFF).
@@ -377,9 +348,10 @@ class Senxor(Generic[TDevice]):
         >>> senxor.write_reg(senxor.regs.EMISSIVITY, 0x5F)
 
         """
-        if value < 0 or value > 0xFF:
-            raise ValueError(f"Value must be between 0 and 0xFF, got {value}")
-        addr = self.regs.get_addr(reg)
+        if isinstance(reg, str):
+            addr = self.regs.get_reg(reg).address
+        elif isinstance(reg, int):
+            addr = reg
         self.regs.write_reg(addr, value)
 
     def get_shape(self) -> tuple[int, int]:
@@ -462,7 +434,10 @@ class Senxor(Generic[TDevice]):
         production_year = self.fields.PRODUCTION_YEAR.get()
         production_week = self.fields.PRODUCTION_WEEK.get()
         manuf_location = self.fields.MANUF_LOCATION.get()
-        serial_number = self.fields.SERIAL_NUMBER.get()
+        serial_number_0 = self.fields.SERIAL_NUMBER_0.get()
+        serial_number_1 = self.fields.SERIAL_NUMBER_1.get()
+        serial_number_2 = self.fields.SERIAL_NUMBER_2.get()
+        serial_number = (serial_number_0 << 16) | (serial_number_1 << 8) | serial_number_2
         return f"{production_year:02X}{production_week:02X}{manuf_location:02X}{serial_number:06X}"
 
     def get_sn(self) -> str:
@@ -478,7 +453,7 @@ class Senxor(Generic[TDevice]):
 
     def get_module_type(self) -> str:
         """Get the module type."""
-        module_type = self.fields.MODULE_TYPE.display()
+        module_type = cast("str", self.fields.MODULE_TYPE.display)
         return module_type
 
     def get_module_category(self) -> Literal["Cougar", "Panther"]:
@@ -511,10 +486,10 @@ class Senxor(Generic[TDevice]):
     # These methods are for backward compatibility.
     # Please try to use the new methods instead.
 
-    def regread(self, reg: str | int) -> int:
+    def regread(self, reg: int | RegisterName) -> int:
         return self.read_reg(reg)
 
-    def regwrite(self, reg: str | int, value: int):
+    def regwrite(self, reg: int | RegisterName, value: int):
         return self.write_reg(reg, value)
 
     def start(self):
