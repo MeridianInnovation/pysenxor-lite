@@ -1,24 +1,26 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic
 
+from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
+from senxor.regmap.fields import Fields
 from senxor.regmap.registers import Registers
 
 if TYPE_CHECKING:
-    from senxor.interface.protocol import IDevice, ISenxorInterface
-    from senxor.regmap.base import Register
-    from senxor.regmap.types import RegisterName
+    from senxor.interface.protocol import ISenxorInterface
+    from senxor.regmap.base import Field, Register
+    from senxor.regmap.types import FieldName, RegisterName
 
 
-class SenxorRegistersManager(Registers):
+class SenxorRegistersManager(Registers, Generic[TDevice]):
     """The register system for the senxor.
 
     Attributes
     ----------
-    interface : ISenxorInterface[IDevice]
+    interface : ISenxorInterface[TDevice]
         The interface of the senxor.
     registers : dict[int, Register]
         The dictionary of registers instance by address.
@@ -30,13 +32,23 @@ class SenxorRegistersManager(Registers):
 
     """
 
-    def __init__(self, interface: ISenxorInterface[IDevice]):
-        self.interface: ISenxorInterface[IDevice] = interface
+    def __init__(self, interface: ISenxorInterface[TDevice]):
+        self.interface: ISenxorInterface[TDevice] = interface
         self._log = get_logger(name=self.interface.device.name)
         self.registers: dict[int, Register] = {register.address: register(self) for register in self.__regs__}
         self._registers_by_name: dict[RegisterName, Register] = {
             register.name: register for register in self.registers.values()
         }
+
+        self.fieldmap = SenxorFieldsManager(self)
+
+    @property
+    def cache(self) -> dict[int, int | None]:
+        return {addr: reg._value for addr, reg in self.registers.items()}
+
+    def refresh_all(self) -> None:
+        for reg in self.registers.values():
+            reg.read()
 
     def get_reg(self, name_or_addr: RegisterName | int, /) -> Register:
         if isinstance(name_or_addr, str):
@@ -57,7 +69,8 @@ class SenxorRegistersManager(Registers):
             raise e
         else:
             self._update_reg_value(addr, value)
-            self._log.info("read_reg_success", addr=addr, value=value)
+            updated_fields = self.fieldmap._update_field_values({addr: value})
+            self._log.info("read_reg_success", op="read", addr=addr, value=value, updated_fields=updated_fields)
             return value
 
     def write_reg(self, addr: int, value: int) -> None:
@@ -71,7 +84,15 @@ class SenxorRegistersManager(Registers):
             raise e
         else:
             self._update_reg_value(addr, value)
-            self._log.info("write_reg_success", addr=addr, value=value)
+            updated_fields = self.fieldmap._update_field_values({addr: value})
+            self._log.info(
+                "write_reg_success",
+                op="write",
+                addr=addr,
+                value=value,
+                updated_fields=updated_fields,
+            )
+            self.fieldmap._warn_disabled_fields(updated_fields)
 
     def read_regs(self, addrs: list[int]) -> dict[int, int]:
         for addr in addrs:
@@ -85,7 +106,8 @@ class SenxorRegistersManager(Registers):
         else:
             for addr, value in values.items():
                 self._update_reg_value(addr, value)
-            self._log.info("read_regs_success", values=values, count=len(values))
+            fields_updated = self.fieldmap._update_field_values(values)
+            self._log.info("read_regs_success", op="read", values=values, fields_updated=fields_updated)
             return values
 
     def write_regs(self, regs: dict[int, int]) -> None:
@@ -113,3 +135,116 @@ class SenxorRegistersManager(Registers):
             self._log.warning("access_unknown_reg", op=op, addr=addr)
             return True
         return False
+
+
+class SenxorFieldsManager(Fields):
+    """The field system for the senxor."""
+
+    def __init__(self, regmap: SenxorRegistersManager):
+        self._log = regmap._log
+        self.regmap: SenxorRegistersManager = regmap
+        self.fields: dict[str, Field] = {field.name: field(self) for field in self.__fields__}
+
+    @property
+    def cache(self) -> dict[FieldName, int | None]:
+        return {field.name: field._value for field in self.fields.values()}  # type: ignore[reportReturnType]
+
+    @property
+    def cache_display(self) -> dict[FieldName, str | int | float | None]:
+        return {
+            field.name: None if field._value is None else field.get_display(field._value)
+            for field in self.fields.values()
+        }  # type: ignore[reportReturnType]
+
+    def get_field(self, name: FieldName) -> Field:
+        return self.fields[name]
+
+    def get_fields_by_addr(self, addr: int) -> list[Field]:
+        names = self.__reg2fields__[addr]
+        return [self.fields[name] for name in names]
+
+    def read_field(self, name: FieldName) -> int:
+        field = self.get_field(name)
+        reg = self.regmap.get_reg(field.address)
+        reg_value = reg.read()
+        field_value = self._decode_field_value(reg_value, field.bits_range)
+        field._update_value(field_value)
+        return field_value
+
+    def set_field(self, name: FieldName, value: int, *, force: bool = False) -> None:
+        field = self.get_field(name)
+        self._check_field_enabled(field, force)
+        self._check_field_writable(field)
+        self._check_field_value_range(field, value)
+        self._validate_field_value(field, value)
+        reg = self.regmap.get_reg(field.address)
+
+        reg_value = reg.get()
+        new_reg_value = self._encode_field_value(reg_value, value, field.bits_range)
+        self.regmap.write_reg(reg.address, new_reg_value)
+        field._update_value(value)
+        self._log.info("set_field_success", name=field.name, value=value)
+
+    def _update_field_values(self, regs: dict[int, int]) -> dict[str, int]:
+        updated_fields: dict[str, int] = {}
+        for addr, reg_value in regs.items():
+            if addr not in self.regmap.registers:
+                continue
+            fields = self.get_fields_by_addr(addr)
+            for field in fields:
+                field_value = self._decode_field_value(reg_value, field.bits_range)
+                if field_value != field._value:
+                    updated_fields[field.name] = field_value
+                    field._update_value(field_value)
+
+        return updated_fields
+
+    def _warn_disabled_fields(self, fields: dict[str, int]) -> None:
+        for name, value in fields.items():
+            field = self.fields[name]
+            if not field.enabled:
+                self._log.warning(
+                    "set_disabled_field",
+                    name=field.name,
+                    value=value,
+                    reason=field.disabled_reason,
+                )
+
+    def _validate_field_value(self, field: Field, value: int) -> None:
+        try:
+            field.validate_value(value)
+        except ValueError as e:
+            raise ValueError(f"Invalid field value for {field.name}: {value}, {e}") from None
+
+    def _check_field_value_range(self, field: Field, value: int) -> None:
+        max_value = field._max_value
+        if value < 0 or value > max_value:
+            raise ValueError(f"Invalid field value for {field.name}: {value}, expected range: [0, {max_value}]")
+
+    def _check_field_enabled(self, field: Field, force: bool = False) -> None:
+        if field.enabled or force:
+            return
+        self._log.critical("field_disabled_violation", name=field.name, reason=field.disabled_reason)
+        raise AttributeError(f"Field {field.name} is disabled, reason: {field.disabled_reason}")
+
+    def _check_field_writable(self, field: Field) -> None:
+        if not field.writable:
+            self._log.critical("field_read_only_violation", name=field.name)
+            raise AttributeError(f"Field {field.name} is read-only")
+
+    @staticmethod
+    def _decode_field_value(reg_value: int, bits_range: tuple[int, int]) -> int:
+        start, end = bits_range
+        length = end - start
+        mask = (1 << length) - 1
+        result = (reg_value >> start) & mask
+        return result
+
+    @staticmethod
+    def _encode_field_value(reg_value: int, field_value: int, bits_range: tuple[int, int]) -> int:
+        start, end = bits_range
+        length = end - start
+        max_value = (1 << length) - 1
+        mask = max_value << start
+        result = (reg_value & ~mask) | ((field_value & max_value) << start)
+        return result
