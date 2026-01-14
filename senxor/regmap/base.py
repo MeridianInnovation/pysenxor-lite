@@ -72,25 +72,53 @@ class Register(ABC):
         return f"{self.name}(0x{self.address:02X}){value_str}"
 
     def get(self, *, refresh: bool = True) -> int:
-        """Get the value of the register."""
+        """Get the value of the register.
+
+        Parameters
+        ----------
+        refresh : bool, optional
+            If True and the register supports self-reset, read from device. Default is True.
+
+        Returns
+        -------
+        int
+            The register value.
+
+        """
         if self._value is None or (self.self_reset and refresh):
             self.read()
         return cast("int", self._value)
 
     def set(self, value: int) -> None:
-        """Set the value of the register."""
+        """Set the value of the register.
+
+        Parameters
+        ----------
+        value : int
+            The value to set.
+
+        """
         # The regmap will validate the value, handle the error and update self._value.
         self.regmap.write_reg(self.address, value)
 
     def read(self) -> int:
-        """Read the value of the register."""
+        """Read the value from the register on the device.
+
+        Returns
+        -------
+        int
+            The register value.
+
+        """
         # The regmap will handle the error and update self._value.
         return self.regmap.read_reg(self.address)
 
     def reset(self) -> None:
-        """Reset the value of the register to the default value."""
+        """Reset the register to its default value."""
         # The regmap will handle the error and update self._value.
-        self.set(cast("int", self.default_value))
+        if self.default_value is None:
+            raise ValueError("Default value is not set for the register")
+        self.set(self.default_value)
 
     def _update_value(self, value: int) -> None:
         # Called by the regmap to update the value of the register.
@@ -159,31 +187,90 @@ class Field(ABC):
         return self.get_display(self.value)
 
     def get(self, *, refresh: bool = True) -> int:
-        """Get the value of the field."""
+        """Get the value of the field.
+
+        Parameters
+        ----------
+        refresh : bool, optional
+            If True and the field supports self-reset, read from device. Default is True.
+
+        Returns
+        -------
+        int
+            The field value.
+
+        """
         if self._value is None or (self.self_reset and refresh):
             self.read()
         return cast("int", self._value)
 
     def set(self, value: int, *, force: bool = False) -> None:
-        """Set the value of the field."""
+        """Set the value of the field.
+
+        Parameters
+        ----------
+        value : int
+            The value to set.
+        force : bool, optional
+            If True, skip validation. Default is False.
+
+        """
         # The regmap will validate the value, handle the error and update self._value.
         self.fieldmap.set_field(self.name, value, force=force)
 
     def read(self) -> int:
-        """Read the value of the field."""
+        """Read the value from the field on the device.
+
+        Returns
+        -------
+        int
+            The field value.
+
+        """
         # The regmap will validate the address, handle the error and update self._value.
         return self.fieldmap.read_field(self.name)
 
     def reset(self) -> None:
-        """Reset the value of the field to the default value."""
+        """Reset the field to its default value."""
         # The regmap will handle the error and update self._value.
-        self.set(cast("int", self.default_value))
+        if self.default_value is None:
+            raise ValueError("Default value is not set for the field")
+        self.set(self.default_value)
 
     def validate_value(self, value: int) -> None:  # noqa: B027
-        """Validate the value of the field."""
+        """Validate the field value.
+
+        Parameters
+        ----------
+        value : int
+            The value to validate.
+
+        Raises
+        ------
+        ValueError
+            If validation fails.
+
+        """
 
     def get_display(self, value: int) -> str | int | float:
-        """Get the display value of the field."""
+        """Get the display value of the field.
+
+        Parameters
+        ----------
+        value : int
+            The raw field value.
+
+        Returns
+        -------
+        str | int | float
+            The display value.
+
+        Examples
+        --------
+        >>> MCU_TYPE.get_display(0)
+        "MI48D4"
+
+        """
         return value
 
     def _update_value(self, value: int) -> None:

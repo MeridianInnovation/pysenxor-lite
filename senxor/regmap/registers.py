@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 from __future__ import annotations
 
@@ -14,6 +14,13 @@ class Registers:
     """The definition of the registers for the senxor.
 
     You can use this class to get the register definitions statically, without connecting to a device.
+
+    Attributes
+    ----------
+    __regs__ : list[type[Register]]
+        The list of register definitions.
+    __addrs__ : dict[int, RegisterName]
+        The dictionary of register addresses to register names.
 
     Examples
     --------

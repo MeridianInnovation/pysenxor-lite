@@ -11,7 +11,29 @@ from senxor.regmap.base import Field, FieldDescriptor, describe_field
 
 
 class Fields:
-    """The definition of the fields for the senxor."""
+    """The definition of the fields for the senxor.
+
+    You can use this class to get the field definitions statically, without connecting to a device.
+
+    Attributes
+    ----------
+    __fields__ : list[type[Field]]
+        The list of field definitions.
+    __reg2fields__ : dict[int, list[str]]
+        The dictionary of register addresses to field names.
+
+    Examples
+    --------
+    >>> from senxor.regmap import Fields
+    >>> Fields.__fields__
+    ['SW_RESET', ...]
+    >>> Fields.__reg2fields__
+    {0x00: ['SW_RESET'], 0x01: ['DMA_TIMEOUT_ENABLE', 'TIMEOUT_PERIOD', 'STOP_HOST_XFER'], ...}
+    >>> Fields.SW_RESET.name
+    'SW_RESET'
+
+
+    """
 
     __fields__: ClassVar[list[type[Field]]] = []
     __reg2fields__: ClassVar[dict[int, list[str]]] = {}

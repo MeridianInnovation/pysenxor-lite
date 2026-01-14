@@ -24,6 +24,10 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
         The interface of the senxor.
     registers : dict[int, Register]
         The dictionary of registers instance by address.
+    fieldmap : SenxorFieldsManager
+        The field system for the senxor.
+    cache : dict[int, int | None]
+        The cache of the registers values.
 
     Notes
     -----
@@ -47,10 +51,12 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
         return {addr: reg._value for addr, reg in self.registers.items()}
 
     def refresh_all(self) -> None:
+        """Refresh the cache of all registers and fields."""
         for reg in self.registers.values():
             reg.read()
 
     def get_reg(self, name_or_addr: RegisterName | int, /) -> Register:
+        """Get a register instance by name or address."""
         if isinstance(name_or_addr, str):
             return self._registers_by_name[name_or_addr]
         elif isinstance(name_or_addr, int):
@@ -59,7 +65,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
             raise TypeError(f"Argument must be a RegisterName or an integer address, got {type(name_or_addr)}")
 
     def read_reg(self, addr: int) -> int:
-        """The unified method to read a register value from the senxor."""
+        """Read a register value from the senxor."""
         self._check_valid_addr(addr)
         self._warn_unknown_reg(addr, "read")
         try:
@@ -74,6 +80,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
             return value
 
     def write_reg(self, addr: int, value: int) -> None:
+        """Write a value to a register."""
         self._check_valid_addr(addr)
         self._check_reg_writable(addr)
         self._warn_unknown_reg(addr, "write")
@@ -95,6 +102,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
             self.fieldmap._warn_disabled_fields(updated_fields)
 
     def read_regs(self, addrs: list[int]) -> dict[int, int]:
+        """Read the values from multiple registers at once."""
         for addr in addrs:
             self._check_valid_addr(addr)
             self._warn_unknown_reg(addr, "read_regs")
@@ -111,6 +119,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
             return values
 
     def write_regs(self, regs: dict[int, int]) -> None:
+        """Write the values to multiple registers at once."""
         raise NotImplementedError
 
     def _update_reg_value(self, addr: int, value: int):
@@ -138,7 +147,20 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
 
 
 class SenxorFieldsManager(Fields):
-    """The field system for the senxor."""
+    """The field system for the senxor.
+
+    Attributes
+    ----------
+    regmap : SenxorRegistersManager
+        The register system for the senxor.
+    fields : dict[FieldName, Field]
+        The dictionary of field instances by name.
+    cache : dict[FieldName, int | None]
+        The cache of the fields values.
+    cache_display : dict[FieldName, str | int | float | None]
+        The cache of the fields display values.
+
+    """
 
     def __init__(self, regmap: SenxorRegistersManager):
         self._log = regmap._log
@@ -157,13 +179,16 @@ class SenxorFieldsManager(Fields):
         }  # type: ignore[reportReturnType]
 
     def get_field(self, name: FieldName) -> Field:
+        """Get a field instance by name."""
         return self.fields[name]
 
     def get_fields_by_addr(self, addr: int) -> list[Field]:
+        """Get the fields by register address."""
         names = self.__reg2fields__[addr]
         return [self.fields[name] for name in names]
 
     def read_field(self, name: FieldName) -> int:
+        """Read a field value from the senxor."""
         field = self.get_field(name)
         reg = self.regmap.get_reg(field.address)
         reg_value = reg.read()
@@ -172,6 +197,7 @@ class SenxorFieldsManager(Fields):
         return field_value
 
     def set_field(self, name: FieldName, value: int, *, force: bool = False) -> None:
+        """Set a field value on the senxor."""
         field = self.get_field(name)
         self._check_field_enabled(field, force)
         self._check_field_writable(field)
