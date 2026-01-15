@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, cast, overload
 
 if TYPE_CHECKING:
     from senxor.regmap.core import SenxorFieldsManager, SenxorRegistersManager
-    from senxor.regmap.types import FieldName, RegisterName
+    from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
 
 
 class Register(ABC):
@@ -38,7 +38,7 @@ class Register(ABC):
 
     name: ClassVar[RegisterName]
     description: ClassVar[str]
-    address: ClassVar[int]
+    address: ClassVar[RegisterAddress]
 
     writable: ClassVar[bool]
     readable: ClassVar[bool]
@@ -68,7 +68,7 @@ class Register(ABC):
         return f"<Register(name={self.name}, address=0x{self.address:02X})>"
 
     def __str__(self) -> str:
-        value_str = "" if self._value is None else f"= {self.value:02d}"
+        value_str = "" if self._value is None else f"={self.value:02d}"
         return f"{self.name}(0x{self.address:02X}){value_str}"
 
     def get(self, *, refresh: bool = True) -> int:
@@ -160,7 +160,7 @@ class Field(ABC):
     description: ClassVar[str]
     help: ClassVar[str]
 
-    address: ClassVar[int]
+    address: ClassVar[RegisterAddress]
     bits_range: ClassVar[tuple[int, int]]
     writable: ClassVar[bool]
     readable: ClassVar[bool]
@@ -281,7 +281,7 @@ class Field(ABC):
         return f"<Field(name={self.name}, address=0x{self.address:02X}, bits_range={self.bits_range})>"
 
     def __str__(self) -> str:
-        value_str = "" if self._value is None else f"= {self.value:02d}"
+        value_str = "" if self._value is None else f"={self.value:02d}"
         return f"{self.name}(0x{self.address:02X}:{self.bits_range[0]}-{self.bits_range[1]}){value_str}"
 
 

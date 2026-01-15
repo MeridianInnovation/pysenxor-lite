@@ -12,7 +12,7 @@ from senxor.regmap.registers import Registers
 if TYPE_CHECKING:
     from senxor.interface.protocol import ISenxorInterface
     from senxor.regmap.base import Field, Register
-    from senxor.regmap.types import FieldName, RegisterName
+    from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
 
 
 class SenxorRegistersManager(Registers, Generic[TDevice]):
@@ -55,7 +55,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
         for reg in self.registers.values():
             reg.read()
 
-    def get_reg(self, name_or_addr: RegisterName | int, /) -> Register:
+    def get_reg(self, name_or_addr: RegisterName | RegisterAddress, /) -> Register:
         """Get a register instance by name or address."""
         if isinstance(name_or_addr, str):
             return self._registers_by_name[name_or_addr]
