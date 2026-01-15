@@ -1,13 +1,13 @@
 # Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 # ruff: noqa: E501
-from collections import defaultdict
 from typing import ClassVar
 
 from senxor.consts import MCU_TYPE as MCU_TYPE_MAP
 from senxor.consts import MODULE_TYPE as MODULE_TYPE_MAP
 from senxor.consts import SENXOR_TYPE as SENXOR_TYPE_MAP
 from senxor.regmap.base import Field, FieldDescriptor, describe_field
+from senxor.regmap.registers import Registers
 
 
 class Fields:
@@ -1252,7 +1252,7 @@ class Fields:
 
 
 Fields.__fields__ = [v.cls for v in Fields.__dict__.values() if isinstance(v, FieldDescriptor)]
-Fields.__reg2fields__ = defaultdict(list)
+Fields.__reg2fields__ = {addr: [] for addr in Registers.__addrs__}
 for field in Fields.__fields__:
     Fields.__reg2fields__[field.address].append(field.name)
 
