@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generic
+from typing import TYPE_CHECKING, Generic, cast
 
 from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
@@ -248,7 +248,7 @@ class SenxorFieldsManager(Fields):
         """Get a field instance by name."""
         return self.fields[name]
 
-    def get_fields_by_addr(self, addr: int) -> list[Field]:
+    def get_fields_by_addr(self, addr: RegisterAddress) -> list[Field]:
         """Get the fields by register address."""
         names = self.__reg2fields__[addr]
         return [self.fields[name] for name in names]
@@ -282,7 +282,7 @@ class SenxorFieldsManager(Fields):
         for addr, reg_value in regs.items():
             if addr not in self.regmap.registers:
                 continue
-            fields = self.get_fields_by_addr(addr)
+            fields = self.get_fields_by_addr(cast("RegisterAddress", addr))
             for field in fields:
                 field_value = self._decode_field_value(reg_value, field.bits_range)
                 if field_value != field._value:
@@ -309,6 +309,8 @@ class SenxorFieldsManager(Fields):
             raise ValueError(f"Invalid field value for {field.name}: {value}, {e}") from None
 
     def _check_field_value_range(self, field: Field, value: int) -> None:
+        if not isinstance(value, int):
+            raise TypeError(f"Field value must be an integer, got {type(value)}")
         max_value = field._max_value
         if value < 0 or value > max_value:
             raise ValueError(f"Invalid field value for {field.name}: {value}, expected range: [0, {max_value}]")
