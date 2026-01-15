@@ -10,6 +10,8 @@ from senxor.regmap.fields import Fields
 from senxor.regmap.registers import Registers
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from senxor.interface.protocol import ISenxorInterface
     from senxor.regmap.base import Field, Register
     from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
@@ -29,6 +31,31 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
     cache : dict[int, int | None]
         The cache of the registers values.
 
+    Examples
+    --------
+    1. Iterate over the registers:
+    >>> regs = SenxorRegistersManager(interface)
+    >>> for reg in regs:
+    ...     print(reg.name, reg.address)
+
+    2. Use subscript notation to get a register instance:
+    >>> regs = SenxorRegistersManager(interface)
+    >>> regs["MCU_RESET"]
+    >>> regs[0x00]
+
+    3. Check if a register exists:
+    >>> "MCU_RESET" in regs
+    >>> 0x00 in regs
+
+    4. Use the cache to get the cached register value:
+    >>> regs.cache
+    {0x00: 0x00, 0x01: 0x01, ...}
+
+    5. Refresh the cache of all registers:
+    >>> regs.refresh_all()
+    >>> regs.cache
+    {0x00: 0x00, 0x01: 0x01, ...}
+
     Notes
     -----
     Each register operation should be performed through this class to ensure logging,
@@ -45,6 +72,15 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
         }
 
         self.fieldmap = SenxorFieldsManager(self)
+
+    def __iter__(self) -> Iterator[Register]:
+        return iter(self.registers.values())
+
+    def __getitem__(self, key: RegisterName | RegisterAddress) -> Register:
+        return self.get_reg(key)
+
+    def __contains__(self, key: str | int) -> bool:
+        return key in self.registers or key in self._registers_by_name
 
     @property
     def cache(self) -> dict[int, int | None]:
@@ -160,12 +196,42 @@ class SenxorFieldsManager(Fields):
     cache_display : dict[FieldName, str | int | float | None]
         The cache of the fields display values.
 
+    Examples
+    --------
+    1. Iterate over the fields:
+    >>> fieldmap = SenxorFieldsManager(regmap)
+    >>> for field in fieldmap:
+    ...     print(field.name, field.address)
+
+    2. Use subscript notation to get a field instance:
+    >>> fieldmap["MCU_TYPE"]
+
+    3. Check if a field exists:
+    >>> "MCU_TYPE" in fieldmap
+
+    4. Use the cache to get the cached field value:
+    >>> fieldmap.cache
+    {SENXOR_TYPE: 1, MODULE_TYPE: 19, ...}
+
+    5. Use the cache_display to get the cached field display value:
+    >>> fieldmap.cache_display
+    {SENXOR_TYPE: "MI0801", MODULE_TYPE: "MI0802M5S", ...}
+
     """
 
     def __init__(self, regmap: SenxorRegistersManager):
         self._log = regmap._log
         self.regmap: SenxorRegistersManager = regmap
         self.fields: dict[str, Field] = {field.name: field(self) for field in self.__fields__}
+
+    def __iter__(self) -> Iterator[Field]:
+        return iter(self.fields.values())
+
+    def __getitem__(self, key: FieldName) -> Field:
+        return self.get_field(key)
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.fields
 
     @property
     def cache(self) -> dict[FieldName, int | None]:
