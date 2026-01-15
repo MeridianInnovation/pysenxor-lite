@@ -13,7 +13,7 @@ from senxor.consts import FRAME_SHAPE2MODULE_CATEGORY, SENXOR_TYPE2FRAME_SHAPE
 from senxor.error import SenxorResponseTimeoutError
 from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
-from senxor.proc import bytes_to_adc, bytes_to_raw, raw_to_frame, raw_to_temp
+from senxor.proc import process_senxor_data
 from senxor.regmap import SenxorRegistersManager
 
 if TYPE_CHECKING:
@@ -46,7 +46,6 @@ class Senxor(Generic[TDevice]):
         )
         self.interface = interface
 
-        self.read_temp_units: Literal["K", "C", "F"] = "C"
         self.regs = SenxorRegistersManager[TDevice](interface)
         self.fields = self.regs.fieldmap
 
@@ -80,11 +79,7 @@ class Senxor(Generic[TDevice]):
         self._logger = get_logger(name=self.name)
 
         self.stop_stream()
-
-        if self.fields.TEMP_UNITS.value != 0:
-            self.fields.TEMP_UNITS.set(0, force=True)
-        if self.fields.NO_HEADER.value != 0:
-            self.fields.NO_HEADER.set(0, force=True)
+        self._setup_senxor()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info(
@@ -150,17 +145,7 @@ class Senxor(Generic[TDevice]):
     def read(
         self,
         *,
-        raw: bool = False,
-        celsius: bool | None = None,
-    ) -> tuple[np.ndarray | None, np.ndarray]: ...
-
-    @overload
-    def read(
-        self,
-        *,
         block: Literal[False],
-        raw: bool = False,
-        celsius: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None]: ...
 
     @overload
@@ -168,38 +153,26 @@ class Senxor(Generic[TDevice]):
         self,
         *,
         block: Literal[True] = True,
-        raw: bool = False,
-        celsius: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray]: ...
 
     def read(
         self,
         *,
         block: bool = True,
-        raw: bool = False,
-        celsius: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None]:
-        """Read the frame data from the senxor, return (header: np.ndarray[uint16], frame: np.ndarray).
+        """Read a frame from the Senxor and return (header, frame).
 
-        The header is a 1D numpy array of uint16, check documentation for more details.
-        The frame depends on the `raw` and `celsius` parameters.
-        By default, the frame is a numpy array with shape (height, width), dtype is float32, each element means the
-        temperature in Celsius.
+        header : np.ndarray[uint16], 1-D
+            Frame metadata; see the documentation for layout details.
+        frame  : np.ndarray, 2-D, shape (height, width)
+            - If ADC_ENABLE = 1 → dtype = uint16, values are raw ADC counts.
+            - If ADC_ENABLE = 0 → dtype = float32, values are temperature in °C.
 
         Parameters
         ----------
         block : bool, optional
             Whether to block the read operation until a frame is available.
             If False, if no frame is available, return None immediately.
-        raw : bool, optional
-            Whether to return the raw data or the frame data.
-            Raw data is a flat numpy array of uint16.
-            Frame data is reshaped to a 2D numpy array of uint16.
-            In the most cases, frame data is open to use.
-        celsius : bool, optional
-            Whether to convert the frame data to Celsius.
-            If True, the frame data will be converted to Celsius, float32.
-            If False, the frame data will be returned in 1/10 Kelvin, uint16.
 
         Returns
         -------
@@ -229,22 +202,8 @@ class Senxor(Generic[TDevice]):
             return None, None
         else:
             header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
-            frame_units = self.get_temp_units()
-            if frame_units == "adc":
-                data = bytes_to_adc(data_bytes)
-            else:
-                data = bytes_to_raw(data_bytes, unit=frame_units)
-                if celsius:
-                    self._logger.warning(
-                        "`senxor.read(celsius=True)` will be deprecated, use `senxor.set_read_temp_units` instead.",
-                    )
-                    data = raw_to_temp(data, in_unit=frame_units, out_unit="C")
-                else:
-                    data = raw_to_temp(data, in_unit=frame_units, out_unit=self.read_temp_units)
-
-            if not raw:
-                data = raw_to_frame(data)
-
+            is_adc_enabled = self.fields.ADC_ENABLE.get() == 1
+            data = process_senxor_data(data_bytes, adc=is_adc_enabled)
             return header, data
 
     def read_reg(self, reg: int | RegisterName) -> int:
@@ -354,6 +313,29 @@ class Senxor(Generic[TDevice]):
             addr = reg
         self.regs.write_reg(addr, value)
 
+    def _setup_senxor(self):
+        # Ensure the TEMP_UNITS is set to 0
+        temp_units = self.fields.TEMP_UNITS.value
+        if temp_units != 0:
+            self._logger.warning(
+                "reset_temp_units",
+                msg="pysenxor internally force set TEMP_UNITS to 0",
+                raw_value=temp_units,
+            )
+            self.fields.TEMP_UNITS.set(0, force=True)
+        # Ensure the NO_HEADER is set to 0
+        no_header = self.fields.NO_HEADER.value
+        if no_header != 0:
+            self._logger.warning(
+                "reset_no_header",
+                msg="pysenxor internally force set NO_HEADER to 0",
+                raw_value=no_header,
+            )
+            self.fields.NO_HEADER.set(0, force=True)
+
+        # Read the ADC_ENABLE field and cache it.
+        self.fields.ADC_ENABLE.get()
+
     def get_shape(self) -> tuple[int, int]:
         """Get the frame shape(height, width) of the senxor.
 
@@ -369,39 +351,6 @@ class Senxor(Generic[TDevice]):
         senxor_type = self.fields.SENXOR_TYPE.get()
         frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
         return frame_shape
-
-    def get_temp_units(self) -> Literal["dK", "adc"]:
-        """Get the temperature units configured on the device.
-
-        The temperature units of the frame is determined by 'ADC_ENABLE' field.
-        If 'ADC_ENABLE' is set to `1`, the temperature units is `adc`.
-        Otherwise, the temperature units is `dK`.
-
-        Returns
-        -------
-        Literal["dK", "adc"]
-            The temperature units of the frame.
-            - `dK`: 0.1 K
-            - `adc`: ADC data(uint16)
-
-        """
-        if self.fields.ADC_ENABLE.get():
-            return "adc"
-        else:
-            return "dK"
-
-    def set_read_temp_units(self, temp_units: Literal["K", "C", "F"]):
-        """Set the temperature units to use for the `read` method.
-
-        Parameters
-        ----------
-        temp_units : Literal["K", "C", "F"]
-            The temperature units to use for the `read` method.
-
-        """
-        if temp_units not in ["K", "C", "F"]:
-            raise ValueError(f"Invalid temperature units: {temp_units}")
-        self.read_temp_units = temp_units
 
     def get_production_year(self) -> int:
         """Get the production year.

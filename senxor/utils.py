@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 """Utilities for Senxor devices."""
 
@@ -13,7 +13,7 @@ from senxor.core import Senxor
 from senxor.interface.registry import InterfaceRegistry
 
 # To compatible with the old version
-from senxor.proc import normalize, raw_to_frame
+from senxor.proc import normalize
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 
 __all__ = [
     "connect",
-    "data_to_frame",
     "list_camera",
     "list_senxor",
     "remap",
@@ -136,29 +135,3 @@ def remap(
 
     """
     return normalize(image, in_range, out_range, dtype)
-
-
-def data_to_frame(data: np.ndarray, array_shape: tuple[int, int] | None = None, *, hflip: bool = False) -> np.ndarray:  # noqa: ARG001
-    """Convert raw data to a frame.
-
-    It's used for backward compatibility.
-
-    Parameters
-    ----------
-    data : np.ndarray
-        The raw data.
-    array_shape : tuple[int, int] | None
-        Not needed, it's for backward compatibility.
-    hflip : bool, optional
-        Whether to flip the image horizontally.
-
-    Returns
-    -------
-    np.ndarray
-        The frame.
-
-    """
-    frame = raw_to_frame(data)
-    if hflip:
-        frame = np.flip(frame, axis=1)
-    return frame
