@@ -15,8 +15,8 @@ class TestField:
         assert field.writable is not None
         assert field.readable is not None
         assert field.self_reset is not None
-        assert field.enabled is not None
-        assert hasattr(field, "disabled_reason")
+        assert field.available is not None
+        assert hasattr(field, "unavailable_reason")
         assert hasattr(field, "default_value")
 
     def test_repr(self, mock_fieldmap: SenxorFieldsManager):

@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import inspect
-from abc import ABC
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, cast, overload
 
 if TYPE_CHECKING:
@@ -13,7 +12,7 @@ if TYPE_CHECKING:
     from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
 
 
-class Register(ABC):
+class Register:
     """Base class for all registers.
 
     Attributes
@@ -43,7 +42,7 @@ class Register(ABC):
     writable: ClassVar[bool]
     readable: ClassVar[bool]
 
-    self_reset: bool
+    self_reset: ClassVar[bool]
 
     default_value: int | None
 
@@ -153,8 +152,37 @@ def describe(cls: type[TRegister]) -> RegisterDescriptor[TRegister]:
     return RegisterDescriptor[TRegister](cls)
 
 
-class Field(ABC):
-    """Base class for all register fields."""
+class Field:
+    """Base class for all register fields.
+
+    Attributes
+    ----------
+    name : ClassVar[FieldName]
+        The name of the field.
+    description : ClassVar[str]
+        A brief description of the field.
+    help : ClassVar[str]
+        Detailed help text for the field.
+    address : ClassVar[RegisterAddress]
+        The register address where the field is located.
+    bits_range : ClassVar[tuple[int, int]]
+        The bit range (start, end) of the field within the register.
+    writable : ClassVar[bool]
+        Whether the field is writable.
+    readable : ClassVar[bool]
+        Whether the field is readable.
+    self_reset : bool
+        Whether the field may be modified by the senxor itself.
+    available : bool
+        Whether the field is available in the current firmware version and module type.
+    unavailable_reason : str | None
+        The reason why the field is unavailable, if applicable. Default is None.
+    default_value : int | None
+        The default value of the field. Default is None.
+    fieldmap : SenxorFieldsManager
+        The field manager instance managing this field.
+
+    """
 
     name: ClassVar[FieldName]
     description: ClassVar[str]
@@ -165,10 +193,10 @@ class Field(ABC):
     writable: ClassVar[bool]
     readable: ClassVar[bool]
 
-    self_reset: bool
+    self_reset: ClassVar[bool]
 
-    enabled: bool = True
-    disabled_reason: str | None = None
+    available: bool = True
+    unavailable_reason: str | None = None
     default_value: int | None = None
 
     def __init__(self, fieldmap: SenxorFieldsManager):
@@ -237,7 +265,7 @@ class Field(ABC):
             raise ValueError("Default value is not set for the field")
         self.set(self.default_value)
 
-    def validate_value(self, value: int) -> None:  # noqa: B027
+    def validate_value(self, value: int) -> None:
         """Validate the field value.
 
         Parameters

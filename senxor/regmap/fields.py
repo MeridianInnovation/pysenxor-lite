@@ -54,7 +54,7 @@ class Fields:
         writable = True
         readable = False
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -72,7 +72,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -93,7 +93,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "500 ms",
@@ -118,7 +118,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -136,7 +136,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -153,7 +153,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -173,7 +173,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -191,7 +191,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -213,7 +213,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "Full-Frame Readout Mode",
@@ -235,8 +235,8 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = False
-        disabled_reason = "Enable no header mode may cause compatibility issues in some devices."
+        available = False
+        unavailable_reason = "Enable no header mode may cause compatibility issues in some devices."
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -253,7 +253,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -270,7 +270,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class FW_VERSION_MINOR(Field):
@@ -284,7 +284,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class FW_VERSION_BUILD(Field):
@@ -298,7 +298,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class FRAME_RATE_DIVIDER(Field):
@@ -318,7 +318,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             if value == 0:
@@ -341,7 +341,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             period_x100 = self.fieldmap.PERIOD_X100.get()
@@ -362,7 +362,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "1 s" if value == 1 else "10 ms"
@@ -386,7 +386,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -407,7 +407,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -424,7 +424,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -441,7 +441,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -460,7 +460,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -478,7 +478,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -495,7 +495,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -521,7 +521,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "1.0",
@@ -546,7 +546,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return SENXOR_TYPE_MAP.get(value, f"Unknown: {value}")
@@ -565,7 +565,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return MODULE_TYPE_MAP.get(value, f"Unknown: {value}")
@@ -582,7 +582,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return MCU_TYPE_MAP.get(value, f"Unknown: {value}")
@@ -603,7 +603,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "Module flash",
@@ -636,7 +636,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class LUT_VERSION(Field):
@@ -650,7 +650,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class CORR_FACTOR(Field):
@@ -668,7 +668,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> float:
             return round(value * 0.01, 2)
@@ -686,7 +686,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -704,7 +704,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -722,7 +722,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "True" if value == 1 else "False"
@@ -740,7 +740,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return f"{(value + 1) * 100}"
@@ -762,7 +762,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> float:
             return round(value * 0.01, 2)
@@ -787,7 +787,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> float:
             uint8 = value
@@ -818,7 +818,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> float:
             uint8 = value
@@ -839,7 +839,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> int:
             return value + 2000
@@ -856,7 +856,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class MANUF_LOCATION(Field):
@@ -870,7 +870,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class SERIAL_NUMBER_0(Field):
@@ -884,7 +884,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class SERIAL_NUMBER_1(Field):
@@ -898,7 +898,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class SERIAL_NUMBER_2(Field):
@@ -912,7 +912,7 @@ class Fields:
         writable = False
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class USER_FLASH_ENABLE(Field):
@@ -930,7 +930,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class TEMP_UNITS(Field):
@@ -955,8 +955,8 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = False
-        disabled_reason = "This field is not supported in some firmware versions. Don't use it."
+        available = False
+        unavailable_reason = "This field is not supported in some firmware versions. Don't use it."
 
         value_map: ClassVar[dict[int, str]] = {
             0: "dK",
@@ -984,7 +984,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -1008,7 +1008,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "quick-stark",
@@ -1040,7 +1040,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "3x3 kernel",
@@ -1063,7 +1063,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return f"{value / 10} K"
@@ -1081,7 +1081,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class STARK_SCALE(Field):
@@ -1095,7 +1095,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return f"{value / 100} %"
@@ -1115,7 +1115,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -1133,7 +1133,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -1152,7 +1152,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -1173,7 +1173,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         value_map: ClassVar[dict[int, str]] = {
             0: "3x3 kernel",
@@ -1198,7 +1198,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Enabled" if value == 1 else "Disabled"
@@ -1217,7 +1217,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = True
-        enabled = True
+        available = True
 
         def get_display(self, value: int) -> str:
             return "Active" if value == 1 else "Idle"
@@ -1234,7 +1234,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
     @describe_field
     class TEMPORAL_MSB(Field):
@@ -1248,7 +1248,7 @@ class Fields:
         writable = True
         readable = True
         self_reset = False
-        enabled = True
+        available = True
 
 
 Fields.__fields__ = [v.cls for v in Fields.__dict__.values() if isinstance(v, FieldDescriptor)]

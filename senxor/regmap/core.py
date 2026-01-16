@@ -135,7 +135,7 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
                 value=value,
                 updated_fields=updated_fields,
             )
-            self.fieldmap._warn_disabled_fields(updated_fields)
+            self.fieldmap._warn_unavailable_fields(updated_fields)
 
     def read_regs(self, addrs: list[int]) -> dict[int, int]:
         """Read the values from multiple registers at once."""
@@ -265,7 +265,7 @@ class SenxorFieldsManager(Fields):
     def set_field(self, name: FieldName, value: int, *, force: bool = False) -> None:
         """Set a field value on the senxor."""
         field = self.get_field(name)
-        self._check_field_enabled(field, force)
+        self._check_field_available(field, force)
         self._check_field_writable(field)
         self._check_field_value_range(field, value)
         self._validate_field_value(field, value)
@@ -291,15 +291,15 @@ class SenxorFieldsManager(Fields):
 
         return updated_fields
 
-    def _warn_disabled_fields(self, fields: dict[str, int]) -> None:
+    def _warn_unavailable_fields(self, fields: dict[str, int]) -> None:
         for name, value in fields.items():
             field = self.fields[name]
-            if not field.enabled:
+            if not field.available:
                 self._log.warning(
-                    "set_disabled_field",
+                    "set_unavailable_field",
                     name=field.name,
                     value=value,
-                    reason=field.disabled_reason,
+                    reason=field.unavailable_reason,
                 )
 
     def _validate_field_value(self, field: Field, value: int) -> None:
@@ -315,11 +315,11 @@ class SenxorFieldsManager(Fields):
         if value < 0 or value > max_value:
             raise ValueError(f"Invalid field value for {field.name}: {value}, expected range: [0, {max_value}]")
 
-    def _check_field_enabled(self, field: Field, force: bool = False) -> None:
-        if field.enabled or force:
+    def _check_field_available(self, field: Field, force: bool = False) -> None:
+        if field.available or force:
             return
-        self._log.critical("field_disabled_violation", name=field.name, reason=field.disabled_reason)
-        raise AttributeError(f"Field {field.name} is disabled, reason: {field.disabled_reason}")
+        self._log.critical("field_unavailable_violation", name=field.name, reason=field.unavailable_reason)
+        raise AttributeError(f"Field {field.name} is unavailable, reason: {field.unavailable_reason}")
 
     def _check_field_writable(self, field: Field) -> None:
         if not field.writable:

@@ -115,7 +115,7 @@ class TestFieldsManager:
             mock_fieldmap.set_field("FW_VERSION_MAJOR", 2)
 
         # Test disabled field
-        mock_fieldmap.TEMP_UNITS.enabled = False
+        mock_fieldmap.TEMP_UNITS.available = False
         with pytest.raises(AttributeError):
             mock_fieldmap.set_field("TEMP_UNITS", 1)
 
@@ -223,9 +223,9 @@ class TestFieldsManager:
         assert updated_fields == {}
 
     def test_warn_disabled_fields(self, mock_fieldmap: SenxorFieldsManager):
-        assert mock_fieldmap.TEMP_UNITS.enabled is False
+        assert mock_fieldmap.TEMP_UNITS.available is False
         with capture_logs() as logs:
-            mock_fieldmap._warn_disabled_fields({"TEMP_UNITS": 1})
+            mock_fieldmap._warn_unavailable_fields({"TEMP_UNITS": 1})
         assert len(logs) == 1
         assert logs[0]["log_level"] == "warning"
 

@@ -42,7 +42,7 @@ class TestFields:
             assert hasattr(field, "bits_range")
             assert hasattr(field, "writable")
             assert hasattr(field, "readable")
-            assert hasattr(field, "enabled")
+            assert hasattr(field, "available")
             assert field.writable or field.readable
 
     def test_reg2fields_consistency(self):
