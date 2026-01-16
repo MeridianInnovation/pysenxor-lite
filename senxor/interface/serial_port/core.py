@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 from __future__ import annotations
 
@@ -11,7 +11,12 @@ from serial import Serial, SerialException
 from serial.tools import list_ports
 
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
-from senxor.error import SenxorNoModuleError, SenxorNotConnectedError, SenxorResponseTimeoutError
+from senxor.error import (
+    SenxorLostConnectionError,
+    SenxorNoModuleError,
+    SenxorNotConnectedError,
+    SenxorResponseTimeoutError,
+)
 from senxor.interface.protocol import IDevice, ISenxorInterface
 from senxor.interface.serial_port._parser import SenxorCmdEncoder
 from senxor.interface.serial_port._reader import SenxorSerialReader
@@ -82,21 +87,23 @@ class SerialPort(IDevice):
 
 def _op_wrapper(func: Callable) -> Callable:
     def operation(self: SerialInterface, *args, **kwargs) -> Any:
+        self.receiver.raise_if_error()
         if not self.is_connected:
             self.close()
             raise SenxorNotConnectedError
-        self.receiver.raise_if_error()
         return func(self, *args, **kwargs)
 
     def handle_error(self: SerialInterface, error: Exception, try_count: int) -> None:
+        if isinstance(error, (SenxorNotConnectedError, SenxorLostConnectionError)):
+            raise error
         if try_count == 0:
             self.logger.error("op_failed", error=error, func_name=func.__name__)
             time.sleep(self.OP_RETRY_INTERVAL)
         elif try_count < self.OP_RETRY_TIMES:
-            self.logger.error("retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
+            self.logger.error("retry_failed", retry_count=try_count, error=error, func_name=func.__name__)
             time.sleep(self.OP_RETRY_INTERVAL)
         else:
-            self.logger.exception("last_retry_failed", retry_count=try_count - 1, error=error, func_name=func.__name__)
+            self.logger.exception("last_retry_failed", retry_count=try_count, error=error, func_name=func.__name__)
             self.close()
             raise error
 
