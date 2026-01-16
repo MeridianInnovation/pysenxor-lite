@@ -5,12 +5,12 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Generic, Literal, cast, overload
+from typing import TYPE_CHECKING, Generic, Literal, overload
 
 import numpy as np
 
-from senxor.consts import FRAME_SHAPE2MODULE_CATEGORY, SENXOR_TYPE2FRAME_SHAPE
 from senxor.error import SenxorResponseTimeoutError
+from senxor.helper import SenxorHelperMixin
 from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
 from senxor.proc import process_senxor_data
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from senxor.regmap.types import RegisterName
 
 
-class Senxor(Generic[TDevice]):
+class Senxor(SenxorHelperMixin, Generic[TDevice]):
     def __init__(
         self,
         interface: ISenxorInterface[TDevice],
@@ -38,6 +38,7 @@ class Senxor(Generic[TDevice]):
             Whether to open the senxor automatically, by default True.
 
         """
+        super().__init__()
         logger = get_logger()
         logger.info(
             "init Senxor",
@@ -317,113 +318,24 @@ class Senxor(Generic[TDevice]):
         # Ensure the TEMP_UNITS is set to 0
         temp_units = self.fields.TEMP_UNITS.value
         if temp_units != 0:
+            self.fields.TEMP_UNITS.set(0, force=True)
             self._logger.warning(
                 "reset_temp_units",
                 msg="pysenxor internally force set TEMP_UNITS to 0",
                 raw_value=temp_units,
             )
-            self.fields.TEMP_UNITS.set(0, force=True)
         # Ensure the NO_HEADER is set to 0
         no_header = self.fields.NO_HEADER.value
         if no_header != 0:
+            self.fields.NO_HEADER.set(0, force=True)
             self._logger.warning(
                 "reset_no_header",
                 msg="pysenxor internally force set NO_HEADER to 0",
                 raw_value=no_header,
             )
-            self.fields.NO_HEADER.set(0, force=True)
 
         # Read the ADC_ENABLE field and cache it.
         self.fields.ADC_ENABLE.get()
-
-    def get_shape(self) -> tuple[int, int]:
-        """Get the frame shape(height, width) of the senxor.
-
-        Returns
-        -------
-        tuple[int, int]
-            The frame shape(height, width) of the senxor.
-
-        """
-        # Although the frame shape depends on the senxor type, but the internal implementation of `read` method
-        # do not rely on this method.
-
-        senxor_type = self.fields.SENXOR_TYPE.get()
-        frame_shape = SENXOR_TYPE2FRAME_SHAPE[senxor_type]
-        return frame_shape
-
-    def get_production_year(self) -> int:
-        """Get the production year.
-
-        Returns
-        -------
-        int
-            The production year.
-
-        """
-        production_year = self.fields.PRODUCTION_YEAR.get() + 2000
-        return production_year
-
-    def get_senxor_id_hex(self) -> str:
-        """Get the senxor id(SN code) string in hex format.
-
-        The senxor id is a hex string of 12 characters, the format is:
-        `YYWWLLSSSSSS`, where:
-        - `YY` is the production year (from 2000 to 2099).
-        - `WW` is the production week.
-        - `LL` is the manufacturing location.
-        - `SSSSSS` is the serial number (from 000000 to 999999).
-
-        Returns
-        -------
-        str
-            The senxor id.
-
-        """
-        production_year = self.fields.PRODUCTION_YEAR.get()
-        production_week = self.fields.PRODUCTION_WEEK.get()
-        manuf_location = self.fields.MANUF_LOCATION.get()
-        serial_number_0 = self.fields.SERIAL_NUMBER_0.get()
-        serial_number_1 = self.fields.SERIAL_NUMBER_1.get()
-        serial_number_2 = self.fields.SERIAL_NUMBER_2.get()
-        serial_number = (serial_number_0 << 16) | (serial_number_1 << 8) | serial_number_2
-        return f"{production_year:02X}{production_week:02X}{manuf_location:02X}{serial_number:06X}"
-
-    def get_sn(self) -> str:
-        """Get the SN code string. Same as `get_senxor_id_hex`.
-
-        Returns
-        -------
-        str
-            The SN code string.
-
-        """
-        return self.get_senxor_id_hex()
-
-    def get_module_type(self) -> str:
-        """Get the module type."""
-        module_type = cast("str", self.fields.MODULE_TYPE.display)
-        return module_type
-
-    def get_module_category(self) -> Literal["Cougar", "Panther"]:
-        """Get the module category."""
-        frame_shape = self.get_shape()
-        module_category = cast("Literal['Cougar', 'Panther']", FRAME_SHAPE2MODULE_CATEGORY.get(frame_shape))
-        return module_category
-
-    def get_fw_version(self) -> str:
-        """Get the firmware version string.
-
-        Returns
-        -------
-        str
-            The firmware version string.
-
-        """
-        major = self.fields.FW_VERSION_MAJOR.get()
-        minor = self.fields.FW_VERSION_MINOR.get()
-        build = self.fields.FW_VERSION_BUILD.get()
-        return f"{major}.{minor}.{build}"
 
     def __repr__(self):
         return f"Senxor(interface={self.interface})"
