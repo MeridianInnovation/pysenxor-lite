@@ -440,7 +440,7 @@ class Fields:
         bits_range = (3, 4)
         writable = False
         readable = True
-        self_reset = False
+        self_reset = True
         enabled = True
 
         def get_display(self, value: int) -> str:
@@ -459,7 +459,7 @@ class Fields:
         bits_range = (4, 5)
         writable = False
         readable = True
-        self_reset = False
+        self_reset = True
         enabled = True
 
         def get_display(self, value: int) -> str:
@@ -477,7 +477,7 @@ class Fields:
         bits_range = (5, 6)
         writable = False
         readable = True
-        self_reset = False
+        self_reset = True
         enabled = True
 
         def get_display(self, value: int) -> str:
@@ -721,7 +721,7 @@ class Fields:
         bits_range = (4, 5)
         writable = True
         readable = True
-        self_reset = True
+        self_reset = False
         enabled = True
 
         def get_display(self, value: int) -> str:
