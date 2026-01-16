@@ -41,7 +41,7 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
         super().__init__()
         logger = get_logger()
         logger.info(
-            "init Senxor",
+            "init_senxor_instance",
             name=interface.device.name,
             interface=str(interface),
         )
@@ -72,19 +72,20 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
 
     def open(self):
         """Open the senxor. If the senxor is already connected, do nothing."""
+        self._logger = get_logger(name=self.name)
         if self.is_connected:
+            self._logger.info("senxor_already_opened")
             return
-
+        self._logger.info("opening_senxor")
         time_start = time.time()
         self.interface.open()
-        self._logger = get_logger(name=self.name)
 
         self.stop_stream()
         self._setup_senxor()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info(
-            "open senxor success",
+            "open_senxor_success",
             device=self.device,
             startup_time=f"{time_cost}ms",
         )
@@ -94,9 +95,9 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
         if not self.is_connected:
             return
 
-        self._logger.info("closing senxor")
+        self._logger.info("closing_senxor")
         self.interface.close()
-        self._logger.info("close senxor success")
+        self._logger.info("close_senxor_success")
 
     @property
     def is_streaming(self) -> bool:
@@ -119,12 +120,12 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
     def start_stream(self):
         """Start the stream mode."""
         self.fields.CONTINUOUS_STREAM.set(1)
-        self._logger.info("start stream")
+        self._logger.info("start_stream_success")
 
     def stop_stream(self):
         """Stop the stream mode."""
         self.fields.CONTINUOUS_STREAM.set(0)
-        self._logger.info("stop stream")
+        self._logger.info("stop_stream_success")
 
     def refresh_all(self):
         """Refresh the all registers and fields. This method will read all registers and update all fields.
