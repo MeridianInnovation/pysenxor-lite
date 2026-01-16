@@ -81,6 +81,11 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
         self.interface.open()
 
         self.stop_stream()
+        # Read readonly registers(device info registers) and cache the values.
+        for reg in self.regs:
+            if not reg.writable:
+                reg.get()
+
         self._setup_senxor()
 
         time_cost = int((time.time() - time_start) * 1000)
@@ -88,6 +93,9 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
             "open_senxor_success",
             device=self.device,
             startup_time=f"{time_cost}ms",
+            fw_version=self.get_fw_version(),
+            module_type=self.get_module_type(),
+            sn=self.get_sn(),
         )
 
     def close(self):
