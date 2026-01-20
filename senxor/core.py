@@ -175,7 +175,11 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
 
     def stop_stream(self):
         """Stop the stream mode."""
-        self.fields.CONTINUOUS_STREAM.set(0)
+        try:
+            self.fields.CONTINUOUS_STREAM.set(0)
+        except Exception as e:
+            self._logger.error("stop_stream_failed", error=e)
+            raise
         self._logger.info("stop_stream_success")
 
     def refresh_all(self):
