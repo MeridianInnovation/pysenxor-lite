@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 """Constants related to Senxor devices."""
 
@@ -58,11 +58,6 @@ SENXOR_TYPE2FRAME_SHAPE = {
     6: (120, 160),
     8: (62, 80),
     9: (50, 50),
-}
-
-FRAME_SHAPE2MODULE_CATEGORY = {
-    (62, 80): "Cougar",
-    (120, 160): "Panther",
 }
 
 MCU_TYPE = {
