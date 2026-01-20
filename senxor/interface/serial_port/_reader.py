@@ -1,15 +1,20 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
+from __future__ import annotations
 
 import queue
 import threading
 import time
 from collections import deque
 from enum import Enum, auto
+from typing import TYPE_CHECKING
 
 from serial import PortNotOpenError, Serial, SerialException
 
-from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNotConnectedError
+from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNoModuleError, SenxorNotConnectedError
 from senxor.interface.serial_port._parser import SenxorAckDecoder, SenxorAckParser
+
+if TYPE_CHECKING:
+    from senxor.interface.event import SenxorInterfaceEvent
 
 
 class ByteFIFO:
@@ -46,10 +51,16 @@ class SenxorSerialState(Enum):
 
 
 class SenxorSerialReader:
-    def __init__(self, ser: Serial, logger, read_interval: float = 0.005):
+    def __init__(
+        self,
+        ser: Serial,
+        logger,
+        events: SenxorInterfaceEvent,
+        read_interval: float = 0.005,
+    ):
         self.ser = ser
-
         self.logger = logger
+        self.events = events
         self.read_interval = read_interval
 
         self._buffer = ByteFIFO()
@@ -103,7 +114,7 @@ class SenxorSerialReader:
 
     def _init_ack_pipe(self) -> None:
         """Initialize the ACK pipe."""
-        self.gfra_queue: deque[tuple[bytearray | None, bytearray]] = deque(maxlen=5)
+        self.gfra_queue: deque[tuple[bytes | None, bytes]] = deque(maxlen=5)
         self.gfra_ready = threading.Condition()
 
         self.rreg_queue: deque[int] = deque(maxlen=1)
@@ -125,6 +136,7 @@ class SenxorSerialReader:
     def _set_error(self, error: Exception, msg: str) -> None:
         self.error_queue.put((msg, error))
         self.error_event.set()
+        self.events.error.emit(error)
 
     def _worker_loop(self) -> None:
         try:
@@ -306,8 +318,11 @@ class SenxorSerialReader:
         if cmd == "GFRA":
             with self.gfra_ready:
                 header, temp_data = SenxorAckDecoder._parse_ack_gfra(data)
-                self.gfra_queue.append((header, temp_data))
+                header_ = None if header is None else bytes(header)
+                temp_data_ = bytes(temp_data)
+                self.gfra_queue.append((header_, temp_data_))
                 self.gfra_ready.notify_all()
+                self.events.data.emit(header_, temp_data_)
         elif cmd == "RREG":
             with self.rreg_ready:
                 self.rreg_queue.append(SenxorAckDecoder._parse_ack_rreg(data))
@@ -321,7 +336,11 @@ class SenxorSerialReader:
                 self.rrse_queue.append(SenxorAckDecoder._parse_ack_rrse(data))
                 self.rrse_ready.notify_all()
         elif cmd == "SERR":
-            self.no_module_event.set()
+            if not self.no_module_event.is_set():
+                self.no_module_event.set()
+                # We don't call `_set_error` here because register operations still work without lens module.
+                # Only `read` function will raise `SenxorNoModuleError`.
+                self.events.error.emit(SenxorNoModuleError())
         else:
             self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
             self.logger.warning("unknown_ack_type", cmd=cmd, data=data)

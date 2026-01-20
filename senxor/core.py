@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Generic, Literal, overload
+from typing import TYPE_CHECKING, Callable, Generic, Literal, overload
 
 import numpy as np
 
@@ -124,6 +124,49 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
             return True
         else:
             return is_connected
+
+    @overload
+    def on(self, event: Literal["open", "close"], listener: Callable[[], None]) -> Callable[[], None]: ...
+    @overload
+    def on(self, event: Literal["error"], listener: Callable[[Exception], None]) -> Callable[[], None]: ...
+    @overload
+    def on(
+        self,
+        event: Literal["data"],
+        listener: Callable[[np.ndarray | None, np.ndarray], None],
+    ) -> Callable[[], None]: ...
+
+    def on(self, event: Literal["open", "close", "data", "error"], listener: Callable) -> Callable[[], None]:
+        """Register a listener for an event.
+
+        Parameters
+        ----------
+        event : Literal["open", "close", "data", "error"]
+            The event to register the listener for.
+        listener : Callable
+            The listener to register.
+
+        Returns
+        -------
+        Callable[[], None]
+            The function to clear the listener.
+
+        Notes
+        -----
+        Be careful with the thread safety of the listener.
+        If the listener is not thread-safe, it may cause unexpected behavior.
+
+        """
+        if event == "data":
+
+            def on_data(header_bytes: bytes | None, data_bytes: bytes):
+                header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
+                data = process_senxor_data(data_bytes, adc=self.fields.ADC_ENABLE.get() == 1)
+                listener(header, data)
+
+            return self.interface.on(event, on_data)
+        else:
+            return self.interface.on(event, listener)
 
     def start_stream(self):
         """Start the stream mode."""

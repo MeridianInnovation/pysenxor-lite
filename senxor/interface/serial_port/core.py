@@ -17,6 +17,7 @@ from senxor.error import (
     SenxorNotConnectedError,
     SenxorResponseTimeoutError,
 )
+from senxor.interface.event import SenxorInterfaceEvent
 from senxor.interface.protocol import IDevice, ISenxorInterface
 from senxor.interface.serial_port._parser import SenxorCmdEncoder
 from senxor.interface.serial_port._reader import SenxorSerialReader
@@ -145,7 +146,12 @@ class SerialInterface(ISenxorInterface[SerialPort]):
             raise ValueError(f"The serial port {device.device} is not a senxor device.")
         self.logger = get_logger().bind(name=device.name)
         self.ser: Serial = Serial()
-        self.receiver = SenxorSerialReader(self.ser, self.logger)
+        self.events = SenxorInterfaceEvent(self.logger)
+        self.receiver = SenxorSerialReader(
+            self.ser,
+            self.logger,
+            self.events,
+        )
         self._op_lock = threading.Lock()
 
     @property
@@ -163,15 +169,17 @@ class SerialInterface(ISenxorInterface[SerialPort]):
             if not self.is_connected:
                 self.ser.open()
             self.receiver.start()
+            self.events.open.emit()
         except Exception as e:
             self.logger.exception("open_failed", error=e)
             raise
 
     def close(self):
         self.receiver.stop()
+        self.events.close.emit()
 
     @_op_wrapper
-    def read(self, block: bool = True) -> tuple[bytearray | None, bytearray | None]:
+    def read(self, block: bool = True) -> tuple[bytes | None, bytes | None]:
         if self.receiver.gfra_queue:
             return self.receiver.gfra_queue.popleft()
         elif self.receiver.no_module_event.is_set():
