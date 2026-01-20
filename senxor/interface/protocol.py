@@ -1,11 +1,15 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 from __future__ import annotations
 
-from typing import Callable, Protocol, TypeVar
+from typing import TYPE_CHECKING, Callable, Literal, Protocol, TypeVar, overload
+
+if TYPE_CHECKING:
+    from senxor.interface.event import SenxorInterfaceEvent
 
 TDevice = TypeVar("TDevice", bound="IDevice")
 TInterface = TypeVar("TInterface", bound="ISenxorInterface")
+
 
 # The following is the protocol for the interface class.
 # The interface class must implement the methods and properties defined in this protocol class.
@@ -73,6 +77,7 @@ class ISenxorInterface(Protocol[TDevice]):
 
     device: TDevice
     is_connected: bool
+    events: SenxorInterfaceEvent
 
     def __init__(self, device: TDevice) -> None:
         """Initialize the interface.
@@ -200,31 +205,44 @@ class ISenxorInterface(Protocol[TDevice]):
         """
         ...
 
-    def on_open(self, callback: Callable[[], None]) -> None:
-        """Set a callback function to be called when the device is opened."""
-        ...
+    @overload
+    def on(self, event: Literal["open", "close"], listener: Callable[[], None]) -> Callable[[], None]: ...
+    @overload
+    def on(self, event: Literal["data"], listener: Callable[[bytes | None, bytes], None]) -> Callable[[], None]: ...
+    @overload
+    def on(self, event: Literal["error"], listener: Callable[[Exception], None]) -> Callable[[], None]: ...
 
-    def on_close(self, callback: Callable[[], None]) -> None:
-        """Set a callback function to be called when the device is closed."""
-        ...
-
-    def on_data(self, callback: Callable[[bytes | None, bytes], None]) -> None:
-        """Set a callback function to be called when data is received from the device.
+    def on(self, event: Literal["open", "close", "data", "error"], listener: Callable) -> Callable[[], None]:
+        """Register a listener for an event.
 
         Parameters
         ----------
-        callback : Callable[[bytes | None, bytes], None]
-            The callback function to call when data is received from the device.
-            The callback function should take two arguments:
-            - header: The header of the frame, None if no header is available.
-            - data: The data of the frame.
+        event : Literal["open", "close", "data", "error"]
+            The event to register the listener for.
+        listener : Callable
+            The listener to register.
+
+        Returns
+        -------
+        Callable[[], None]
+            The function to clear the listener.
+
+        Raises
+        ------
+        ValueError
+            If the event is invalid.
 
         """
-        ...
-
-    def on_error(self, callback: Callable[[Exception], None]) -> None:
-        """Set a callback function to be called when an error occurs."""
-        ...
+        if event == "open":
+            return self.events.open.on(listener)
+        elif event == "close":
+            return self.events.close.on(listener)
+        elif event == "data":
+            return self.events.data.on(listener)
+        elif event == "error":
+            return self.events.error.on(listener)
+        else:
+            raise ValueError(f"Invalid event: {event}")
 
     def __repr__(self) -> str:
         """Return a string representation of the interface."""
