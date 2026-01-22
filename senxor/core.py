@@ -18,7 +18,7 @@ from senxor.regmap import SenxorRegistersManager
 
 if TYPE_CHECKING:
     from senxor.interface import ISenxorInterface
-    from senxor.regmap.types import RegisterName
+    from senxor.regmap.types import FieldName, RegisterName
 
 
 class Senxor(SenxorHelperMixin, Generic[TDevice]):
@@ -370,6 +370,35 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
         elif isinstance(reg, int):
             addr = reg
         self.regs.write_reg(addr, value)
+
+    def get_field(self, field: FieldName) -> int:
+        """Get the value of a field.
+
+        Parameters
+        ----------
+        field : FieldName, str
+            The field to get the value of.
+
+        Returns
+        -------
+        int
+            The value of the field.
+
+        """
+        return self.fields.get_field(field).value
+
+    def set_field(self, field: FieldName, value: int):
+        """Set the value of a field.
+
+        Parameters
+        ----------
+        field : FieldName
+            The field to set the value of.
+        value : int
+            The value to set the field to.
+
+        """
+        return self.fields.set_field(field, value)
 
     def _setup_senxor(self):
         # Ensure the TEMP_UNITS is set to 0
