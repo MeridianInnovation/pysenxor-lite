@@ -309,7 +309,8 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
     def read_regs(self, regs: list[int | RegisterName]) -> dict[int, int]:
         """Read the values from multiple registers at once.
 
-        Note: This method takes the almost same time as reading one register.
+        Note: This method is more efficient than reading one register one by one.
+        Warning: On some devices with older firmware, this method may cause the device to hang.
 
         Parameters
         ----------
