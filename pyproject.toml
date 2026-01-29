@@ -16,7 +16,6 @@ classifiers = [
 ]
 
 dependencies = [
-  "colormap-tool>=1.0.0",
   "numpy>=1.19.5",
   "pyserial>=3.5",
   "structlog>=25.4.0",
