@@ -10,11 +10,10 @@ except ImportError:
 
 import senxor
 from senxor.log import setup_console_logger
-from senxor.proc import apply_colormap, enlarge, get_colormaps, normalize
+from senxor.proc import apply_colormap, colormaps, enlarge, normalize
 
-# Choose the colormap `inferno` from the built-in cv2 colormaps.
-# This method does not require the cv2 package actually.
-cmap = get_colormaps("inferno", namespace="cv", n=1024)
+# Choose the colormap `inferno`
+cmap = colormaps["inferno"]
 
 if __name__ == "__main__":
     # Setup the logger based on structlog.

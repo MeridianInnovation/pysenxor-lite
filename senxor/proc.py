@@ -4,12 +4,11 @@
 
 from __future__ import annotations
 
-import importlib.resources
-import json
-from typing import Any
+from collections.abc import Iterator, Mapping
+from importlib.resources import files
+from typing import Any, Literal, cast
 
 import numpy as np
-from colormap_tool import get_colormaps, resample_lut
 
 from senxor.consts import (
     KELVIN,
@@ -20,38 +19,65 @@ __all__ = [
     "apply_colormap",
     "colormaps",
     "enlarge",
-    "get_colormaps",
     "normalize",
+    "process_senxor_data",
     "resample_lut",
 ]
 
-_RESOURCE_DIR = importlib.resources.files("senxor").joinpath("resources")
+ColormapKey = Literal[
+    "autumn",
+    "bone",
+    "cividis",
+    "cool",
+    "hot",
+    "inferno",
+    "ironbow",
+    "jet",
+    "magma",
+    "pink",
+    "plasma",
+    "rainbow",
+    "rainbow2",
+    "spring",
+    "turbo",
+    "viridis",
+]
 
 
-colormaps = {
-    "inferno": get_colormaps("inferno", namespace="cv"),
-    "magma": get_colormaps("magma", namespace="cv"),
-    "plasma": get_colormaps("plasma", namespace="cv"),
-    # ------------------------------------------------------------
-    "autumn": get_colormaps("autumn", namespace="cv"),
-    "bone": get_colormaps("bone", namespace="cv"),
-    "jet": get_colormaps("jet", namespace="cv"),
-    "rainbow": get_colormaps("rainbow", namespace="cv"),
-    "spring": get_colormaps("spring", namespace="cv"),
-    "cool": get_colormaps("cool", namespace="cv"),
-    "pink": get_colormaps("pink", namespace="cv"),
-    "hot": get_colormaps("hot", namespace="cv"),
-    "viridis": get_colormaps("viridis", namespace="cv"),
-    "cividis": get_colormaps("cividis", namespace="cv"),
-    "turbo": get_colormaps("turbo", namespace="cv"),
-}
+class _LazyLutDict(Mapping):
+    def __init__(self):
+        super().__init__()
+        self.resource_path = files("senxor.resources.cmaps")
+        self._keys = cast(
+            "list[ColormapKey]",
+            [path.name.removesuffix(".npy") for path in self.resource_path.iterdir() if path.is_file()],
+        )
+        self.data = {}
 
-with (_RESOURCE_DIR / "cmaps.json").open() as f:
-    _custom_cmaps = json.load(f)
+    def _load_lut(self, key: str) -> np.ndarray:
+        path = self.resource_path.joinpath(f"{key}.npy")
+        try:
+            lut = np.load(str(path))
+        except FileNotFoundError:
+            raise KeyError(key) from None
+        return lut
 
-for k, v in _custom_cmaps.items():
-    lut = np.array(v, dtype=np.uint8).T.reshape(256, 3)
-    colormaps[k] = lut
+    def __getitem__(self, key: ColormapKey) -> np.ndarray:
+        if key not in self.data:
+            self.data[key] = self._load_lut(key)
+        return self.data[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self._keys
+
+    def __iter__(self) -> Iterator[ColormapKey]:
+        return iter(self._keys)
+
+    def __len__(self) -> int:
+        return len(self._keys)
+
+
+colormaps: dict[ColormapKey, np.ndarray] = _LazyLutDict()  # type: ignore[reportAssignmentIssue]
 
 
 def process_senxor_data(bytes_data: bytes, *, adc: bool = False) -> np.ndarray:
@@ -224,6 +250,63 @@ def enlarge(image: np.ndarray, scale: int) -> np.ndarray:
         return image.repeat(scale, axis=0).repeat(scale, axis=1)
     else:
         raise ValueError("Input image must be 2D or 3D array.")
+
+
+def resample_lut(lut: np.ndarray, n: int) -> np.ndarray:
+    """Resample a LUT to a new length.
+
+    Accepts (m, 3) or (m, 1, 3) uint8 arrays. Returns the same format with length n.
+
+    Parameters
+    ----------
+    lut : np.ndarray
+        Input LUT, shape (m, 3) or (m, 1, 3), dtype uint8.
+    n : int
+        Target length.
+
+    Returns
+    -------
+    np.ndarray
+        Resampled LUT, same format as input, length n.
+
+    Raises
+    ------
+    TypeError, ValueError
+        If input is not a valid LUT.
+
+    Examples
+    --------
+    >>> lut = np.array([[0, 0, 0], [255, 255, 255]], dtype=np.uint8)
+    >>> resample_lut(lut, 5).shape
+    (5, 3)
+
+    """
+    msg = "The shape of the lut must be (n, 3) or (n, 1, 3)."
+
+    if lut.ndim == 2:
+        if lut.shape[1] != 3:
+            raise ValueError(msg)
+        lut2d = lut
+        out_shape = (n, 3)
+    elif lut.ndim == 3:
+        if lut.shape[1] != 1 or lut.shape[2] != 3:
+            raise ValueError(msg)
+        lut2d = lut.reshape(-1, 3)
+        out_shape = (n, 1, 3)
+    else:
+        raise ValueError(msg)
+
+    m = lut2d.shape[0]
+    if n == m:
+        return lut.copy() if lut.shape[0] == n else lut2d.reshape(out_shape)
+
+    x_old = np.linspace(0, 1, m)
+    x_new = np.linspace(0, 1, n)
+    resampled = np.empty((n, 3), dtype=np.float32)
+    for c in range(3):
+        resampled[:, c] = np.interp(x_new, x_old, lut2d[:, c])
+    resampled = np.clip(resampled, 0, 255).astype(np.uint8)
+    return resampled.reshape(out_shape)
 
 
 def apply_colormap(
