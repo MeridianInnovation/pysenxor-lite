@@ -2,8 +2,8 @@
 
 """Register system for the senxor."""
 
-from senxor.regmap.core import SenxorRegistersManager
+from senxor.regmap.core import SenxorFieldsManager, SenxorRegistersManager
 from senxor.regmap.fields import Fields
 from senxor.regmap.registers import Registers
 
-__all__ = ["Fields", "Registers", "SenxorRegistersManager"]
+__all__ = ["Fields", "Registers", "SenxorFieldsManager", "SenxorRegistersManager"]
