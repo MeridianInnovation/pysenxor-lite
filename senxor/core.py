@@ -219,9 +219,9 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
     ) -> tuple[np.ndarray | None, np.ndarray | None]:
         """Read a frame from the Senxor and return (header, frame).
 
-        header : np.ndarray[uint16], 1-D
-            Frame metadata; see the documentation for layout details.
-        frame  : np.ndarray, 2-D, shape (height, width)
+        - header : np.ndarray[uint16], 1-D
+            - Frame metadata; see the documentation for layout details.
+        - frame  : np.ndarray, 2-D, shape (height, width)
             - If ADC_ENABLE = 1 → dtype = uint16, values are raw ADC counts.
             - If ADC_ENABLE = 0 → dtype = float32, values are temperature in °C.
 

@@ -2,5 +2,5 @@
 
 ## Next Steps
 
-- [Tutorials](guides/getting_started.md)
+- [Tutorials](guides/1.connect_device.md)
 - [API Reference](api/regmap.md)

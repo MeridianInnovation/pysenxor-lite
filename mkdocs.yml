@@ -10,12 +10,15 @@ copyright: Maintained by <a href="https://www.meridianinno.com/">MeridianInnovat
 nav:
   - Overview: index.md
   - Tutorials:
-      - Getting Started: guides/getting_started.md
-      - Device Control: guides/device_control.md
-      - Loading Settings From File: guides/loading_settings.md
+      - Connect Device: guides/1.connect_device.md
+      - Basic Stream: guides/2.basic_stream.md
+      - Data Processing: guides/3.data_processing.md
+      - Device Control: guides/4.device_control.md
+      - Logging: guides/5.logging.md
+      - Loading Settings: guides/6.loading_settings.md
+      - Error Handling: guides/7.error_handling.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
-      - Use Thread to Stream Frames: examples/thread_stream.md
       - Stream to Virtual Camera using FFmpeg and v4l2loopback: examples/v4l2-virtual-camera.md
   - API Reference:
       - senxor: api/senxor.md
@@ -24,9 +27,7 @@ nav:
       - senxor.error: api/error.md
       - senxor.log: api/log.md
       - senxor.settings: api/settings.md
-      - senxor.thread: api/thread.md
-      - senxor.consts: api/consts.md
-      - senxor.cam: api/cam.md
+      - senxor.cv_utils: api/cv_utils.md
       - senxor.interface.protocol: api/interface/protocol.md
       - senxor.interface.serial_port: api/interface/serial_port.md
       - senxor.interface.registry: api/interface/registry.md
@@ -43,6 +44,9 @@ plugins:
             - https://docs.python.org/3/objects.inv
 
           options:
+            inherited_members: true
+            members_order: source
+            group_by_category: true
             docstring_style: numpy
             parameter_headings: true
             show_symbol_type_heading: true
