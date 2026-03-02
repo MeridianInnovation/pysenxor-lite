@@ -3,7 +3,12 @@ from __future__ import annotations
 
 import queue
 import threading
-from typing import TYPE_CHECKING, Callable, Generic, ParamSpec
+from typing import TYPE_CHECKING, Callable, Generic
+
+try:
+    from typing import ParamSpec
+except ImportError:
+    from typing_extensions import ParamSpec
 
 if TYPE_CHECKING:
     from senxor.log import SenxorLogger
