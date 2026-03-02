@@ -50,7 +50,11 @@ class _LazyLutDict(Mapping):
         self.resource_path = files("senxor.resources.cmaps")
         self._keys = cast(
             "list[ColormapKey]",
-            [path.name.removesuffix(".npy") for path in self.resource_path.iterdir() if path.is_file()],
+            [
+                path.name.removesuffix(".npy")
+                for path in self.resource_path.iterdir()
+                if path.is_file() and path.name.endswith(".npy")
+            ],
         )
         self.data = {}
 
