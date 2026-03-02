@@ -3,16 +3,19 @@
 import cv2
 import numpy as np
 
-import senxor
+from senxor import connect, list_senxor
 from senxor.log import setup_console_logger
 from senxor.proc import enlarge, normalize
-from senxor.thread import CVCamThread
 
 if __name__ == "__main__":
     setup_console_logger()
 
     # Initialize the Senxor device
-    senxor_device = senxor.connect_senxor()
+    devices = list_senxor("serial")
+    if not devices:
+        raise ValueError("No devices found")
+
+    senxor_device = connect(devices[0])
     senxor_device.fields.FRAME_RATE_DIVIDER.set(0)
     senxor_device.start_stream()
 
@@ -22,12 +25,6 @@ if __name__ == "__main__":
     # Optional: Set the resolution of the camera
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-    # Create threaded wrapper for camera
-    cam_thread = CVCamThread(cam)
-
-    # Start the threads
-    cam_thread.start()
 
     thermal_image = None
     rgb_image = None
@@ -40,8 +37,8 @@ if __name__ == "__main__":
                 thermal_image = normalize(thermal_raw, dtype=np.float32)
                 thermal_image = enlarge(thermal_image, 3)
 
-            # Read from CVCamThread (non-blocking)
-            rgb_raw = cam_thread.read()
+            # Read from OpenCV camera(blocking)
+            ret, rgb_raw = cam.read()
             if rgb_raw is not None:
                 rgb_image = rgb_raw
                 rgb_image = cv2.resize(rgb_image, (640, 360))
@@ -56,4 +53,4 @@ if __name__ == "__main__":
         # Clean up resources
         cv2.destroyAllWindows()
         senxor_device.close()
-        cam_thread.stop()
+        cam.release()

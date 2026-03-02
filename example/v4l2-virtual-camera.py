@@ -53,7 +53,7 @@ import cv2 as cv
 import numpy as np
 
 import senxor
-from senxor.proc import apply_colormap, enlarge, get_colormaps, normalize
+from senxor.proc import apply_colormap, colormaps, enlarge, normalize
 
 # Global constants
 WHITE = [255, 255, 255]
@@ -239,7 +239,7 @@ def main():
     # Initialize processing tools
     temporal_filter = RollingAverageFilter(N=args.temporal_smooth)
     clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)) if args.clahe else None
-    cmap = get_colormaps(args.colormap, namespace="cv")
+    cmap = colormaps[args.colormap]
     window_name = f"Thermal Image - {mi48.get_sn()}"
     stream_size = (640, 480)
 

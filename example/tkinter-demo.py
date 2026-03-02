@@ -11,7 +11,7 @@ except ImportError:
     print("Required packages are not installed.")
     exit(1)
 
-from senxor import connect_senxor, list_senxor
+from senxor import connect, list_senxor
 from senxor.log import setup_console_logger
 from senxor.proc import normalize
 
@@ -57,7 +57,7 @@ class DeviceControlFrame(ttk.Frame):
         if selected_index >= 0:
             self.on_connect_callback(selected_index)
 
-    def update_device_list(self, devices: list[str]):
+    def update_device_list(self, devices: list):
         """Populates the dropdown with a list of device addresses."""
         self.device_combo["values"] = devices
         if devices:
@@ -158,7 +158,7 @@ class MainApp:
 
         address = self.available_devices[device_index]
         try:
-            self.senxor = connect_senxor(address)
+            self.senxor = connect(address)
             self.senxor.start_stream()
             self.device_control.set_connection_state(True)
             self.status_bar.set_status(f"Connected to {address}")
