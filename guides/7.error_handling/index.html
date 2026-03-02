@@ -12,11 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/api/cam/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/7.error_handling/">
       
       
-        <link rel="prev" href="../regmap/">
+        <link rel="prev" href="../6.loading_settings/">
       
+      
+        <link rel="next" href="../../examples/basic_stream/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +26,7 @@
     
     
       
-        <title>senxor.cam - pysenxor</title>
+        <title>Error Handling - pysenxor</title>
       
     
     
@@ -78,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#senxorcam" class="md-skip">
+        <a href="#error-handling" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              senxor.cam
+              Error Handling
             
           </span>
         </div>
@@ -238,11 +240,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guides/getting_started/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1.connect_device/" class="md-tabs__link">
           
   
   
@@ -278,13 +282,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../senxor/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../api/senxor/" class="md-tabs__link">
           
   
   
@@ -373,26 +375,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -405,7 +412,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Tutorials
@@ -419,12 +426,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/getting_started/" class="md-nav__link">
+      <a href="../1.connect_device/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Connect Device
     
   </span>
   
@@ -442,7 +449,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/device_control/" class="md-nav__link">
+      <a href="../2.basic_stream/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.data_processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.device_control/" class="md-nav__link">
         
   
   
@@ -465,17 +518,132 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/loading_settings/" class="md-nav__link">
+      <a href="../5.logging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Logging
     
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.loading_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading Settings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Error Handling
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Handling
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-error-types-in-pysenxor" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Error types in pysenxor
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-catching-and-handling-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Catching and handling errors
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-auto-reconnect-on-lost-connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Auto-reconnect on lost connection
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -561,29 +729,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/thread_stream/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Use Thread to Stream Frames
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
         
   
@@ -611,31 +756,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -648,7 +788,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -662,7 +802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../senxor/" class="md-nav__link">
+      <a href="../../api/senxor/" class="md-nav__link">
         
   
   
@@ -685,7 +825,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../proc/" class="md-nav__link">
+      <a href="../../api/proc/" class="md-nav__link">
         
   
   
@@ -708,76 +848,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../log/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.log
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.settings
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../consts/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.consts
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../utils/" class="md-nav__link">
+      <a href="../../api/utils/" class="md-nav__link">
         
   
   
@@ -800,12 +871,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../thread/" class="md-nav__link">
+      <a href="../../api/error/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.thread
+    senxor.error
     
   </span>
   
@@ -823,12 +894,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../regmap/" class="md-nav__link">
+      <a href="../../api/log/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.regmap
+    senxor.log
     
   </span>
   
@@ -843,100 +914,135 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    senxor.cam
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../api/settings/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.cam
+    senxor.settings
     
   </span>
   
 
       </a>
-      
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+              
+            
+              
+                
   
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#senxorcam" class="md-nav__link">
-    <span class="md-ellipsis">
-      senxor.cam
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.cam">
-      <ul class="md-nav__list">
+    <li class="md-nav__item">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#senxor.cam" class="md-nav__link">
-    <span class="md-ellipsis">
-      cam
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    senxor.cv_utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#senxor.cam.list_camera" class="md-nav__link">
-    <span class="md-ellipsis">
-      list_camera
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    senxor.interface.protocol
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#senxor.cam.list_camera_info" class="md-nav__link">
-    <span class="md-ellipsis">
-      list_camera_info
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    senxor.interface.serial_port
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/registry/" class="md-nav__link">
         
-      </ul>
-    </nav>
   
-</li>
-      
-    </ul>
   
-</nav>
-      
+  <span class="md-ellipsis">
+    senxor.interface.registry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/regmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.regmap
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -966,6 +1072,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -974,44 +1082,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#senxorcam" class="md-nav__link">
+  <a href="#1-error-types-in-pysenxor" class="md-nav__link">
     <span class="md-ellipsis">
-      senxor.cam
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.cam">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.cam" class="md-nav__link">
-    <span class="md-ellipsis">
-      cam
+      1. Error types in pysenxor
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.cam.list_camera" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#2-catching-and-handling-errors" class="md-nav__link">
     <span class="md-ellipsis">
-      list_camera
+      2. Catching and handling errors
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.cam.list_camera_info" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#3-auto-reconnect-on-lost-connection" class="md-nav__link">
     <span class="md-ellipsis">
-      list_camera_info
+      3. Auto-reconnect on lost connection
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1031,7 +1124,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/api/cam.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/7.error_handling.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1040,182 +1133,126 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/api/cam.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/7.error_handling.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-  <h1>senxor.cam</h1>
+<h1 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h1>
+<p>This tutorial describes the exceptions pysenxor can raise and how to handle them. Use <code>try/except</code> to recover from transient failures (e.g. device unplugged) or to fail cleanly when the device or hardware is not usable.</p>
+<h2 id="1-error-types-in-pysenxor">1. Error types in pysenxor<a class="headerlink" href="#1-error-types-in-pysenxor" title="Permanent link">&para;</a></h2>
+<p>All errors live in <code>senxor.error</code>. They are normal runtime conditions, not programming bugs.</p>
+<table>
+<thead>
+<tr>
+<th>Exception</th>
+<th>When it happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SenxorNotConnectedError</code></td>
+<td>You call methods like <code>read()</code> or <code>start_stream()</code> when the device is not connected or already closed.</td>
+</tr>
+<tr>
+<td><code>SenxorLostConnectionError</code></td>
+<td>The device was connected but the link dropped (e.g. USB unplugged, cable fault) while you were using it.</td>
+</tr>
+<tr>
+<td><code>SenxorUnexpectedAckError</code></td>
+<td>The device sent an ACK that was not expected for the current operation.</td>
+</tr>
+<tr>
+<td><code>SenxorAckInvalidError</code></td>
+<td>The device sent an ACK with invalid format or content.</td>
+</tr>
+<tr>
+<td><code>SenxorResponseTimeoutError</code></td>
+<td>No response from the device within the expected time.</td>
+</tr>
+<tr>
+<td><code>SenxorNoModuleError</code></td>
+<td>The board has no thermal imaging lens module attached.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>About SenxorNoModuleError:</strong> The dev board is made of an MCU chip and a thermal imaging lens. If the lens module is not installed, <code>read()</code> will raise <code>SenxorNoModuleError</code> because there is no image data. You can still perform some register and field operations; only lens-dependent data is unavailable. Fields that depend on the lens (e.g. <code>SERIAL_NUMBER</code>) will return <code>0</code> when no module is present.</p>
+<h2 id="2-catching-and-handling-errors">2. Catching and handling errors<a class="headerlink" href="#2-catching-and-handling-errors" title="Permanent link">&para;</a></h2>
+<p>Use <code>try/except</code> around connect, stream start, and read. Handle the exceptions you care about and exit or retry as appropriate.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.error</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SenxorLostConnectionError</span><span class="p">,</span>
+    <span class="n">SenxorNoModuleError</span><span class="p">,</span>
+    <span class="n">SenxorNotConnectedError</span><span class="p">,</span>
+<span class="p">)</span>
 
-<h2 id="senxorcam"><code>senxor.cam</code><a class="headerlink" href="#senxorcam" title="Permanent link">&para;</a></h2>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
 
-
-<div class="doc doc-object doc-module">
-
-
-
-<a id="senxor.cam"></a>
-    <div class="doc doc-contents first">
-
-        <p>RGB camera related utilities.</p>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="senxor.cam.list_camera" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">list_camera</span><span class="p">()</span></code>
-
-<a href="#senxor.cam.list_camera" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>List all cameras available.</p>
-
-
-<details class="warning:" open>
-  <summary>Warning:</summary>
-  <p>This function is deprecated. Use <code>list_camera_info</code> instead.</p>
-</details>
-
-<details class="returns:" open>
-  <summary>Returns:</summary>
-  <p>list[str]
-    A list of camera names.</p>
-</details>
-
-<details class="examples:" open>
-  <summary>Examples:</summary>
-  <blockquote>
-<blockquote>
-<blockquote>
-<p>list_camera()
-['Camera 0', 'Camera 1', 'Camera 2']</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>You can use <code>cv2.VideoCapture(index)</code> to open a camera.</p>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="senxor.cam.list_camera_info" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">list_camera_info</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
-
-<a href="#senxor.cam.list_camera_info" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>List available camera information.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>backend</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The backend to use for camera enumeration. If 0, all supported backends are used.</p>
-              </div>
-            </td>
-            <td>
-                  <code>0</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>list of CameraInfo</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>List of camera information objects. Use <code>cv2.VideoCapture(camera.index, camera.backend)</code> to open a camera.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Examples:</span></p>
-    <ol>
-<li>Print all cameras information available.</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">camera</span> <span class="ow">in</span> <span class="n">list_camera_info</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">vid</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">dev</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SenxorNoModuleError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No lens module installed; cannot read frames.&quot;</span><span class="p">)</span>
+    <span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">except</span> <span class="p">(</span><span class="n">SenxorNotConnectedError</span><span class="p">,</span> <span class="n">SenxorLostConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection problem: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dev</span><span class="p">:</span>
+        <span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
-    <ol>
-<li>Connect to a specific camera.</li>
+<h2 id="3-auto-reconnect-on-lost-connection">3. Auto-reconnect on lost connection<a class="headerlink" href="#3-auto-reconnect-on-lost-connection" title="Permanent link">&para;</a></h2>
+<p>When you read frames in a loop, the device may disconnect (e.g. cable unplugged). You can catch <code>SenxorLostConnectionError</code>, try to reconnect a limited number of times, and exit if reconnection fails.</p>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>Connect and start the stream.</li>
+<li>In a loop, call <code>read()</code>. On success, process the frame and continue.</li>
+<li>On <code>SenxorLostConnectionError</code>, close the old connection and try to reconnect (e.g. re-enumerate and <code>connect()</code> again), then <code>start_stream()</code>. Retry up to 3 times.</li>
+<li>If all retries fail, log or print and exit the loop.</li>
 </ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">camera_info</span> <span class="o">=</span> <span class="n">list_camera_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">camera_info</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">camera_info</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
+<p><strong>Example: reconnect up to 3 times then exit</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.error</span><span class="w"> </span><span class="kn">import</span> <span class="n">SenxorLostConnectionError</span>
+
+<span class="n">MAX_RECONNECT</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SenxorLostConnectionError</span><span class="p">:</span>
+        <span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">MAX_RECONNECT</span><span class="p">):</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconnect attempt </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_RECONNECT</span><span class="si">}</span><span class="s2">: no devices&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">dev</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconnected.&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconnect attempt </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_RECONNECT</span><span class="si">}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconnect failed after&quot;</span><span class="p">,</span> <span class="n">MAX_RECONNECT</span><span class="p">,</span> <span class="s2">&quot;attempts. Exiting.&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
 </code></pre></div>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+<p>After 3 failed reconnect attempts the loop exits. You can replace the <code>print</code> calls with your own logging or error reporting.</p>
 
 
 
@@ -1251,7 +1288,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../regmap/" class="md-footer__link md-footer__link--prev" aria-label="Previous: senxor.regmap">
+          <a href="../6.loading_settings/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Loading Settings">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1261,11 +1298,27 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                senxor.regmap
+                Loading Settings
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../../examples/basic_stream/" class="md-footer__link md-footer__link--next" aria-label="Next: Basic Stream">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Basic Stream
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

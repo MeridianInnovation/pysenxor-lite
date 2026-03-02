@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/getting_started/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/5.logging/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../4.device_control/">
       
       
-        <link rel="next" href="../device_control/">
+        <link rel="next" href="../6.loading_settings/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Getting Started - pysenxor</title>
+        <title>Logging - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#import" class="md-skip">
+        <a href="#logging" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Getting Started
+              Logging
             
           </span>
         </div>
@@ -246,7 +246,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../1.connect_device/" class="md-tabs__link">
           
   
   
@@ -423,6 +423,98 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.connect_device/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Connect Device
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.basic_stream/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.data_processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.device_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Device Control
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -432,13 +524,15 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Logging
     
   </span>
   
@@ -451,7 +545,7 @@
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Logging
     
   </span>
   
@@ -464,6 +558,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -472,90 +568,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#import" class="md-nav__link">
+  <a href="#1-default-behavior" class="md-nav__link">
     <span class="md-ellipsis">
-      Import
+      1. Default behavior
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-available-devices" class="md-nav__link">
+  <a href="#2-enable-console-logging" class="md-nav__link">
     <span class="md-ellipsis">
-      List available devices
+      2. Enable console logging
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#connect-to-senxor" class="md-nav__link">
+  <a href="#3-log-levels" class="md-nav__link">
     <span class="md-ellipsis">
-      Connect to senxor
+      3. Log levels
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-stream-and-read-data" class="md-nav__link">
+  <a href="#4-log-to-a-file" class="md-nav__link">
     <span class="md-ellipsis">
-      Start Stream and Read Data
+      4. Log to a file
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#process-the-data" class="md-nav__link">
+  <a href="#5-use-get_logger-in-your-own-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Process the data
+      5. Use get_logger in your own code
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#display-or-save-the-thermal-image" class="md-nav__link">
+  <a href="#6-multiple-loggers-and-custom-pipelines-advanced" class="md-nav__link">
     <span class="md-ellipsis">
-      Display or save the thermal image
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#device-control" class="md-nav__link">
-    <span class="md-ellipsis">
-      Device Control
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Logging
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#multi-threading" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi-threading
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
+      6. Multiple loggers and custom pipelines (advanced)
     </span>
   </a>
   
@@ -577,12 +637,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../device_control/" class="md-nav__link">
+      <a href="../6.loading_settings/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Device Control
+    Loading Settings
     
   </span>
   
@@ -600,12 +660,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../loading_settings/" class="md-nav__link">
+      <a href="../7.error_handling/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Error Handling
     
   </span>
   
@@ -679,29 +739,6 @@
   
   <span class="md-ellipsis">
     Basic Stream
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/thread_stream/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Use Thread to Stream Frames
     
   </span>
   
@@ -838,6 +875,52 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.error
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/log/" class="md-nav__link">
         
   
@@ -884,12 +967,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/consts/" class="md-nav__link">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.consts
+    senxor.cv_utils
     
   </span>
   
@@ -907,12 +990,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/utils/" class="md-nav__link">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.utils
+    senxor.interface.protocol
     
   </span>
   
@@ -930,12 +1013,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/thread/" class="md-nav__link">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.thread
+    senxor.interface.serial_port
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.interface.registry
     
   </span>
   
@@ -959,29 +1065,6 @@
   
   <span class="md-ellipsis">
     senxor.regmap
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/cam/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.cam
     
   </span>
   
@@ -1016,6 +1099,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1024,90 +1109,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#import" class="md-nav__link">
+  <a href="#1-default-behavior" class="md-nav__link">
     <span class="md-ellipsis">
-      Import
+      1. Default behavior
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-available-devices" class="md-nav__link">
+  <a href="#2-enable-console-logging" class="md-nav__link">
     <span class="md-ellipsis">
-      List available devices
+      2. Enable console logging
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#connect-to-senxor" class="md-nav__link">
+  <a href="#3-log-levels" class="md-nav__link">
     <span class="md-ellipsis">
-      Connect to senxor
+      3. Log levels
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-stream-and-read-data" class="md-nav__link">
+  <a href="#4-log-to-a-file" class="md-nav__link">
     <span class="md-ellipsis">
-      Start Stream and Read Data
+      4. Log to a file
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#process-the-data" class="md-nav__link">
+  <a href="#5-use-get_logger-in-your-own-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Process the data
+      5. Use get_logger in your own code
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#display-or-save-the-thermal-image" class="md-nav__link">
+  <a href="#6-multiple-loggers-and-custom-pipelines-advanced" class="md-nav__link">
     <span class="md-ellipsis">
-      Display or save the thermal image
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#device-control" class="md-nav__link">
-    <span class="md-ellipsis">
-      Device Control
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Logging
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#multi-threading" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi-threading
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
+      6. Multiple loggers and custom pipelines (advanced)
     </span>
   </a>
   
@@ -1129,7 +1178,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/getting_started.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/5.logging.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1138,165 +1187,98 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/getting_started.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/5.logging.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h3 id="import">Import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">senxor</span>
-</code></pre></div>
-<h3 id="list-available-devices">List available devices<a class="headerlink" href="#list-available-devices" title="Permanent link">&para;</a></h3>
-<p>You can list all available devices by calling the <code>list_senxor</code> function.</p>
-<div class="highlight"><pre><span></span><code><span class="n">addrs</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">list_senxor</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="n">addrs</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-</code></pre></div>
-<p>You can also specify the type of device to list.</p>
-<div class="highlight"><pre><span></span><code><span class="n">addrs</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span> <span class="c1"># list all usb serial devices</span>
-</code></pre></div>
-<h3 id="connect-to-senxor">Connect to senxor<a class="headerlink" href="#connect-to-senxor" title="Permanent link">&para;</a></h3>
-<p>Once you have the device address, you can connect to the device.</p>
-<p>There are several ways to connect to a Senxor device.</p>
-<ol>
-<li>Use the context manager provided by the <code>connect</code> function.</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="n">addr</span> <span class="o">=</span> <span class="n">addrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<h1 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h1>
+<p>This tutorial shows how to enable and use structured logging in pysenxor. The library uses <strong>structlog</strong> so you get consistent, key-value log lines that are easy to filter and parse (e.g. for debugging connection, register access, or streaming).</p>
+<h2 id="1-default-behavior">1. Default behavior<a class="headerlink" href="#1-default-behavior" title="Permanent link">&para;</a></h2>
+<p>When you import <code>senxor</code>, a standard logger is configured automatically. The default log level is <strong>WARNING</strong>, so under normal use you will not see info-level messages. This keeps the library from affecting your application’s logging when you use pysenxor as a dependency.</p>
+<p>To see more detail (e.g. device open/close, register reads/writes, stream start/stop), enable console or file logging as below.</p>
+<h2 id="2-enable-console-logging">2. Enable console logging<a class="headerlink" href="#2-enable-console-logging" title="Permanent link">&para;</a></h2>
+<p>Call <code>setup_console_logger</code> at the start of your script so that senxor logs are printed to the console with a readable, colored format. Pass the desired level (e.g. <code>"INFO"</code> or <code>"DEBUG"</code>).</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_console_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
 
-<span class="k">with</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;serial&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dev</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
+<span class="n">setup_console_logger</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
-</code></pre></div>
-<p>The <code>with</code> statement will ensure that the connection is closed after the block is executed.</p>
-<p>It's equivalent to:</p>
-<div class="highlight"><pre><span></span><code><span class="n">dev</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;serial&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">get_fw_version</span><span class="p">())</span>
 <span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
-<p>You can also use the <code>connect</code> without specifying the address or type.</p>
-<p>In this case, the function will automatically find the first available device.</p>
-<div class="highlight"><pre><span></span><code><span class="n">dev</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
+<p>Output (example):</p>
+<div class="highlight"><pre><span></span><code>2026-03-02T14:06:22+0800 [info     ] init_senxor_instance           name=COM4 interface=&#39;SerialInterface - COM4&#39;
+2026-03-02T14:06:22+0800 [info     ] opening_senxor                 name=COM4
+2026-03-02T14:06:22+0800 [info     ] read_reg_success               name=COM4 op=read addr=177 value=32 updated_fields={&#39;GET_SINGLE_FRAME&#39;: 0, &#39;CONTINUOUS_STREAM&#39;: 0, &#39;READOUT_MODE&#39;: 0, &#39;NO_HEADER&#39;: 1, &#39;ADC_ENABLE&#39;: 0}
+2026-03-02T14:06:22+0800 [info     ] write_reg_success              name=COM4 op=write addr=177 value=32 updated_fields={}
+2026-03-02T14:06:22+0800 [info     ] set_field_success              name=CONTINUOUS_STREAM value=0
+2026-03-02T14:06:22+0800 [info     ] stop_stream_success            name=COM4
+2026-03-02T14:06:22+0800 [info     ] read_reg_success               name=COM4 op=read addr=178 value=70 updated_fields={&#39;FW_VERSION_MAJOR&#39;: 4, &#39;FW_VERSION_MINOR&#39;: 6}
+...
 </code></pre></div>
-<p>To be compatible with the old version, below is the equivalent code.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">connect_senxor</span>
-
-<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
-
-<span class="n">dev</span> <span class="o">=</span> <span class="n">connect_senxor</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="start-stream-and-read-data">Start Stream and Read Data<a class="headerlink" href="#start-stream-and-read-data" title="Permanent link">&para;</a></h3>
-<p>Once you have connected to the device, you can start the stream and read data from the device.</p>
-<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
-
-<span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, dtype: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="c1"># Output: Frame shape: (120, 160), dtype: float32</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame min: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> C, max: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2"> C, mean: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> C&quot;</span><span class="p">)</span>
-    <span class="c1"># Output: Frame min: 20.3 C, max: 34.1 C, mean: 27.2 C</span>
-
-<span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1"># Stop the stream and close the connection</span>
-</code></pre></div>
-<p>The <code>read</code> method will return a tuple of <code>(header, frame)</code> or <code>(None, None)</code> if the frame is not available(if block is False).</p>
-<p>The <code>header</code> is a uint16 np.ndarray with some information about the frame.</p>
-<p>In default, the <code>frame</code> is a 2D float32 np.ndarray, which is the temperature in Celsius.</p>
-<p>The <code>read</code> method is default in blocking mode, which means it will wait until a new frame is available.</p>
-<p>You can set the <code>block</code> parameter to <code>False</code> to make the <code>read</code> method non-blocking.</p>
-<div class="highlight"><pre><span></span><code><span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No new frame is available&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="process-the-data">Process the data<a class="headerlink" href="#process-the-data" title="Permanent link">&para;</a></h3>
-<p>You can use the <code>senxor.proc</code> module to process the data.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">senxor.proc</span>
-</code></pre></div>
-<p>Convert the frame to uint8 grayscale image.</p>
-<p>Note: Due to the uint8 grayscale image has only 256 possible values, some information of the temperature frame may be lost.</p>
-<div class="highlight"><pre><span></span><code><span class="n">uint8_image</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-<span class="c1"># Or use the `remap`, it&#39;s equivalent to `normalize(frame, dtype=np.uint8)`</span>
-<span class="n">uint8_image</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-</code></pre></div>
-<p>Convert the frame to float32 grayscale image.</p>
-<p>The float grayscale image can keep all the information of the temperature frame.</p>
-<div class="highlight"><pre><span></span><code><span class="n">float32_image</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-</code></pre></div>
-<p>Simply enlarge the image with a integer scale factor.</p>
-<div class="highlight"><pre><span></span><code><span class="n">enlarged_image</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">enlarge</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># only support integer scale factor</span>
-</code></pre></div>
-<p>Get a built-in cv2 colormap or matplotlib colormap.</p>
-<div class="highlight"><pre><span></span><code><span class="n">cmap_cv_inferno</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">get_colormap</span><span class="p">(</span><span class="s2">&quot;inferno&quot;</span><span class="p">,</span> <span class="s2">&quot;cv&quot;</span><span class="p">)</span>
-<span class="n">cmap_mpl_inferno</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">get_colormap</span><span class="p">(</span><span class="s2">&quot;inferno&quot;</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
-</code></pre></div>
-<p>Apply a colormap to the image.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># This returns a RGB image</span>
-<span class="n">colored_image</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">apply_colormap</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">lut</span><span class="o">=</span><span class="n">cmap_cv_inferno</span><span class="p">)</span>
-</code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>To keep the lightweight of the pysenxor, the <code>get_colormap</code> and <code>apply_colormap</code> doesn't need <code>cv2</code> or <code>matplotlib</code> as dependencies. They are based on the <code>colormap_tool</code> and <code>numpy</code> only.</p>
-</div>
-<h3 id="display-or-save-the-thermal-image">Display or save the thermal image<a class="headerlink" href="#display-or-save-the-thermal-image" title="Permanent link">&para;</a></h3>
-<p>You can use the <code>cv2</code> or <code>matplotlib</code> to display or save the thermal image.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
-
-<span class="c1"># Note: The cv2 uses BGR format instead of RGB format.</span>
-<span class="n">bgr_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">colored_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;senxor&quot;</span><span class="p">,</span> <span class="n">bgr_image</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colored_image</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div>
-<h3 id="device-control">Device Control<a class="headerlink" href="#device-control" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">senxor</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">senxor</span><span class="o">.</span><span class="n">list_senxor</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-</code></pre></div>
-<p>You can access device registers and fields through the <code>regs</code> and <code>fields</code> properties of the device object.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Get the MCU type value and display string</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;MI48G&#39;</span><span class="p">)</span>
-
-<span class="c1"># Set the frame rate divider to 4</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-
-<span class="c1"># print the help string of a field</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
-
-<span class="c1"># Get all fields value as a dictionary</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">status</span>
-<span class="p">{</span><span class="s1">&#39;MCU_TYPE&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;FW_VERSION_MAJOR&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;FW_VERSION_MINOR&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
-</code></pre></div>
-<h3 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h3>
-<p>You can enable logging to see debug information.</p>
+<p><code>setup_console_logger(log_level="INFO", logger_name="senxor", add_logger_name=False)</code> lets you set the level, logger name, and whether to show the logger name in each line.</p>
+<h2 id="3-log-levels">3. Log levels<a class="headerlink" href="#3-log-levels" title="Permanent link">&para;</a></h2>
+<p>Use standard levels: <code>"DEBUG"</code>, <code>"INFO"</code>, <code>"WARNING"</code>, <code>"ERROR"</code>. Pass them as strings or use <code>logging</code> constants.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_console_logger</span>
 
-<span class="c1"># Must be called before any other code.</span>
-<span class="n">setup_console_logger</span><span class="p">()</span>
+<span class="n">setup_console_logger</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Example output:</p>
-<div class="highlight"><pre><span></span><code>2025-10-27T11:34:17+0800 [info     ] init Senxor                    address=&lt;serial.tools.list_ports_common.ListPortInfo object at 0x000001458BC88320&gt; type=serial auto_open=True
-2025-10-27T11:34:17+0800 [info     ] registers read                 address=COM4 addrs=[177] values={177: 32}
-2025-10-27T11:34:17+0800 [info     ] refresh fields by reg-read     address=COM4 fields={&#39;NO_HEADER&#39;: 1, &#39;ADC_ENABLE&#39;: 0, &#39;GET_SINGLE_FRAME&#39;: 0, &#39;READOUT_MODE&#39;: 0, &#39;CONTINUOUS_STREAM&#39;: 0}
-2025-10-27T11:34:17+0800 [info     ] registers write                address=COM4 updates={177: 32}
-2025-10-27T11:34:17+0800 [info     ] stop stream                    address=COM4
+<p><code>"DEBUG"</code> gives the most detail; <code>"INFO"</code> is usually enough for connection and register activity.</p>
+<h2 id="4-log-to-a-file">4. Log to a file<a class="headerlink" href="#4-log-to-a-file" title="Permanent link">&para;</a></h2>
+<p>Use <code>setup_file_logger</code> to write senxor logs to a file. You can use plain text (default) or JSON.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_file_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
+
+<span class="n">setup_file_logger</span><span class="p">(</span><span class="s2">&quot;senxor.log&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="multi-threading">Multi-threading<a class="headerlink" href="#multi-threading" title="Permanent link">&para;</a></h3>
-<p><code>senxor</code> is designed to be thread-safe.</p>
-<p>You can interact with the device in multiple threads.</p>
-<p>For example, you can read the data in a background thread, and read/write registers in the main thread. Which is useful for GUI applications.</p>
-<h1 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>Append to an existing file:</p>
+<div class="highlight"><pre><span></span><code><span class="n">setup_file_logger</span><span class="p">(</span><span class="s2">&quot;senxor.log&quot;</span><span class="p">,</span> <span class="n">file_mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>JSON format (one line per event) for later analysis or ingestion:</p>
+<div class="highlight"><pre><span></span><code><span class="n">setup_file_logger</span><span class="p">(</span><span class="s2">&quot;senxor.log&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="n">json_format</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p>For log rotation or external tools that replace the file, use <code>watch_file=True</code> so the handler reopens the file when it changes:</p>
+<div class="highlight"><pre><span></span><code><span class="n">setup_file_logger</span><span class="p">(</span><span class="s2">&quot;senxor.log&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="n">watch_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="5-use-get_logger-in-your-own-code">5. Use get_logger in your own code<a class="headerlink" href="#5-use-get_logger-in-your-own-code" title="Permanent link">&para;</a></h2>
+<p>If your application also wants structured logs in the same style, use <code>get_logger</code>. Any keyword arguments you pass are bound to every log event (e.g. device identifier).</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;custom_event&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">25.3</span><span class="p">)</span>
+</code></pre></div>
+<p>Output (with console logger enabled): the event and key-value pairs (e.g. <code>temperature=25.3</code>) appear in the same format as the library logs.</p>
+<h2 id="6-multiple-loggers-and-custom-pipelines-advanced">6. Multiple loggers and custom pipelines (advanced)<a class="headerlink" href="#6-multiple-loggers-and-custom-pipelines-advanced" title="Permanent link">&para;</a></h2>
+<p>After you understand the basic <code>get_logger</code> usage, you can build more advanced pipelines by using different logger names. Logger names act as separate logging pipelines. The default name used inside the library is <code>"senxor"</code>, and both <code>setup_console_logger</code> and <code>setup_file_logger</code> attach handlers to a specific <code>logger_name</code>. By choosing different names, you can keep library logs and application logs completely separate.</p>
+<p>For example, send Senxor logs (WARNING and above) to the console, and application logs (INFO and above) to a file:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_console_logger</span><span class="p">,</span> <span class="n">setup_file_logger</span><span class="p">,</span> <span class="n">get_logger</span>
+
+<span class="c1"># Senxor logs: WARNING+ to console</span>
+<span class="n">setup_console_logger</span><span class="p">(</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="s2">&quot;senxor&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Application logs: INFO+ to file</span>
+<span class="n">app_log</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;my_app&quot;</span><span class="p">,</span> <span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;demo&quot;</span><span class="p">)</span>
+<span class="n">setup_file_logger</span><span class="p">(</span><span class="s2">&quot;my_app.log&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="s2">&quot;my_app&quot;</span><span class="p">)</span>
+
+<span class="n">app_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;app_started&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>In this example, <code>senxor_log</code> uses the <code>"senxor"</code> pipeline (console), and <code>app_log</code> uses the <code>"my_app"</code> pipeline (file). The first argument to <code>get_logger</code> is the logger name; any keyword arguments (such as <code>app_name="demo"</code>) are bound as extra context on each event.</p>
 
 
 
@@ -1332,7 +1314,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
+          <a href="../4.device_control/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Device Control">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1342,20 +1324,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Overview
+                Device Control
               </div>
             </div>
           </a>
         
         
           
-          <a href="../device_control/" class="md-footer__link md-footer__link--next" aria-label="Next: Device Control">
+          <a href="../6.loading_settings/" class="md-footer__link md-footer__link--next" aria-label="Next: Loading Settings">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Device Control
+                Loading Settings
               </div>
             </div>
             <div class="md-footer__button md-icon">

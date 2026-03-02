@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/api/thread/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/6.loading_settings/">
       
       
-        <link rel="prev" href="../utils/">
+        <link rel="prev" href="../5.logging/">
       
       
-        <link rel="next" href="../regmap/">
+        <link rel="next" href="../7.error_handling/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>senxor.thread - pysenxor</title>
+        <title>Loading Settings - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#senxorthread" class="md-skip">
+        <a href="#loading-settings" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              senxor.thread
+              Loading Settings
             
           </span>
         </div>
@@ -240,11 +240,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guides/getting_started/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1.connect_device/" class="md-tabs__link">
           
   
   
@@ -280,13 +282,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../senxor/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../api/senxor/" class="md-tabs__link">
           
   
   
@@ -375,26 +375,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -407,7 +412,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Tutorials
@@ -421,12 +426,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/getting_started/" class="md-nav__link">
+      <a href="../1.connect_device/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Connect Device
     
   </span>
   
@@ -444,7 +449,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/device_control/" class="md-nav__link">
+      <a href="../2.basic_stream/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.data_processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.device_control/" class="md-nav__link">
         
   
   
@@ -467,12 +518,154 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/loading_settings/" class="md-nav__link">
+      <a href="../5.logging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Loading Settings
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading Settings
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Connect to the device
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Configuration file structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-load-and-apply" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Load and apply
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-condition-expressions-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Condition expressions (when)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-load-from-string-bytes-or-file-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Load from string, bytes, or file object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-apply-a-single-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Apply a single profile
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Handling
     
   </span>
   
@@ -563,29 +756,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/thread_stream/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Use Thread to Stream Frames
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../examples/v4l2-virtual-camera/" class="md-nav__link">
         
   
@@ -613,31 +783,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -650,7 +815,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -664,7 +829,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../senxor/" class="md-nav__link">
+      <a href="../../api/senxor/" class="md-nav__link">
         
   
   
@@ -687,7 +852,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../proc/" class="md-nav__link">
+      <a href="../../api/proc/" class="md-nav__link">
         
   
   
@@ -710,7 +875,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../log/" class="md-nav__link">
+      <a href="../../api/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.error
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/log/" class="md-nav__link">
         
   
   
@@ -733,7 +944,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../settings/" class="md-nav__link">
+      <a href="../../api/settings/" class="md-nav__link">
         
   
   
@@ -756,12 +967,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../consts/" class="md-nav__link">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.consts
+    senxor.cv_utils
     
   </span>
   
@@ -779,168 +990,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/" class="md-nav__link">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.utils
+    senxor.interface.protocol
     
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    senxor.thread
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.thread
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#senxorthread" class="md-nav__link">
-    <span class="md-ellipsis">
-      senxor.thread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.thread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread" class="md-nav__link">
-    <span class="md-ellipsis">
-      thread
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread" class="md-nav__link">
-    <span class="md-ellipsis">
-      CVCamThread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="CVCamThread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread.read" class="md-nav__link">
-    <span class="md-ellipsis">
-      read
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread" class="md-nav__link">
-    <span class="md-ellipsis">
-      SenxorThread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="SenxorThread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread.read" class="md-nav__link">
-    <span class="md-ellipsis">
-      read
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -953,35 +1013,58 @@
   
   
     <li class="md-nav__item">
-      <a href="../regmap/" class="md-nav__link">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.interface.serial_port
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.interface.registry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/regmap/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     senxor.regmap
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cam/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.cam
     
   </span>
   
@@ -1016,6 +1099,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1024,92 +1109,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#senxorthread" class="md-nav__link">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
     <span class="md-ellipsis">
-      senxor.thread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.thread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread" class="md-nav__link">
-    <span class="md-ellipsis">
-      thread
+      1. Connect to the device
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-file-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      CVCamThread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="CVCamThread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
+      2. Configuration file structure
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.CVCamThread.read" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#3-load-and-apply" class="md-nav__link">
     <span class="md-ellipsis">
-      read
+      3. Load and apply
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#4-condition-expressions-when" class="md-nav__link">
     <span class="md-ellipsis">
-      SenxorThread
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="SenxorThread">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
+      4. Condition expressions (when)
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.thread.SenxorThread.read" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#5-load-from-string-bytes-or-file-object" class="md-nav__link">
     <span class="md-ellipsis">
-      read
+      5. Load from string, bytes, or file object
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#6-apply-a-single-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Apply a single profile
+    </span>
+  </a>
   
 </li>
       
@@ -1129,7 +1178,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/api/thread.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/6.loading_settings.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1138,458 +1187,128 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/api/thread.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/6.loading_settings.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-  <h1>senxor.thread</h1>
-
-<h2 id="senxorthread"><code>senxor.thread</code><a class="headerlink" href="#senxorthread" title="Permanent link">&para;</a></h2>
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<a id="senxor.thread"></a>
-    <div class="doc doc-contents first">
-
-        <p>Thread utilities for Senxor devices.</p>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="senxor.thread.CVCamThread" class="doc doc-heading">
-            <code>CVCamThread</code>
-
-
-<a href="#senxor.thread.CVCamThread" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="senxor.thread.CVCamThread.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">video_capture</span><span class="p">,</span> <span class="n">on_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raise_on_backlog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">backlog_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></code>
-
-<a href="#senxor.thread.CVCamThread.__init__" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Thread for reading frames from a video capture.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>video_capture</code>
-            </td>
-            <td>
-                  <code><span title="cv2.VideoCapture">VideoCapture</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The video capture to read frames from.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>on_data</code>
-            </td>
-            <td>
-                  <code><span title="typing.Callable">Callable</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The callback function to call when a frame is read.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>raise_on_backlog</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to raise an error if the frame buffer backlog exceeds the threshold.</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>backlog_threshold</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The threshold for the frame buffer backlog.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="senxor.thread.CVCamThread.read" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">read</span><span class="p">()</span></code>
-
-<a href="#senxor.thread.CVCamThread.read" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Read the frame from the video capture.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span> | None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The frame from the video capture.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="RuntimeError">RuntimeError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the thread is not started.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="senxor.thread.SenxorThread" class="doc doc-heading">
-            <code>SenxorThread</code>
-
-
-<a href="#senxor.thread.SenxorThread" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="senxor.thread.SenxorThread.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">on_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raise_on_backlog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">backlog_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></code>
-
-<a href="#senxor.thread.SenxorThread.__init__" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Thread for reading data from a Senxor device.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>senxor</code>
-            </td>
-            <td>
-                  <code><a class="autorefs autorefs-internal" href="../senxor/#senxor.Senxor">Senxor</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The Senxor device to read data from.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>on_data</code>
-            </td>
-            <td>
-                  <code><span title="typing.Callable">Callable</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The callback function to call when a frame is read.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>raise_on_backlog</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to raise an error if the data buffer backlog exceeds the threshold.</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>backlog_threshold</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The threshold for the data buffer backlog.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="senxor.thread.SenxorThread.read" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">read</span><span class="p">()</span></code>
-
-<a href="#senxor.thread.SenxorThread.read" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Read the data from the Senxor device.</p>
-<p>It's equivalent to <code>senxor.read(block=False)</code>, if you don't need the <code>on_data</code> callback,
-it's not necessary to use <code>SenxorThread</code>.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span> | None, <span title="numpy.ndarray">ndarray</span> | None]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The (header, data) from the Senxor device.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="RuntimeError">RuntimeError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the thread is not started.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
+<h1 id="loading-settings">Loading Settings<a class="headerlink" href="#loading-settings" title="Permanent link">&para;</a></h1>
+<p>This tutorial shows how to load device configuration from YAML, TOML, or JSON files and apply it to a Senxor device. Use this to apply the same settings across many devices (e.g. in production).</p>
+<h2 id="1-connect-to-the-device">1. Connect to the device<a class="headerlink" href="#1-connect-to-the-device" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>See the <a href="../1.connect_device/">Connect Device</a> tutorial for how to connect to the device.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
+
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<h2 id="2-configuration-file-structure">2. Configuration file structure<a class="headerlink" href="#2-configuration-file-structure" title="Permanent link">&para;</a></h2>
+<p>A settings file has a <code>profiles</code> list. Each profile has:</p>
+<ul>
+<li><code>name</code>: profile name (required)</li>
+<li><code>desc</code>: short description (optional)</li>
+<li><code>when</code>: condition expression (optional); the profile is applied only when it evaluates to true</li>
+<li><code>settings</code>: dict of field names to values (required)</li>
+</ul>
+<p>Field names and values are the same as in <a href="../4.device_control/">Device Control</a>.</p>
+<p>Example (YAML):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">general</span><span class="nv"> </span><span class="s">use&quot;</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">83</span>
+<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;panther&quot;</span>
+<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">120x160</span><span class="nv"> </span><span class="s">modules&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span>
+</code></pre></div>
+<p>TOML and JSON use the same structure; the file type is inferred from the file extension (<code>.yaml</code>, <code>.toml</code>, <code>.json</code>).</p>
+<h2 id="3-load-and-apply">3. Load and apply<a class="headerlink" href="#3-load-and-apply" title="Permanent link">&para;</a></h2>
+<p>Use <code>load(path)</code> to read a file and get a dict of profiles by name. Use <code>apply(dev, ...)</code> to apply settings to the device. You can pass a file path, a dict of profiles, or a single profile.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">apply</span>
+
+<span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_settings.yaml&quot;</span><span class="p">)</span>
+<span class="n">apply</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+</code></pre></div>
+<p>Apply directly from a file path:</p>
+<div class="highlight"><pre><span></span><code><span class="n">apply</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="s2">&quot;my_settings.yaml&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>When you apply a dict of profiles, each profile’s <code>when</code> is evaluated with the current device state. Every profile whose <code>when</code> is true is applied, in order (later profiles override earlier ones for the same fields). A profile without <code>when</code> always matches.</p>
+<h2 id="4-condition-expressions-when">4. Condition expressions (when)<a class="headerlink" href="#4-condition-expressions-when" title="Permanent link">&para;</a></h2>
+<p>The <code>when</code> field is a Python expression. You can use comparison (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, etc.) and logical operators (<code>and</code>, <code>or</code>, <code>not</code>). Available names:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frame_shape</code></td>
+<td>tuple</td>
+<td>Frame size, e.g. <code>(120, 160)</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>str</td>
+<td>Device name, e.g. <code>"COM3"</code></td>
+</tr>
+<tr>
+<td><em>field name</em></td>
+<td>int</td>
+<td>Current value of that field</td>
+</tr>
+</tbody>
+</table>
+<p>Example: apply different settings by frame size:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;panther&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">85</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cougar&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(60,</span><span class="nv"> </span><span class="s">80)&quot;</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
+</code></pre></div>
+<h2 id="5-load-from-string-bytes-or-file-object">5. Load from string, bytes, or file object<a class="headerlink" href="#5-load-from-string-bytes-or-file-object" title="Permanent link">&para;</a></h2>
+<p>Use <code>loads(fp, filetype="yaml")</code> when the config is not from a path: e.g. from a string, bytes, or an open file. Set <code>filetype</code> to <code>"yaml"</code>, <code>"toml"</code>, or <code>"json"</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">apply</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;yaml&quot;</span><span class="p">)</span>
+<span class="n">apply</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">config_bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">profiles:</span>
+<span class="s2">  - name: &quot;default&quot;</span>
+<span class="s2">    settings:</span>
+<span class="s2">      EMISSIVITY: 83</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">config_bytes</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;yaml&quot;</span><span class="p">)</span>
+<span class="n">apply</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="6-apply-a-single-profile">6. Apply a single profile<a class="headerlink" href="#6-apply-a-single-profile" title="Permanent link">&para;</a></h2>
+<p>You can apply one profile from the loaded dict:</p>
+<div class="highlight"><pre><span></span><code><span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_settings.yaml&quot;</span><span class="p">)</span>
+<span class="n">apply</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">])</span>
+</code></pre></div>
+<p>Field names and allowed values are the same as when using <code>dev.fields</code>; see the <a href="../4.device_control/">Device Control</a> tutorial and the field definitions in the API reference.</p>
 
 
 
@@ -1625,7 +1344,7 @@ it's not necessary to use <code>SenxorThread</code>.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../utils/" class="md-footer__link md-footer__link--prev" aria-label="Previous: senxor.utils">
+          <a href="../5.logging/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Logging">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1635,20 +1354,20 @@ it's not necessary to use <code>SenxorThread</code>.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                senxor.utils
+                Logging
               </div>
             </div>
           </a>
         
         
           
-          <a href="../regmap/" class="md-footer__link md-footer__link--next" aria-label="Next: senxor.regmap">
+          <a href="../7.error_handling/" class="md-footer__link md-footer__link--next" aria-label="Next: Error Handling">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                senxor.regmap
+                Error Handling
               </div>
             </div>
             <div class="md-footer__button md-icon">

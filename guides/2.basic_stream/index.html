@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/api/settings/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/2.basic_stream/">
       
       
-        <link rel="prev" href="../log/">
+        <link rel="prev" href="../1.connect_device/">
       
       
-        <link rel="next" href="../cv_utils/">
+        <link rel="next" href="../3.data_processing/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>senxor.settings - pysenxor</title>
+        <title>Basic Stream - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#senxorsettings" class="md-skip">
+        <a href="#basic-stream" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              senxor.settings
+              Basic Stream
             
           </span>
         </div>
@@ -240,11 +240,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guides/1.connect_device/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1.connect_device/" class="md-tabs__link">
           
   
   
@@ -280,13 +282,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../senxor/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../api/senxor/" class="md-tabs__link">
           
   
   
@@ -375,26 +375,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -407,7 +412,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Tutorials
@@ -421,7 +426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/1.connect_device/" class="md-nav__link">
+      <a href="../1.connect_device/" class="md-nav__link">
         
   
   
@@ -441,10 +446,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../guides/2.basic_stream/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Basic Stream
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -455,6 +482,71 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. connect to the device
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-start-the-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. start the stream
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-read-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. read the data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-stop-the-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. stop the stream
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -467,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/3.data_processing/" class="md-nav__link">
+      <a href="../3.data_processing/" class="md-nav__link">
         
   
   
@@ -490,7 +582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/4.device_control/" class="md-nav__link">
+      <a href="../4.device_control/" class="md-nav__link">
         
   
   
@@ -513,7 +605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/5.logging/" class="md-nav__link">
+      <a href="../5.logging/" class="md-nav__link">
         
   
   
@@ -536,7 +628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/6.loading_settings/" class="md-nav__link">
+      <a href="../6.loading_settings/" class="md-nav__link">
         
   
   
@@ -559,7 +651,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/7.error_handling/" class="md-nav__link">
+      <a href="../7.error_handling/" class="md-nav__link">
         
   
   
@@ -682,31 +774,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -719,7 +806,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -733,7 +820,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../senxor/" class="md-nav__link">
+      <a href="../../api/senxor/" class="md-nav__link">
         
   
   
@@ -756,7 +843,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../proc/" class="md-nav__link">
+      <a href="../../api/proc/" class="md-nav__link">
         
   
   
@@ -779,7 +866,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/" class="md-nav__link">
+      <a href="../../api/utils/" class="md-nav__link">
         
   
   
@@ -802,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../error/" class="md-nav__link">
+      <a href="../../api/error/" class="md-nav__link">
         
   
   
@@ -825,7 +912,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../log/" class="md-nav__link">
+      <a href="../../api/log/" class="md-nav__link">
         
   
   
@@ -845,30 +932,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    senxor.settings
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../api/settings/" class="md-nav__link">
         
   
   
@@ -879,138 +946,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#senxorsettings" class="md-nav__link">
-    <span class="md-ellipsis">
-      senxor.settings
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.settings">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;settings
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;loads
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" loads">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads(fp)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;fp
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads(filetype)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;filetype
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.load" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.load(path)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;path
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;apply
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" apply">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply(senxor)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;senxor
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply(settings)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;settings
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1023,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cv_utils/" class="md-nav__link">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
   
   
@@ -1046,7 +981,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../interface/protocol/" class="md-nav__link">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
   
   
@@ -1069,7 +1004,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../interface/serial_port/" class="md-nav__link">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
         
   
   
@@ -1092,7 +1027,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../interface/registry/" class="md-nav__link">
+      <a href="../../api/interface/registry/" class="md-nav__link">
         
   
   
@@ -1115,7 +1050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../regmap/" class="md-nav__link">
+      <a href="../../api/regmap/" class="md-nav__link">
         
   
   
@@ -1155,6 +1090,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1163,116 +1100,47 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#senxorsettings" class="md-nav__link">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
     <span class="md-ellipsis">
-      senxor.settings
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="senxor.settings">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;settings
+      1. connect to the device
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#2-start-the-stream" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;loads
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" loads">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads(fp)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;fp
+      2. start the stream
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.loads(filetype)" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#3-read-the-data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;filetype
+      3. read the data
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.load" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#4-stop-the-stream" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.load(path)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;path
+      4. stop the stream
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;apply
+      Summary
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label=" apply">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply(senxor)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;senxor
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#senxor.settings.apply(settings)" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-parameter"></code>&nbsp;settings
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1292,7 +1160,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/api/settings.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/2.basic_stream.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1301,319 +1169,63 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/api/settings.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/2.basic_stream.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-  <h1>senxor.settings</h1>
+<h1 id="basic-stream">Basic Stream<a class="headerlink" href="#basic-stream" title="Permanent link">&para;</a></h1>
+<p>This tutorial shows how to start a stream and read data from a Senxor device.</p>
+<h2 id="1-connect-to-the-device">1. connect to the device<a class="headerlink" href="#1-connect-to-the-device" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>See the <a href="../1.connect_device/">Connect Device</a> tutorial for how to connect to the device.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
 
-<h2 id="senxorsettings"><code>senxor.settings</code><a class="headerlink" href="#senxorsettings" title="Permanent link">&para;</a></h2>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
 
-
-<div class="doc doc-object doc-module">
-
-
-
-<a id="senxor.settings"></a>
-    <div class="doc doc-contents first">
-
-          
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="senxor.settings.loads" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">loads</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;yaml&#39;</span><span class="p">)</span></code>
-
-<a href="#senxor.settings.loads" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Load settings from a file-like object or string, specifying the file type.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-<h4 id="senxor.settings.loads(fp)" class="doc doc-heading doc-heading-parameter">                  <code>fp</code>
-<a href="#senxor.settings.loads(fp)" class="headerlink" title="Permanent link">&para;</a></h4>            </td>
-            <td>
-                  <code>file-like object or str or bytes</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>A file-like object with a <code>.read()</code> method or a string/bytes containing the settings data.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-<h4 id="senxor.settings.loads(filetype)" class="doc doc-heading doc-heading-parameter">                  <code>filetype</code>
-<a href="#senxor.settings.loads(filetype)" class="headerlink" title="Permanent link">&para;</a></h4>            </td>
-            <td>
-                  <code><a class="autorefs autorefs-external" title="&lt;code&gt;typing.Literal&lt;/code&gt;" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;yaml&#39;, &#39;toml&#39;, &#39;json&#39;]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The file type to parse ('yaml', 'toml', or 'json'). Default is 'yaml'.</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;yaml&#39;</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <span title="senxor._utils.setting.Profile">Profile</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>A dictionary of profiles loaded from the input, where each key is the profile name
-and the value is a <code>Profile</code> object.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;settings.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">settings</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;yaml&quot;</span><span class="p">)</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
-
-          
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="senxor.settings.load" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
-
-<a href="#senxor.settings.load" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Load settings from a specified file path.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-<h4 id="senxor.settings.load(path)" class="doc doc-heading doc-heading-parameter">                  <code>path</code>
-<a href="#senxor.settings.load(path)" class="headerlink" title="Permanent link">&para;</a></h4>            </td>
-            <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> or <a class="autorefs autorefs-external" title="&lt;code&gt;pathlib.Path&lt;/code&gt;" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The file path to load settings from. Supports YAML, TOML, and JSON formats.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <span title="senxor._utils.setting.Profile">Profile</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>A dictionary of profiles loaded from the file, where each key is the profile name
-and the value is a <code>Profile</code> object.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;settings.yaml&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">default_setting</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">default_setting</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;default&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">default_setting</span><span class="o">.</span><span class="n">settings</span>
-<span class="go">{&#39;foo&#39;: 1, &#39;bar&#39;: 2}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">default_setting</span><span class="o">.</span><span class="n">when</span>
-<span class="go">&#39;foo &gt; 10 and bar &lt; 20&#39;</span>
+<h2 id="2-start-the-stream">2. start the stream<a class="headerlink" href="#2-start-the-stream" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
 </code></pre></div>
+<h2 id="3-read-the-data">3. read the data<a class="headerlink" href="#3-read-the-data" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-          
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="senxor.settings.apply" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span></code>
-
-<a href="#senxor.settings.apply" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Apply settings to a Senxor object from either a dictionary of profiles or a file path.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-<h4 id="senxor.settings.apply(senxor)" class="doc doc-heading doc-heading-parameter">                  <code>senxor</code>
-<a href="#senxor.settings.apply(senxor)" class="headerlink" title="Permanent link">&para;</a></h4>            </td>
-            <td>
-                  <code><a class="autorefs autorefs-internal" href="../senxor/#senxor.Senxor">Senxor</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The Senxor object to which the settings will be applied.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-<h4 id="senxor.settings.apply(settings)" class="doc doc-heading doc-heading-parameter">                  <code>settings</code>
-<a href="#senxor.settings.apply(settings)" class="headerlink" title="Permanent link">&para;</a></h4>            </td>
-            <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <span title="senxor._utils.setting.Profile">Profile</span>] or <span title="senxor._utils.setting.Profile">Profile</span> or <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> or <a class="autorefs autorefs-external" title="&lt;code&gt;pathlib.Path&lt;/code&gt;" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>A file path to load settings from, or a dictionary of profiles, or a single profile.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Examples:</span></p>
-    <ol>
-<li>Apply settings from a file path:</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="s2">&quot;settings.yaml&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, dtype: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame min: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> C, max: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2"> C, mean: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> C&quot;</span><span class="p">)</span>
 </code></pre></div>
-    <ol>
-<li>Apply settings from a dictionary of profiles:</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;settings.yaml&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<p>Output:
+<div class="highlight"><pre><span></span><code>Frame shape: (120, 160), dtype: float32
+Frame min: 20.3 C, max: 34.1 C, mean: 27.2 C
+</code></pre></div></p>
+<p>The <code>read()</code> method returns two values: <code>header</code> (a 1-D NumPy array of <code>uint16</code> containing frame metadata, or <code>None</code>) and <code>frame</code> (a 2-D NumPy array of <code>float32</code> with shape <code>(height, width)</code>). By default, <code>frame</code> contains temperature values in degrees Celsius.</p>
+<p>By default, <code>read()</code> waits until a new frame arrives or a timeout occurs, so when it returns you have a valid frame. If you pass <code>block=False</code>, it returns immediately; when no frame is ready, both <code>header</code> and <code>frame</code> will be <code>None</code>. In that case you must check before using the result:</p>
+<div class="highlight"><pre><span></span><code><span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No new frame is available&quot;</span><span class="p">)</span>
 </code></pre></div>
-    <ol>
-<li>Apply a single profile:</li>
-</ol>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;settings.yaml&quot;</span><span class="p">)[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+<p>Output:
+<div class="highlight"><pre><span></span><code>No new frame is available
+</code></pre></div></p>
+<h2 id="4-stop-the-stream">4. stop the stream<a class="headerlink" href="#4-stop-the-stream" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
 </code></pre></div>
-
-          
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+<p>The <code>stop_stream</code> method will stop the stream but keep the connection open.</p>
+<p>You can also use the <code>close</code> method, which will stop the stream and close the connection.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>start_stream()</code> starts the stream mode.</li>
+<li><code>stop_stream()</code> stops the stream mode but keeps the connection open.</li>
+<li><code>close()</code> stops the stream and closes the connection.</li>
+</ul>
+<p>A full example is available in the <a href="../../examples/basic_stream/">Basic Stream</a> example.</p>
 
 
 
@@ -1649,7 +1261,7 @@ and the value is a <code>Profile</code> object.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../log/" class="md-footer__link md-footer__link--prev" aria-label="Previous: senxor.log">
+          <a href="../1.connect_device/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Connect Device">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1659,20 +1271,20 @@ and the value is a <code>Profile</code> object.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                senxor.log
+                Connect Device
               </div>
             </div>
           </a>
         
         
           
-          <a href="../cv_utils/" class="md-footer__link md-footer__link--next" aria-label="Next: senxor.cv_utils">
+          <a href="../3.data_processing/" class="md-footer__link md-footer__link--next" aria-label="Next: Data Processing">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                senxor.cv_utils
+                Data Processing
               </div>
             </div>
             <div class="md-footer__button md-icon">

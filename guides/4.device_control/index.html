@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/loading_settings/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/4.device_control/">
       
       
-        <link rel="prev" href="../device_control/">
+        <link rel="prev" href="../3.data_processing/">
       
       
-        <link rel="next" href="../../examples/basic_stream/">
+        <link rel="next" href="../5.logging/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Loading Settings From File - pysenxor</title>
+        <title>Device Control - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#loading-settings-from-files" class="md-skip">
+        <a href="#device-control" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Loading Settings From File
+              Device Control
             
           </span>
         </div>
@@ -246,7 +246,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../getting_started/" class="md-tabs__link">
+        <a href="../1.connect_device/" class="md-tabs__link">
           
   
   
@@ -426,12 +426,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting_started/" class="md-nav__link">
+      <a href="../1.connect_device/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Connect Device
     
   </span>
   
@@ -449,12 +449,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../device_control/" class="md-nav__link">
+      <a href="../2.basic_stream/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Device Control
+    Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.data_processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
     
   </span>
   
@@ -486,7 +509,7 @@
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Device Control
     
   </span>
   
@@ -499,7 +522,7 @@
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Device Control
     
   </span>
   
@@ -522,46 +545,73 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration-file-format" class="md-nav__link">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration File Format
+      1. Connect to the device
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuration File Format">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-read-a-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Read a field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-configure-a-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Configure a field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-discover-and-understand-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Discover and understand fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cache-and-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Cache and refresh
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-registers-low-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Registers (low-level)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Registers (low-level)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic-structure" class="md-nav__link">
+  <a href="#access-by-name" class="md-nav__link">
     <span class="md-ellipsis">
-      Basic Structure
+      Access by name
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#yaml-format-example" class="md-nav__link">
+  <a href="#readwrite-by-address" class="md-nav__link">
     <span class="md-ellipsis">
-      YAML Format Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#toml-format-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      TOML Format Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#json-format-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      JSON Format Example
+      Read/write by address
     </span>
   </a>
   
@@ -573,103 +623,64 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conditional-expressions-when-field" class="md-nav__link">
+  <a href="#7-helper-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      Conditional Expressions (when field)
+      7. Helper functions
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conditional Expressions (when field)">
+    <nav class="md-nav" aria-label="7. Helper functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#supported-syntax" class="md-nav__link">
+  <a href="#device-info-read-only" class="md-nav__link">
     <span class="md-ellipsis">
-      Supported Syntax
+      Device info (read-only)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#available-context-variables" class="md-nav__link">
+  <a href="#frame-rate" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Context Variables
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#loading-configuration-from-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Loading Configuration from File
+      Frame rate
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#loading-configuration-from-various-sources" class="md-nav__link">
+  <a href="#gain" class="md-nav__link">
     <span class="md-ellipsis">
-      Loading Configuration from Various Sources
+      Gain
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#applying-single-configuration" class="md-nav__link">
+  <a href="#temperature-correction" class="md-nav__link">
     <span class="md-ellipsis">
-      Applying Single Configuration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#practical-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Practical Examples
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Practical Examples">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-1-module-specific-settings" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example 1: Module-specific settings
+      Temperature correction
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#example-2-firmware-version-based-configuration" class="md-nav__link">
+  <a href="#filters" class="md-nav__link">
     <span class="md-ellipsis">
-      Example 2: Firmware Version-Based Configuration
+      Filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data output
     </span>
   </a>
   
@@ -684,6 +695,75 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.loading_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading Settings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Handling
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -752,29 +832,6 @@
   
   <span class="md-ellipsis">
     Basic Stream
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/thread_stream/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Use Thread to Stream Frames
     
   </span>
   
@@ -911,6 +968,52 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.error
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/log/" class="md-nav__link">
         
   
@@ -957,12 +1060,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/consts/" class="md-nav__link">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.consts
+    senxor.cv_utils
     
   </span>
   
@@ -980,12 +1083,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/utils/" class="md-nav__link">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.utils
+    senxor.interface.protocol
     
   </span>
   
@@ -1003,12 +1106,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/thread/" class="md-nav__link">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.thread
+    senxor.interface.serial_port
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.interface.registry
     
   </span>
   
@@ -1032,29 +1158,6 @@
   
   <span class="md-ellipsis">
     senxor.regmap
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/cam/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.cam
     
   </span>
   
@@ -1099,46 +1202,73 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration-file-format" class="md-nav__link">
+  <a href="#1-connect-to-the-device" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration File Format
+      1. Connect to the device
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuration File Format">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-read-a-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Read a field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-configure-a-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Configure a field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-discover-and-understand-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Discover and understand fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cache-and-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Cache and refresh
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-registers-low-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Registers (low-level)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Registers (low-level)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic-structure" class="md-nav__link">
+  <a href="#access-by-name" class="md-nav__link">
     <span class="md-ellipsis">
-      Basic Structure
+      Access by name
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#yaml-format-example" class="md-nav__link">
+  <a href="#readwrite-by-address" class="md-nav__link">
     <span class="md-ellipsis">
-      YAML Format Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#toml-format-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      TOML Format Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#json-format-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      JSON Format Example
+      Read/write by address
     </span>
   </a>
   
@@ -1150,103 +1280,64 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conditional-expressions-when-field" class="md-nav__link">
+  <a href="#7-helper-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      Conditional Expressions (when field)
+      7. Helper functions
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conditional Expressions (when field)">
+    <nav class="md-nav" aria-label="7. Helper functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#supported-syntax" class="md-nav__link">
+  <a href="#device-info-read-only" class="md-nav__link">
     <span class="md-ellipsis">
-      Supported Syntax
+      Device info (read-only)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#available-context-variables" class="md-nav__link">
+  <a href="#frame-rate" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Context Variables
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#loading-configuration-from-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Loading Configuration from File
+      Frame rate
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#loading-configuration-from-various-sources" class="md-nav__link">
+  <a href="#gain" class="md-nav__link">
     <span class="md-ellipsis">
-      Loading Configuration from Various Sources
+      Gain
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#applying-single-configuration" class="md-nav__link">
+  <a href="#temperature-correction" class="md-nav__link">
     <span class="md-ellipsis">
-      Applying Single Configuration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#practical-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Practical Examples
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Practical Examples">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-1-module-specific-settings" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example 1: Module-specific settings
+      Temperature correction
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#example-2-firmware-version-based-configuration" class="md-nav__link">
+  <a href="#filters" class="md-nav__link">
     <span class="md-ellipsis">
-      Example 2: Firmware Version-Based Configuration
+      Filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data output
     </span>
   </a>
   
@@ -1273,7 +1364,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/loading_settings.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/4.device_control.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1282,218 +1373,305 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/loading_settings.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/4.device_control.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="loading-settings-from-files">Loading Settings from Files<a class="headerlink" href="#loading-settings-from-files" title="Permanent link">&para;</a></h1>
-<p>pysenxor provides a powerful configuration system that allows you to load device settings from files and automatically apply them to SenXor devices. This system supports conditional configuration, enabling automatic selection of appropriate settings based on the device's current state (such as frame size, device type, etc.).</p>
-<hr />
-<h2 id="configuration-file-format">Configuration File Format<a class="headerlink" href="#configuration-file-format" title="Permanent link">&para;</a></h2>
-<p>The configuration system supports three file formats: YAML, TOML, and JSON. All formats follow the same structure:</p>
-<h3 id="basic-structure">Basic Structure<a class="headerlink" href="#basic-structure" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;profile_name&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;profile_description&quot;</span><span class="w"> </span><span class="c1"># optional</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;condition_expression&quot;</span><span class="w"> </span><span class="c1"># optional</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">field_1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">value</span>
-<span class="w">      </span><span class="nt">field_2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">value</span>
-</code></pre></div>
-<h3 id="yaml-format-example">YAML Format Example<a class="headerlink" href="#yaml-format-example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">general</span><span class="nv"> </span><span class="s">use&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">83</span>
-<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<h1 id="device-control">Device Control<a class="headerlink" href="#device-control" title="Permanent link">&para;</a></h1>
+<p>This tutorial shows how to control a Senxor device by reading and writing configuration fields.</p>
+<h2 id="1-connect-to-the-device">1. Connect to the device<a class="headerlink" href="#1-connect-to-the-device" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>See the <a href="../1.connect_device/">Connect Device</a> tutorial for how to connect to the device.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Panther&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Special</span><span class="nv"> </span><span class="s">settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">Panther</span><span class="nv"> </span><span class="s">Module&quot;</span><span class="w"> </span><span class="c1"># Panther Module has image size: w:160, h:120</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span>
-</code></pre></div>
-<h3 id="toml-format-example">TOML Format Example<a class="headerlink" href="#toml-format-example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">[[profiles]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;default&quot;</span>
-<span class="n">desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Default settings for general use&quot;</span>
-<span class="k">[profiles.settings]</span>
-<span class="n">EMISSIVITY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">83</span>
-<span class="n">FRAME_RATE_DIVIDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
 
-<span class="k">[[profiles]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Panther&quot;</span>
-<span class="n">desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Special settings for Panther Module&quot;</span>
-<span class="n">when</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;frame_shape == (120, 160)&quot;</span>
-<span class="k">[profiles.settings]</span>
-<span class="n">STARK_ENABLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
-<span class="n">EMISSIVITY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">95</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
-<h3 id="json-format-example">JSON Format Example<a class="headerlink" href="#json-format-example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Default settings for general use&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;EMISSIVITY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">83</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;FRAME_RATE_DIVIDER&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Panther&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Special settings for Panther Module&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;when&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;frame_shape == (120, 160)&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;STARK_ENABLE&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;EMISSIVITY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
+<h2 id="2-read-a-field">2. Read a field<a class="headerlink" href="#2-read-a-field" title="Permanent link">&para;</a></h2>
+<p>Use <code>dev.fields</code> to access configuration fields. <code>.get()</code> returns the raw integer value; <code>.display</code> gives a human-readable string when available.</p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </code></pre></div>
-<hr />
-<h2 id="conditional-expressions-when-field">Conditional Expressions (when field)<a class="headerlink" href="#conditional-expressions-when-field" title="Permanent link">&para;</a></h2>
-<p>The <code>when</code> field allows you to conditionally apply configurations based on the device's current state. Conditional expressions use Python syntax and support the following operations:</p>
-<h3 id="supported-syntax">Supported Syntax<a class="headerlink" href="#supported-syntax" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Comparison operators</strong>: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></li>
-<li><strong>Logical operators</strong>: <code>and</code>, <code>or</code>, <code>not</code></li>
-<li><strong>Variables</strong>: Device properties and field values</li>
-<li><strong>Constants</strong>: Numbers, strings, boolean values</li>
-</ul>
-<h3 id="available-context-variables">Available Context Variables<a class="headerlink" href="#available-context-variables" title="Permanent link">&para;</a></h3>
-<p>Conditional expressions can access the following device information:</p>
+<p>Output: <code>56</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">display</span>
+</code></pre></div>
+<p>Output: <code>'56%'</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span><span class="o">.</span><span class="n">display</span>
+</code></pre></div>
+<p>Output: <code>(3, 'MI48G')</code></p>
+<p>You can also use subscript: <code>dev.fields["EMISSIVITY"].get()</code>.</p>
+<h2 id="3-configure-a-field">3. Configure a field<a class="headerlink" href="#3-configure-a-field" title="Permanent link">&para;</a></h2>
+<p>Use <code>.set(value)</code> to write a field. Values are validated by the library.</p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</code></pre></div>
+<p>Output: <code>1</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">98</span><span class="p">)</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">display</span>
+</code></pre></div>
+<p>Output: <code>'98%'</code></p>
+<h2 id="4-discover-and-understand-fields">4. Discover and understand fields<a class="headerlink" href="#4-discover-and-understand-fields" title="Permanent link">&para;</a></h2>
+<p>Each field has <code>.description</code> (short) and <code>.help</code> (detailed). You can iterate over all fields or look up by name.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+</code></pre></div>
+<p>To inspect field definitions without a device, use the static class:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.regmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fields</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="5-cache-and-refresh">5. Cache and refresh<a class="headerlink" href="#5-cache-and-refresh" title="Permanent link">&para;</a></h2>
+<p><code>.get()</code> uses a cached value when possible; for fields that change on the device (e.g. status bits), the value is read from the device when needed. To refresh all register and field caches in one go, call <code>dev.refresh_all()</code>.</p>
+<p>To read the current cache without triggering I/O:</p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">cache</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">cache</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">cache_display</span>
+</code></pre></div>
+<p><code>cache</code> holds raw integer values; <code>cache_display</code> holds the same values as shown by <code>.display</code>.</p>
+<h2 id="6-registers-low-level">6. Registers (low-level)<a class="headerlink" href="#6-registers-low-level" title="Permanent link">&para;</a></h2>
+<p>Registers are 8-bit values at fixed addresses; fields are bits or bit-ranges inside those registers. You access registers via <code>dev.regs</code>. <strong>Reading or writing registers directly requires understanding the hardware</strong> (register map, bit layout). Prefer fields (sections 2–4) for configuration when possible.</p>
+<h3 id="access-by-name">Access by name<a class="headerlink" href="#access-by-name" title="Permanent link">&para;</a></h3>
+<p>Like fields, each register has <code>.description</code>, <code>.get()</code>, <code>.read()</code>, and <code>.set(value)</code>. You can use the register name or subscript: <code>dev.regs["FRAME_MODE"]</code> or <code>dev.regs.FRAME_MODE</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mh">0x02</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="readwrite-by-address">Read/write by address<a class="headerlink" href="#readwrite-by-address" title="Permanent link">&para;</a></h3>
+<p>When you know the register address (0x00–0xFF), use:</p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">read_reg</span><span class="p">(</span><span class="mh">0xB1</span><span class="p">)</span>
+<span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">write_reg</span><span class="p">(</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">)</span>
+</code></pre></div>
+<p>To read multiple registers in one round-trip:</p>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">read_regs</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0xB2</span><span class="p">,</span> <span class="mh">0xCA</span><span class="p">])</span>
+</code></pre></div>
+<p>Returns a dict mapping address to value. Writes still go one register at a time via <code>write_reg(addr, value)</code>.</p>
+<h2 id="7-helper-functions">7. Helper functions<a class="headerlink" href="#7-helper-functions" title="Permanent link">&para;</a></h2>
+<p>The library provides helper methods on the device for the most common settings. They wrap the underlying fields and return or accept convenient types (e.g. float for emissivity, bool for filter enable). All of the following are called on <code>dev</code> (e.g. <code>dev.get_emissivity()</code>).</p>
+<h3 id="device-info-read-only">Device info (read-only)<a class="headerlink" href="#device-info-read-only" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Variable Name</th>
-<th>Type</th>
+<th>Method</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>frame_shape</code></td>
-<td>tuple</td>
-<td>Device frame size, e.g., <code>(120, 160)</code></td>
+<td><code>get_shape()</code></td>
+<td>Returns the frame shape <code>(height, width)</code>.</td>
 </tr>
 <tr>
-<td><code>address</code></td>
-<td>str</td>
-<td>Device address, e.g., <code>"COM3"</code></td>
+<td><code>get_fw_version()</code></td>
+<td>Returns the firmware version string (e.g. <code>"4.5.12"</code>).</td>
 </tr>
 <tr>
-<td><code>type</code></td>
-<td>str</td>
-<td>Device type</td>
+<td><code>get_senxor_type()</code></td>
+<td>Returns the Senxor type as a string.</td>
 </tr>
 <tr>
-<td><code>[field_name]</code></td>
-<td>int</td>
-<td>Current value of any non-auto-reset field</td>
+<td><code>get_module_type()</code></td>
+<td>Returns the module type as a string.</td>
+</tr>
+<tr>
+<td><code>get_mcu_type()</code></td>
+<td>Returns the MCU type as a string.</td>
+</tr>
+<tr>
+<td><code>get_module_name()</code></td>
+<td>Returns the module name: <code>"Cougar"</code>, <code>"Panther"</code>, or <code>"Cheetah"</code>.</td>
+</tr>
+<tr>
+<td><code>get_production_year()</code></td>
+<td>Returns the production year (e.g. 2024).</td>
+</tr>
+<tr>
+<td><code>get_production_week()</code></td>
+<td>Returns the production week (1–52).</td>
+</tr>
+<tr>
+<td><code>get_manuf_location()</code></td>
+<td>Returns the manufacturing location code.</td>
+</tr>
+<tr>
+<td><code>get_serial_number()</code></td>
+<td>Returns the serial number as an integer.</td>
+</tr>
+<tr>
+<td><code>get_sn()</code></td>
+<td>Returns the full SN code as a hex string (format <code>YYWWLLSSSSSS</code>).</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<h3 id="loading-configuration-from-file">Loading Configuration from File<a class="headerlink" href="#loading-configuration-from-file" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">apply</span>
-
-<span class="c1"># Load configuration from file</span>
-<span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_settings.yaml&quot;</span><span class="p">)</span>
-
-<span class="c1"># Connect to device</span>
-<span class="k">with</span> <span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">senxor</span><span class="p">:</span>
-    <span class="c1"># Apply configuration</span>
-    <span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="loading-configuration-from-various-sources">Loading Configuration from Various Sources<a class="headerlink" href="#loading-configuration-from-various-sources" title="Permanent link">&para;</a></h3>
-<p>The <code>loads</code> function is designed to handle non-standard configuration sources such as network-transmitted byte streams, already opened file handles, or configuration data received from external systems.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">apply</span>
-
-<span class="c1"># From a file handle</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">settings</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;yaml&quot;</span><span class="p">)</span>
-
-<span class="c1"># From bytes (e.g., network transmission)</span>
-<span class="n">config_bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">profiles:</span>
-<span class="s2">  - name: &quot;default&quot;</span>
-<span class="s2">    settings:</span>
-<span class="s2">      OTF: 2</span>
-<span class="s2">      EMISSIVITY: 83</span>
-<span class="s2">  - name: &quot;panther&quot;</span>
-<span class="s2">    when: &quot;frame_shape == (120, 160)&quot;</span>
-<span class="s2">    settings:</span>
-<span class="s2">      STARK_ENABLE: false</span>
-<span class="s2">      MEDIAN_ENABLE: false</span>
-<span class="s2">&quot;&quot;&quot;</span>
-<span class="n">settings</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">config_bytes</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;yaml&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="applying-single-configuration">Applying Single Configuration<a class="headerlink" href="#applying-single-configuration" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Apply specific configuration</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
-<span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
-</code></pre></div>
-<hr />
-<h2 id="practical-examples">Practical Examples<a class="headerlink" href="#practical-examples" title="Permanent link">&para;</a></h2>
-<h3 id="example-1-module-specific-settings">Example 1: Module-specific settings<a class="headerlink" href="#example-1-module-specific-settings" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># module_config.yaml</span>
-<span class="nt">profiles</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;panther_module&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Panther</span><span class="nv"> </span><span class="s">Module</span><span class="nv"> </span><span class="s">specific</span><span class="nv"> </span><span class="s">settings&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">MEDIAN_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">85</span>
-<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cougar_module&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Cougar</span><span class="nv"> </span><span class="s">Module</span><span class="nv"> </span><span class="s">specific</span><span class="nv"> </span><span class="s">settings&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(60,</span><span class="nv"> </span><span class="s">80)&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">MEDIAN_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
-<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">apply</span>
-
-<span class="k">with</span> <span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">senxor</span><span class="p">:</span>
-    <span class="n">settings</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;module_config.yaml&quot;</span><span class="p">)</span>
-    <span class="n">apply</span><span class="p">(</span><span class="n">senxor</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applied configuration for </span><span class="si">{</span><span class="n">senxor</span><span class="o">.</span><span class="n">get_shape</span><span class="p">()</span><span class="si">}</span><span class="s2"> device&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="example-2-firmware-version-based-configuration">Example 2: Firmware Version-Based Configuration<a class="headerlink" href="#example-2-firmware-version-based-configuration" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># firmware_config.yaml</span>
-<span class="nt">profiles</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;legacy_firmware&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">older</span><span class="nv"> </span><span class="s">firmware</span><span class="nv"> </span><span class="s">versions&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(FW_VERSION_MAJOR,</span><span class="nv"> </span><span class="s">FW_VERSION_MINOR)</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">(4,</span><span class="nv"> </span><span class="s">3)&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">MEDIAN_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">TEMPORAL_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;modern_firmware&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">newer</span><span class="nv"> </span><span class="s">firmware</span><span class="nv"> </span><span class="s">versions</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">enhanced</span><span class="nv"> </span><span class="s">features&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(FW_VERSION_MAJOR,</span><span class="nv"> </span><span class="s">FW_VERSION_MINOR)</span><span class="nv"> </span><span class="s">&gt;=</span><span class="nv"> </span><span class="s">(4,</span><span class="nv"> </span><span class="s">3)&quot;</span>
-<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">MEDIAN_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">TEMPORAL_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-</code></pre></div>
+<h3 id="frame-rate">Frame rate<a class="headerlink" href="#frame-rate" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_frame_rate_divider()</code></td>
+<td>Returns the current frame rate divider.</td>
+</tr>
+<tr>
+<td><code>set_frame_rate_divider(divider)</code></td>
+<td>Sets the frame rate divider.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gain">Gain<a class="headerlink" href="#gain" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_module_gain()</code></td>
+<td>Returns the module gain as a string (e.g. <code>"1.0"</code>, <code>"auto"</code>, <code>"0.25"</code>, <code>"0.5"</code>).</td>
+</tr>
+<tr>
+<td><code>set_module_gain(gain)</code></td>
+<td>Sets the module gain (0–3).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="temperature-correction">Temperature correction<a class="headerlink" href="#temperature-correction" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_sensitivity()</code></td>
+<td>Returns the sensitivity correction factor (float).</td>
+</tr>
+<tr>
+<td><code>set_sensitivity(value)</code></td>
+<td>Sets the sensitivity correction factor.</td>
+</tr>
+<tr>
+<td><code>get_emissivity()</code></td>
+<td>Returns the emissivity as a float (e.g. 0.56 for 56%).</td>
+</tr>
+<tr>
+<td><code>set_emissivity(value)</code></td>
+<td>Sets the emissivity.</td>
+</tr>
+<tr>
+<td><code>get_offset()</code></td>
+<td>Returns the temperature offset correction (K or °C).</td>
+</tr>
+<tr>
+<td><code>set_offset(value)</code></td>
+<td>Sets the temperature offset correction.</td>
+</tr>
+<tr>
+<td><code>get_otf()</code></td>
+<td>Returns the OTF (optical transfer) correction factor.</td>
+</tr>
+<tr>
+<td><code>set_otf(value)</code></td>
+<td>Sets the OTF correction factor.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>disable_all_filters()</code></td>
+<td>Disables all onboard filters (STARK, MMS KXMS, MMS RA, Median, Temporal).</td>
+</tr>
+<tr>
+<td><code>get_filters_status()</code></td>
+<td>Returns a dict of whether each filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>get_stark_enable()</code></td>
+<td>Returns whether the STARK filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>set_stark_enable(enabled)</code></td>
+<td>Enables or disables the STARK filter.</td>
+</tr>
+<tr>
+<td><code>get_mms_kxms_enable()</code></td>
+<td>Returns whether the MMS KXMS filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>set_mms_kxms_enable(enabled)</code></td>
+<td>Enables or disables the MMS KXMS filter.</td>
+</tr>
+<tr>
+<td><code>get_mms_ra_enable()</code></td>
+<td>Returns whether the MMS RA filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>set_mms_ra_enable(enabled)</code></td>
+<td>Enables or disables the MMS RA filter.</td>
+</tr>
+<tr>
+<td><code>get_median_enable()</code></td>
+<td>Returns whether the median filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>set_median_enable(enabled)</code></td>
+<td>Enables or disables the median filter.</td>
+</tr>
+<tr>
+<td><code>get_temporal_enable()</code></td>
+<td>Returns whether the temporal filter is available and enabled.</td>
+</tr>
+<tr>
+<td><code>set_temporal_enable(enabled)</code></td>
+<td>Enables or disables the temporal filter.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-output">Data output<a class="headerlink" href="#data-output" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_adc_enabled()</code></td>
+<td>Returns whether raw ADC data output is enabled.</td>
+</tr>
+<tr>
+<td><code>set_adc_enabled(enabled)</code></td>
+<td>Enables or disables raw ADC data output.</td>
+</tr>
+</tbody>
+</table>
+<p>For full register and field definitions, see the <a href="../../api/regmap/">API Reference</a>.</p>
 
 
 
@@ -1529,7 +1707,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../device_control/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Device Control">
+          <a href="../3.data_processing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Data Processing">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1539,20 +1717,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Device Control
+                Data Processing
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../examples/basic_stream/" class="md-footer__link md-footer__link--next" aria-label="Next: Basic Stream">
+          <a href="../5.logging/" class="md-footer__link md-footer__link--next" aria-label="Next: Logging">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Basic Stream
+                Logging
               </div>
             </div>
             <div class="md-footer__button md-icon">

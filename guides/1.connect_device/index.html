@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/device_control/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/guides/1.connect_device/">
       
       
-        <link rel="prev" href="../getting_started/">
+        <link rel="prev" href="../..">
       
       
-        <link rel="next" href="../loading_settings/">
+        <link rel="next" href="../2.basic_stream/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Device Control - pysenxor</title>
+        <title>Connect Device - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#device-control-and-status" class="md-skip">
+        <a href="#connect-device" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Device Control
+              Connect Device
             
           </span>
         </div>
@@ -246,7 +246,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../getting_started/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -423,29 +423,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../getting_started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Getting Started
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -463,7 +440,7 @@
   
   
   <span class="md-ellipsis">
-    Device Control
+    Connect Device
     
   </span>
   
@@ -476,7 +453,7 @@
   
   
   <span class="md-ellipsis">
-    Device Control
+    Connect Device
     
   </span>
   
@@ -499,182 +476,74 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-the-register-system-works" class="md-nav__link">
+  <a href="#1-import-the-connect-and-list_senxor-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      How the Register System Works
+      1. Import the connect and list_senxor functions.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="How the Register System Works">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-unpacking-a-register" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Unpacking a Register
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-help-discovering-registers-and-fields" class="md-nav__link">
+  <a href="#2-list-all-available-devices" class="md-nav__link">
     <span class="md-ellipsis">
-      Getting Help: Discovering Registers and Fields
+      2. List all available devices.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Getting Help: Discovering Registers and Fields">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#inspecting-registers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Inspecting Registers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inspecting-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Inspecting Fields
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reading-device-status-and-configuration" class="md-nav__link">
+  <a href="#3-connect-to-the-first-available-device" class="md-nav__link">
     <span class="md-ellipsis">
-      Reading Device Status and Configuration
+      3. Connect to the first available device.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Reading Device Status and Configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-information" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Information
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Configuration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Status
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#understanding-caching-and-io" class="md-nav__link">
+  <a href="#4-print-the-device-connection-status-and-basic-information" class="md-nav__link">
     <span class="md-ellipsis">
-      Understanding Caching and IO
+      4. Print the device connection status and basic information.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Understanding Caching and IO">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#when-and-why-to-call-refresh_regmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      When (and Why) to Call refresh_regmap()
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuring-the-device" class="md-nav__link">
+  <a href="#5-query-and-print-device-hardware-and-firmware-information" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuring the Device
+      5. Query and print device hardware and firmware information.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Configuring the Device">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-setting-the-frame-rate" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Setting the Frame Rate
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-adjusting-emissivity" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Adjusting Emissivity
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#alternative-apis-and-best-practices" class="md-nav__link">
+  <a href="#6-close-the-device-connection" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative APIs and Best Practices
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Alternative APIs and Best Practices">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Best Practices
+      6. Close the device connection.
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#7-using-context-manager-for-automatic-resource-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Using context manager for automatic resource management.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
   
 </li>
       
@@ -694,12 +563,127 @@
   
   
     <li class="md-nav__item">
-      <a href="../loading_settings/" class="md-nav__link">
+      <a href="../2.basic_stream/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Loading Settings From File
+    Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.data_processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.device_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Device Control
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.loading_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading Settings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Handling
     
   </span>
   
@@ -773,29 +757,6 @@
   
   <span class="md-ellipsis">
     Basic Stream
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/thread_stream/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Use Thread to Stream Frames
     
   </span>
   
@@ -932,6 +893,52 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.error
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/log/" class="md-nav__link">
         
   
@@ -978,12 +985,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/consts/" class="md-nav__link">
+      <a href="../../api/cv_utils/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.consts
+    senxor.cv_utils
     
   </span>
   
@@ -1001,12 +1008,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/utils/" class="md-nav__link">
+      <a href="../../api/interface/protocol/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.utils
+    senxor.interface.protocol
     
   </span>
   
@@ -1024,12 +1031,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/thread/" class="md-nav__link">
+      <a href="../../api/interface/serial_port/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    senxor.thread
+    senxor.interface.serial_port
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/interface/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    senxor.interface.registry
     
   </span>
   
@@ -1053,29 +1083,6 @@
   
   <span class="md-ellipsis">
     senxor.regmap
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/cam/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    senxor.cam
     
   </span>
   
@@ -1120,182 +1127,74 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-the-register-system-works" class="md-nav__link">
+  <a href="#1-import-the-connect-and-list_senxor-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      How the Register System Works
+      1. Import the connect and list_senxor functions.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="How the Register System Works">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-unpacking-a-register" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Unpacking a Register
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-help-discovering-registers-and-fields" class="md-nav__link">
+  <a href="#2-list-all-available-devices" class="md-nav__link">
     <span class="md-ellipsis">
-      Getting Help: Discovering Registers and Fields
+      2. List all available devices.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Getting Help: Discovering Registers and Fields">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#inspecting-registers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Inspecting Registers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inspecting-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Inspecting Fields
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reading-device-status-and-configuration" class="md-nav__link">
+  <a href="#3-connect-to-the-first-available-device" class="md-nav__link">
     <span class="md-ellipsis">
-      Reading Device Status and Configuration
+      3. Connect to the first available device.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Reading Device Status and Configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-information" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Information
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Configuration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-reading-device-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Reading Device Status
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#understanding-caching-and-io" class="md-nav__link">
+  <a href="#4-print-the-device-connection-status-and-basic-information" class="md-nav__link">
     <span class="md-ellipsis">
-      Understanding Caching and IO
+      4. Print the device connection status and basic information.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Understanding Caching and IO">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#when-and-why-to-call-refresh_regmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      When (and Why) to Call refresh_regmap()
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuring-the-device" class="md-nav__link">
+  <a href="#5-query-and-print-device-hardware-and-firmware-information" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuring the Device
+      5. Query and print device hardware and firmware information.
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Configuring the Device">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-setting-the-frame-rate" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Setting the Frame Rate
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-adjusting-emissivity" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: Adjusting Emissivity
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#alternative-apis-and-best-practices" class="md-nav__link">
+  <a href="#6-close-the-device-connection" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative APIs and Best Practices
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Alternative APIs and Best Practices">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Best Practices
+      6. Close the device connection.
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#7-using-context-manager-for-automatic-resource-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Using context manager for automatic resource management.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
   
 </li>
       
@@ -1315,7 +1214,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/device_control.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/guides/1.connect_device.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1324,170 +1223,74 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/device_control.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/guides/1.connect_device.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="device-control-and-status">Device Control and Status<a class="headerlink" href="#device-control-and-status" title="Permanent link">&para;</a></h1>
-<p>Most day-to-day interaction with a SenXor device happens through its registers (raw 8-bit values) and the higher-level fields (individual bits or bit-ranges inside those registers). This page shows you how to inspect device status and apply configuration changes using these two powerful APIs.</p>
-<hr />
-<h2 id="how-the-register-system-works">How the Register System Works<a class="headerlink" href="#how-the-register-system-works" title="Permanent link">&para;</a></h2>
-<p>The core of every SenXor device is the MI48 chip, which exposes a bank of 8-bit registers. Each register has:</p>
-<ul>
-<li>Address (e.g., <code>0xB1</code>)</li>
-<li>Value (e.g., <code>0b00000000</code>)</li>
-</ul>
-<p>To save space, small pieces of configuration, called fields, are packed into those 8-bit registers. Each field represents a specific function or status bit, and several fields may share a single register.</p>
-<h3 id="example-unpacking-a-register">Example: Unpacking a Register<a class="headerlink" href="#example-unpacking-a-register" title="Permanent link">&para;</a></h3>
-<p>Take the <code>FRAME_MODE</code> register at address <code>0xB1</code> as an example. It's an 8-bit value structured as follows:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Bit 7</th>
-<th style="text-align: left;">Bit 6</th>
-<th style="text-align: left;">Bit 5</th>
-<th style="text-align: left;">Bits 4-2</th>
-<th style="text-align: left;">Bit 1</th>
-<th style="text-align: left;">Bit 0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">Reserved</td>
-<td style="text-align: left;">Reserved</td>
-<td style="text-align: left;">NO_HEADER</td>
-<td style="text-align: left;">READOUT_MODE</td>
-<td style="text-align: left;">CONTINUOUS_STREAM</td>
-<td style="text-align: left;">GET_SINGLE_FRAME</td>
-</tr>
-</tbody>
-</table>
-<p>Instead of forcing you to do binary math (like <code>(value &amp; 0b00000010) &gt;&gt; 1</code>), <code>pysenxor</code> provides a simple, name-based API: <code>dev.fields.CONTINUOUS_STREAM</code>.</p>
-<hr />
-<h2 id="getting-help-discovering-registers-and-fields">Getting Help: Discovering Registers and Fields<a class="headerlink" href="#getting-help-discovering-registers-and-fields" title="Permanent link">&para;</a></h2>
-<p>After connecting to your device (see Quick Start for details), you can easily explore available registers and fields, as well as their descriptions and help texts.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">senxor</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">addrs</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">list_senxor</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">addrs</span>
-<span class="p">[</span><span class="s1">&#39;COM3&#39;</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span> <span class="o">=</span> <span class="n">senxor</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">addrs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to device </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">address</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">Connected</span> <span class="n">to</span> <span class="n">device</span> <span class="n">COM3</span>
+<h1 id="connect-device">Connect Device<a class="headerlink" href="#connect-device" title="Permanent link">&para;</a></h1>
+<p>This tutorial shows how to connect to a Senxor device and retrieve its basic information.</p>
+<h2 id="1-import-the-connect-and-list_senxor-functions">1. Import the <code>connect</code> and <code>list_senxor</code> functions.<a class="headerlink" href="#1-import-the-connect-and-list_senxor-functions" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
 </code></pre></div>
-<h3 id="inspecting-registers">Inspecting Registers<a class="headerlink" href="#inspecting-registers" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">regs</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">regs</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="p">)</span>
-<span class="n">FRAME_MODE</span> <span class="p">(</span><span class="mh">0xB1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
-<span class="n">Control</span> <span class="n">capture</span> <span class="ow">and</span> <span class="n">readout</span> <span class="n">of</span> <span class="n">thermal</span> <span class="n">data</span>
+<h2 id="2-list-all-available-devices">2. List all available devices.<a class="headerlink" href="#2-list-all-available-devices" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
 </code></pre></div>
-<hr />
-<h3 id="inspecting-fields">Inspecting Fields<a class="headerlink" href="#inspecting-fields" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">fields</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
-</code></pre></div>
-<p>All <code>regs</code> and <code>fields</code> support autocompletion in most editors.</p>
-<p>You can also access register and field metadata statically, without connecting to a device:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.regmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fields</span><span class="p">,</span> <span class="n">Registers</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Registers</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
-</code></pre></div>
-<hr />
-<h2 id="reading-device-status-and-configuration">Reading Device Status and Configuration<a class="headerlink" href="#reading-device-status-and-configuration" title="Permanent link">&para;</a></h2>
-<p>You can use fields and registers to read device information, configuration, and status.</p>
-<h3 id="example-reading-device-information">Example: Reading Device Information<a class="headerlink" href="#example-reading-device-information" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">mcu_type</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">MCU_TYPE</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">mcu_type</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">mcu_type</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;MI48G&#39;</span><span class="p">)</span>
-</code></pre></div>
-<p>The <code>.display()</code> method provides a human-readable string for enumerated or mapped values.</p>
-<h3 id="example-reading-device-configuration">Example: Reading Device Configuration<a class="headerlink" href="#example-reading-device-configuration" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">emissivity</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">emissivity</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
-<span class="s1">&#39;56%&#39;</span>
+<p>The <code>interface</code> argument is a positional parameter that specifies the interface type to search for devices, by default is <code>"serial"</code>.</p>
+<p><strong>Note:</strong> Currently, only the serial port interface (<code>"serial"</code>) is supported.</p>
+<h2 id="3-connect-to-the-first-available-device">3. Connect to the first available device.<a class="headerlink" href="#3-connect-to-the-first-available-device" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">OTF</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
-<span class="s1">&#39;1.06&#39;</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<h2 id="4-print-the-device-connection-status-and-basic-information">4. Print the device connection status and basic information.<a class="headerlink" href="#4-print-the-device-connection-status-and-basic-information" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is connected: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is streaming: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">is_streaming</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Output:</p>
+<div class="highlight"><pre><span></span><code>Connected to COM7
+Device: SerialPort COM7
+Is connected: True
+Is streaming: False
+</code></pre></div>
+<h2 id="5-query-and-print-device-hardware-and-firmware-information">5. Query and print device hardware and firmware information.<a class="headerlink" href="#5-query-and-print-device-hardware-and-firmware-information" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Module type: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">get_module_type</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Firmware version: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">get_fw_version</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Serial number: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">get_sn</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MCU type: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">get_mcu_type</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Output:</p>
+<div class="highlight"><pre><span></span><code>Module type: MI1602M6C
+Firmware version: 4.6.36
+Serial number: 182A01001769
+MCU type: MI48E
+</code></pre></div>
+<h2 id="6-close-the-device-connection">6. Close the device connection.<a class="headerlink" href="#6-close-the-device-connection" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<p>Remember to close the device connection after using to release resources.</p>
+<h2 id="7-using-context-manager-for-automatic-resource-management">7. Using context manager for automatic resource management.<a class="headerlink" href="#7-using-context-manager-for-automatic-resource-management" title="Permanent link">&para;</a></h2>
+<p>You can also use the <code>with</code> statement to automatically close the device connection after the block is executed.</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">dev</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is connected: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># Dictionary-style access</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;OTF&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">6</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is connected: </span><span class="si">{</span><span class="n">dev</span><span class="o">.</span><span class="n">is_connected</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="example-reading-device-status">Example: Reading Device Status<a class="headerlink" href="#example-reading-device-status" title="Permanent link">&para;</a></h3>
-<p>Some fields and registers reflect the device's current state. For general usage. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">CONTINUOUS_STREAM</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">0</span>  <span class="c1"># 0 = disabled, 1 = enabled</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mb">0b00000000</span>
-</code></pre></div>
-<hr />
-<h2 id="understanding-caching-and-io">Understanding Caching and IO<a class="headerlink" href="#understanding-caching-and-io" title="Permanent link">&para;</a></h2>
-<p>The <code>.get()</code> method on registers and fields reads the value from the device and caches it. Subsequent <code>.get()</code> calls will return the cached value, unless the register/field is marked as auto-reset (i.e., its value may change due to hardware events).</p>
-<p>For example, <code>DATA_READY</code> indicates the frame data readiness status: if <code>DATA_READY</code> is 0, the frame data is not ready; if it is 1, the frame data is ready.</p>
-<p>For auto-reset fields (such as <code>DATA_READY</code>), <code>.get()</code> always queries the device directly, bypassing the cache. Frequent polling of such fields may impact device performance, especially for high-frequency operations.</p>
-<p>The <code>.display()</code> and <code>.value</code> properties both call <code>.get()</code> internally.</p>
-<p>To force a direct hardware read and update the cache, use the <code>.read()</code> method on registers:</p>
-<div class="highlight"><pre><span></span><code><span class="n">fresh_value</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">FRAME_MODE</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</code></pre></div>
-<p>If you want a snapshot of all cached values (without triggering any IO), use:</p>
-<div class="highlight"><pre><span></span><code><span class="n">cached_regs</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">status</span>
-<span class="n">cached_fields</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">status</span>
-</code></pre></div>
-<h3 id="when-and-why-to-call-refresh_regmap">When (and Why) to Call <code>refresh_regmap()</code><a class="headerlink" href="#when-and-why-to-call-refresh_regmap" title="Permanent link">&para;</a></h3>
-<p>Sometimes you need a full, up-to-date picture of the device's configuration—for example, right before saving a diagnostic log or after an external system has modified the camera settings. Instead of crawling through every register one-by-one (which could generate hundreds of I/O transactions), you can issue a <em>single</em> bulk read:</p>
-<div class="highlight"><pre><span></span><code><span class="n">dev</span><span class="o">.</span><span class="n">refresh_regmap</span><span class="p">()</span>  <span class="c1"># single round-trip to the device</span>
-</code></pre></div>
-<p>What just happened?</p>
-<ol>
-<li>The library performed one low-level operation to read all registers.</li>
-<li>Both register and field caches were refreshed in RAM.</li>
-<li>Subsequent <code>.get()</code> calls will now hit the fresh cache, keeping I/O traffic to zero until you ask for another live read.</li>
-</ol>
-<blockquote>
-<p>Performance Tip – For normal UI updates or tight acquisition loops, rely on cached values (<code>.status</code>) and refresh only when real-time accuracy is essential. A polling rate faster than 10 Hz (every 100 ms) is generally unnecessary and may congest the bus.</p>
-</blockquote>
-<hr />
-<h2 id="configuring-the-device">Configuring the Device<a class="headerlink" href="#configuring-the-device" title="Permanent link">&para;</a></h2>
-<p>You can change device settings by writing to fields or registers. The recommended way is to use field-level access for clarity and safety.</p>
-<h3 id="example-setting-the-frame-rate">Example: Setting the Frame Rate<a class="headerlink" href="#example-setting-the-frame-rate" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">4</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">1</span>
-</code></pre></div>
-<h3 id="example-adjusting-emissivity">Example: Adjusting Emissivity<a class="headerlink" href="#example-adjusting-emissivity" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">98</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">EMISSIVITY</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">98</span>
-</code></pre></div>
-<hr />
-<h2 id="alternative-apis-and-best-practices">Alternative APIs and Best Practices<a class="headerlink" href="#alternative-apis-and-best-practices" title="Permanent link">&para;</a></h2>
-<p>While attribute-style access (<code>dev.fields.FIELD_NAME</code>) is recommended for its clarity and auto-completion support, other helpers exist:</p>
+<p>Output:
+<div class="highlight"><pre><span></span><code>Connected to COM7
+Is connected: True
+Is connected: False
+</code></pre></div></p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Dictionary access – <code>dev.fields["FIELD_NAME"]</code></li>
-<li>Register-level direct access – <code>dev.regs.read_reg(0xCA)</code> and <code>dev.regs.write_reg(0xCA, 98)</code></li>
-<li>Batch operations – <code>dev.regs.read_regs([0x00, 0x01, 0xB1])</code> or <code>dev.fields.set_fields({"FRAME_RATE_DIVIDER": 2, "EMISSIVITY": 90})</code></li>
-<li>Iteration –
-  <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">dev</span><span class="o">.</span><span class="n">regs</span><span class="p">:</span>
-<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">addr</span><span class="p">),</span> <span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dev</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</code></pre></div></li>
-</ul>
-<p>For more details, please refer to the <a href="../../api/regmap/">API Reference</a>.</p>
-<h3 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Prefer fields when available – less bit-twiddling, fewer mistakes.</li>
-<li>Refresh sparingly – call <code>refresh_regmap()</code> only when you need a full, live snapshot.</li>
-<li>Leverage <code>.display()</code> – convert raw values into human-readable strings.</li>
-<li>Monitor error flags – e.g., <code>dev.fields.CAPTURE_ERROR</code> – to keep your application robust.</li>
+<li><code>list_senxor()</code> lists all available devices.</li>
+<li><code>connect()</code> connects to a device.</li>
 </ul>
 
 
@@ -1524,7 +1327,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../getting_started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting Started">
+          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1534,20 +1337,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Getting Started
+                Overview
               </div>
             </div>
           </a>
         
         
           
-          <a href="../loading_settings/" class="md-footer__link md-footer__link--next" aria-label="Next: Loading Settings From File">
+          <a href="../2.basic_stream/" class="md-footer__link md-footer__link--next" aria-label="Next: Basic Stream">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Loading Settings From File
+                Basic Stream
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -2,70 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/development_rules/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/cam/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/cv_utils/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/consts/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/error/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/log/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/proc/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/regmap/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/senxor/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/settings/</loc>
-         <lastmod>2025-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/thread/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/utils/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/interface/protocol/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/interface/registry/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/api/interface/serial_port/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/examples/basic_stream/</loc>
-         <lastmod>2025-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/examples/thread_stream/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
          <loc>https://MeridianInnovation.github.io/pysenxor-lite/examples/v4l2-virtual-camera/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/device_control/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/1.connect_device/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/getting_started/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/2.basic_stream/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
     <url>
-         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/loading_settings/</loc>
-         <lastmod>2025-10-27</lastmod>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/3.data_processing/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/4.device_control/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/5.logging/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/6.loading_settings/</loc>
+         <lastmod>2026-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://MeridianInnovation.github.io/pysenxor-lite/guides/7.error_handling/</loc>
+         <lastmod>2026-03-02</lastmod>
     </url>
 </urlset>
