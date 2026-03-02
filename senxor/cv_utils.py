@@ -8,9 +8,44 @@ import queue
 import threading
 from typing import TYPE_CHECKING, Callable, cast
 
+from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras
+
 if TYPE_CHECKING:
     import numpy as np
     from cv2 import VideoCapture
+    from cv2_enumerate_cameras.camera_info import CameraInfo
+
+
+def list_camera_info(
+    backend: int = 0,
+) -> list[CameraInfo]:
+    """List available camera information.
+
+    Parameters
+    ----------
+    backend : int, optional
+        The backend to use for camera enumeration. If 0, all supported backends are used.
+
+    Returns
+    -------
+    list of CameraInfo
+        List of camera information objects. Use `cv2.VideoCapture(camera.index, camera.backend)` to open a camera.
+
+    Examples
+    --------
+    1. Print all cameras information available.
+    >>> for camera in list_camera_info():
+    ...     print(camera.index, camera.name, camera.backend)
+    ...     print(camera.path, camera.vid, camera.pid)
+
+    2. Connect to a specific camera.
+    >>> camera_info = list_camera_info()[0]
+    >>> cap = cv2.VideoCapture(camera_info.index, camera_info.backend)
+
+    """
+    # 3.1.0: remove the exclude_same_index parameter and related logic
+    cameras = _enumerate_cameras(backend)
+    return cameras
 
 
 class CVCamThread:

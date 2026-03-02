@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any, Literal, overload
 
 import numpy as np
 
-from senxor.cam import list_camera
 from senxor.core import Senxor
 from senxor.interface.registry import InterfaceRegistry
 
@@ -23,7 +22,6 @@ if TYPE_CHECKING:
 
 __all__ = [
     "connect",
-    "list_camera",
     "list_senxor",
     "remap",
 ]
