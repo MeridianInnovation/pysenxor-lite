@@ -1,6 +1,6 @@
 [project]
 name = "pysenxor"
-version = "3.0.0"
+version = "3.1.0"
 authors = [{ name = "Merididan Innovation", email = "info@meridianinno.com" }]
 description = "Python library for interaction with Meridian Innovation's SenXor(TM)"
 readme = "README.md"
@@ -24,34 +24,26 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-  "commitizen>=4.8.3",
-  "pillow>=11.2.1",
-  "rich>=10.11.0",
-]
+dev = ["commitizen>=4.8.3", "pillow>=11.2.1", "rich>=10.11.0"]
 
-camera = [
-    "opencv-python>=4.11.0.86",
-]
+camera = ["opencv-python>=4.11.0.86"]
 
 doc = [
-    "mkdocs>=1.6.1",
-    "mkdocs-gen-files>=0.5.0",
-    "mkdocs-include-markdown-plugin>=7.1.6",
-    "mkdocs-material>=9.6.14",
-    "mkdocstrings[python]>=0.29.1",
-    "pymdown-extensions>=10.16",
+  "mkdocs>=1.6.1",
+  "mkdocs-gen-files>=0.5.0",
+  "mkdocs-include-markdown-plugin>=7.1.6",
+  "mkdocs-material>=9.6.14",
+  "mkdocstrings[python]>=0.29.1",
+  "pymdown-extensions>=10.16",
 ]
 test = [
-    "deptry>=0.23.0",
-    "mypy>=1.16.1",
-    "pre-commit>=4.2.0",
-    "pytest>=8.4.0",
-    "ruff>=0.11.13",
+  "deptry>=0.23.0",
+  "mypy>=1.16.1",
+  "pre-commit>=4.2.0",
+  "pytest>=8.4.0",
+  "ruff>=0.11.13",
 ]
-package = [
-    "nuitka>=2.7.7",
-]
+package = ["nuitka>=2.7.7"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -73,9 +65,7 @@ default-groups = ["dev", "camera", "test"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--capture sys --verbose"
-markers = [
-    "gui: marks tests as requiring a GUI",
-]
+markers = ["gui: marks tests as requiring a GUI"]
 
 [tool.ruff]
 target-version = "py39"
@@ -86,12 +76,30 @@ src = ["senxor", "example", "bin", "tests"]
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-  "TD", "N", "C", "T",
-  "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D401",
-  "A", "ANN",
+  "TD",
+  "N",
+  "C",
+  "T",
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+  "D401",
+  "A",
+  "ANN",
   "FIX",
-  "PLR", "FBT",
-  "RET", "EM", "ERA", "BLE", "SLF", "TRY",
+  "PLR",
+  "FBT",
+  "RET",
+  "EM",
+  "ERA",
+  "BLE",
+  "SLF",
+  "TRY",
 ]
 fixable = ["ALL"]
 unfixable = ["F401"]

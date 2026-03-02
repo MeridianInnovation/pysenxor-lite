@@ -1,3 +1,30 @@
+## v3.1.0 (2026-01-28)
+
+!!! BREAKING CHANGE !!!
+
+This version is a breaking change, some interfaces and class names have changed, and the old code may not work properly.
+
+### Feat
+
+1. Support new Cheetah 50x50 module
+2. Rrefactor and rename the `senxor._error` module to `senxor.error`.
+3. Refactor and rename the `senxor._interface` module to `senxor.interface`
+4. Introduce the `senxor.interface.registry` for interface registrations.
+5. Refactor and rename the `senxor.interface.SenxorInterfaceProtocol` to `senxor.interface.ISenxorInterface`
+6. Refactor and rename the `senxor.interface.serial_` to `senxor.interface.serial_port`
+7. Refactor the `senxor.utils.list_senxor`, rename `type` parameter to `interface` and remove the `exclude` parameter, now the `list_senxor` function returns a list of `senxor.interface.protocol.IDevice` instances.
+8. Refactor the `senxor.utils.connect`, rename `address` parameter to `device`, remove the `type` parameter, now the `connect` function will determine the interface type based on the device parameter. Remove the `stop_stream` parameter.
+9. Remove the `connect_senxor` function, which is same as the `connect`.
+10. Rename the `senxor._senxor` module to `senxor.core`.
+11. Refactor the `senxor.regmap` module, see the API Reference for more details.
+12. Force set TEMP_UNITS and NO_HEADER to 0 on device open, and prevent users from modifying them to avoid compatibility issues with older devices
+13. Remove get_temp_units method as it is no longer used in pysenxor
+14. Remove extra parameters from Senxor.read(), now it consistently returns 2D frame where data type and meaning depend on ADC_ENABLE field
+15. Remove redundant processing functions from senxor.proc
+16. Enhance the `Senxor` class, add `get_shape`, `disable_all_filters`, `get_filters_status`, `get_fw_version`, `get_module_type`, `get_mcu_type`, `get_module_gain`, `get_senxor_type`, etc. methods
+17. Introduce the `Senxor.on(event, listener)` method for data and event listeners.
+18. Refactor colormap handling and add lazy loading for improved performance
+
 ## v3.0.0 (2025-08-01)
 
 ### Feat
