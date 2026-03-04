@@ -5,21 +5,21 @@
 from __future__ import annotations
 
 from collections.abc import Iterator, Mapping
+from dataclasses import dataclass
 from importlib.resources import files
 from typing import Any, Literal, cast
 
 import numpy as np
 
-from senxor.consts import (
-    KELVIN,
-    SENXOR_FRAME_SHAPE,
-)
+from senxor.consts import KELVIN, SENXOR_FRAME_SHAPE
 
 __all__ = [
+    "SenxorHeader",
     "apply_colormap",
     "colormaps",
     "enlarge",
     "normalize",
+    "parse_header",
     "process_senxor_data",
     "resample_lut",
 ]
@@ -396,3 +396,71 @@ def apply_colormap(
         raise TypeError(f"Unsupported image dtype: {image_dtype}")
 
     return color_image
+
+
+@dataclass
+class SenxorHeader:
+    frame_counter: int
+    vdd: float
+    die_temp: float
+    timestamp: int
+    maxVal: float
+    minVal: float
+    crc: int
+
+
+def parse_header(header: np.ndarray) -> SenxorHeader:
+    """Parse the header of the senxor data.
+
+    Parameters
+    ----------
+    header : np.ndarray
+        The header of the senxor data. Must be a 1D numpy array of uint16.
+
+    Returns
+    -------
+    SenxorHeader: Dataclass with the following attributes:
+    - frame_counter: int, the frame counter value
+    - vdd: float, the VDD(Voltage) value
+    - die_temp: float, the die temperature value in °C
+    - timestamp: int, the timestamp value
+    - maxVal: float, the maximum temperature value in °C
+    - minVal: float, the minimum temperature value in °C
+    - crc: int, the CRC(Cyclic Redundancy Check) value
+
+    Examples
+    --------
+    >>> header, frame = dev.read()
+    >>> if header is not None:
+    >>>     parsed_header = parse_header(header)
+    >>>     print(parsed_header.frame_counter)
+    32
+
+    """
+    if header is None:
+        raise ValueError("Header is None.")
+    if not isinstance(header, np.ndarray) or header.ndim != 1 or header.dtype != np.uint16:
+        raise TypeError("Invalid header type: must be a 1D numpy array of uint16.")
+
+    frame_counter = int(header[0])
+
+    vdd = float(header[1] * 0.0001)
+
+    die_temp = float(header[2] * 0.01 - KELVIN)
+
+    timestamp = int((header[4] << 16) | header[3])
+
+    max_val = float(header[5] * 0.1 - KELVIN)
+    min_val = float(header[6] * 0.1 - KELVIN)
+
+    crc = int(header[7])
+
+    return SenxorHeader(
+        frame_counter=frame_counter,
+        vdd=vdd,
+        die_temp=die_temp,
+        timestamp=timestamp,
+        maxVal=max_val,
+        minVal=min_val,
+        crc=crc,
+    )
