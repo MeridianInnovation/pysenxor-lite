@@ -24,9 +24,12 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["commitizen>=4.8.3", "pillow>=11.2.1", "rich>=10.11.0"]
-
-camera = ["opencv-python>=4.11.0.86"]
+dev = [
+  "commitizen>=4.8.3",
+  "opencv-python>=4.11.0.86",
+  "pillow>=11.2.1",
+  "rich>=10.11.0",
+]
 
 doc = [
   "mkdocs>=1.6.1",
@@ -43,7 +46,6 @@ test = [
   "pytest>=8.4.0",
   "ruff>=0.11.13",
 ]
-package = ["nuitka>=2.7.7"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -60,7 +62,7 @@ Homepage = "https://www.meridianinno.com/"
 Issues = "https://www.meridianinno.com/"
 
 [tool.uv]
-default-groups = ["dev", "camera", "test"]
+default-groups = ["dev", "test"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
