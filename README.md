@@ -26,7 +26,13 @@ This package can let users interact with Meridian Innovation's thermal imaging d
 
 ### Production Installation
 
-To install the library, run the following command:
+To install the library from PyPI, run the following command:
+
+```bash
+python -m pip install pysenxor-lite
+```
+
+To get the latest nightly version, you can install the library from the GitHub repository:
 
 ```bash
 python -m pip install git+https://github.com/MeridianInnovation/pysenxor-lite.git
@@ -143,16 +149,6 @@ plt.show()
 ### Learn more
 
 - [Documentation](https://MeridianInnovation.github.io/pysenxor-lite/)
-
-## Examples
-
-For beginners, there are some examples in the [examples](./example) folder.
-
-These examples provide a set of actual use cases of the `senxor` library.
-
-- Connect device, read thermal data, convert data to image, use cv2 to display the image stream.
-- Use thread to read data in background.
-- Create a simple GUI application to display the thermal camera stream.
 
 ## License
 
