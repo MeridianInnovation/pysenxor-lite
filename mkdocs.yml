@@ -21,6 +21,10 @@ nav:
         - "Concurrency patterns for Senxor: multi-device streaming and blocking I/O": guides/advanced/1.concurrency_patterns.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
+      - Thermal + RGB: examples/thermal_rgb.md
+      - Multi-Senxor Alarm: examples/multi_senxor_alarm.md
+      - Thermal + RGB Recorder: examples/thermal_rgb_recorder.md
+      - FastAPI MJPEG Streamer: examples/fastapi_mjpeg_streamer.md
       - Stream to Virtual Camera using FFmpeg and v4l2loopback: examples/v4l2-virtual-camera.md
   - API Reference:
       - senxor: api/senxor.md

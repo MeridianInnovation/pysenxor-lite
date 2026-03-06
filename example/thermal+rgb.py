@@ -20,6 +20,8 @@ if __name__ == "__main__":
         raise ValueError("No devices found")
 
     senxor_device = connect(devices[0])
+
+    # Set frame rate divider to 0 to get the maximum frame rate
     senxor_device.fields.FRAME_RATE_DIVIDER.set(0)
     senxor_device.start_stream()
 
