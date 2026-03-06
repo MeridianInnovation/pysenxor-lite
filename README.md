@@ -24,15 +24,30 @@ This package can let users interact with Meridian Innovation's thermal imaging d
 
 ## Installation
 
-To install the project, run the following command:
+### Production Installation
+
+To install the library, run the following command:
 
 ```bash
 python -m pip install git+https://github.com/MeridianInnovation/pysenxor-lite.git
+```
 
-# Install from local:
+### Development Installation
+
+For development, you can install the project in editable mode:
+
+```bash
 git clone https://github.com/MeridianInnovation/pysenxor-lite.git
 cd pysenxor-lite
-python -m pip install .
+python -m pip install -e .
+```
+
+or use uv:
+
+```bash
+git clone https://github.com/MeridianInnovation/pysenxor-lite.git
+cd pysenxor-lite
+uv sync
 ```
 
 ## Usage
