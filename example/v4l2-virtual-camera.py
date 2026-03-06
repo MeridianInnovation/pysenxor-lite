@@ -48,6 +48,7 @@ import signal
 import sys
 import time
 from logging import StreamHandler
+from typing import Any
 
 import cv2 as cv
 import numpy as np
@@ -64,7 +65,7 @@ CVFONT_SIZE = 0.7
 # A mutable list to hold the state variables (logger, mi48, args)
 # Accessing and setting elements in this list does NOT require the 'global' keyword.
 # [0] = logger, [1] = mi48, [2] = args
-STATE = [None, None, None]
+STATE: list[Any] = [None, None, None]
 
 # --- Helper Classes and Functions ---
 
@@ -266,7 +267,7 @@ def main():
         smoothed_frame = cv.medianBlur(frame_uint8, ksize=args.smooth_level)
 
         # Apply CLAHE if enabled
-        if args.clahe:
+        if clahe is not None:
             smoothed_frame = clahe.apply(smoothed_frame)
 
         # Apply colormap and enlarge the image. The result is in RGB format.
@@ -278,8 +279,6 @@ def main():
         scale = args.img_scale
         min_loc_scaled = (int(min_loc[0] * scale), int(min_loc[1] * scale))
         max_loc_scaled = (int(max_loc[0] * scale), int(max_loc[1] * scale))
-        min_val = min_val / 10.0
-        max_val = max_val / 10.0
         cv.putText(img_enlarged_rgb, "+", min_loc_scaled, CVFONT, CVFONT_SIZE, WHITE, 2)
         cv.putText(
             img_enlarged_rgb,
@@ -305,7 +304,7 @@ def main():
         if args.stream:
             # Resize the RGB image and write directly to stdout for FFmpeg
             img_resized_rgb = cv.resize(img_enlarged_rgb, stream_size, interpolation=cv.INTER_LINEAR)
-            sys.stdout.write(img_resized_rgb.tobytes())
+            sys.stdout.write(img_resized_rgb.tobytes())  # type: ignore[reportArgumentType]
             sys.stdout.flush()
         else:
             # For local display, convert the RGB image to BGR for OpenCV
