@@ -1,4 +1,8 @@
-"""Dual camera streaming example using thermal and RGB sensors."""
+"""Dual camera streaming example using thermal and RGB cameras.
+
+External dependencies:
+- opencv-python
+"""
 
 import cv2
 import numpy as np

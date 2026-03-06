@@ -1,15 +1,17 @@
+"""A simple tkinter demo for the Senxor device.
+
+External dependencies:
+- tkinter
+- pillow
+"""
+
 import time
 import tkinter as tk
 from tkinter import ttk
 from typing import Callable
 
 import numpy as np
-
-try:
-    from PIL import Image, ImageOps, ImageTk
-except ImportError:
-    print("Required packages are not installed.")
-    exit(1)
+from PIL import Image, ImageOps, ImageTk
 
 from senxor import connect, list_senxor
 from senxor.log import setup_console_logger

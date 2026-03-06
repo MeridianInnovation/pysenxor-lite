@@ -1,4 +1,8 @@
-"""A basic example of how to stream frames from a Senxor device and display them in a window using cv2."""
+"""A basic example of how to stream frames from a Senxor device and display them in a window using OpenCV.
+
+External dependencies:
+- opencv-python
+"""
 
 import cv2
 import numpy as np
