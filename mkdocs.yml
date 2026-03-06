@@ -17,6 +17,8 @@ nav:
       - Logging: guides/5.logging.md
       - Loading Settings: guides/6.loading_settings.md
       - Error Handling: guides/7.error_handling.md
+      - Advanced:
+        - "Concurrency patterns for Senxor: multi-device streaming and blocking I/O": guides/advanced/1.concurrency_patterns.md
   - Examples:
       - Basic Stream: examples/basic_stream.md
       - Stream to Virtual Camera using FFmpeg and v4l2loopback: examples/v4l2-virtual-camera.md
