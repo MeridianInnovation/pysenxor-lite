@@ -116,7 +116,7 @@ jobs:
         uses: ./.github/actions/setup-python-env
 
       - name: Build documentation
-        run: uv run mkdocs build
+        run: uv run --group=doc mkdocs build
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
@@ -149,4 +149,4 @@ jobs:
           path: dist
 
       - name: Publish to PyPI
-        run: uv publish --index pypi --trusted-publishing always
+        run: uv publish --trusted-publishing always
