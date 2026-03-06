@@ -633,6 +633,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parse-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parse the header
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-examples" class="md-nav__link">
     <span class="md-ellipsis">
       More examples
@@ -775,6 +784,83 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_8">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/1.concurrency_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Concurrency patterns for Senxor: multi-device streaming and blocking I/O
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -838,6 +924,98 @@
   
   <span class="md-ellipsis">
     Basic Stream
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/thermal_rgb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Thermal + RGB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/multi_senxor_alarm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-Senxor Alarm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/thermal_rgb_recorder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Thermal + RGB Recorder
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/fastapi_mjpeg_streamer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FastAPI MJPEG Streamer
     
   </span>
   
@@ -1319,6 +1497,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parse-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parse the header
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-examples" class="md-nav__link">
     <span class="md-ellipsis">
       More examples
@@ -1491,6 +1678,26 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colored_image</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
+<h2 id="parse-the-header">Parse the header<a class="headerlink" href="#parse-the-header" title="Permanent link">&para;</a></h2>
+<p>Parsing the header is optional and aimed at advanced use. The header returned by <code>read()</code> is a raw 1D numpy array of uint16; it carries hardware-related metadata such as supply voltage (VDD) and die temperature. When you need these or other frame metadata (e.g. frame counter, timestamp, min/max temperature, CRC), use <code>parse_header()</code> to get a structured <code>SenxorHeader</code> object.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">senxor.proc</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_header</span>
+
+<span class="n">header</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">frame_counter</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">die_temp</span><span class="p">)</span>
+</code></pre></div>
+<p><code>SenxorHeader</code> attributes:</p>
+<ul>
+<li><code>frame_counter</code> — frame counter value</li>
+<li><code>vdd</code> — VDD voltage</li>
+<li><code>die_temp</code> — die temperature in °C</li>
+<li><code>timestamp</code> — timestamp value</li>
+<li><code>maxVal</code> — maximum temperature in °C</li>
+<li><code>minVal</code> — minimum temperature in °C</li>
+<li><code>crc</code> — CRC value</li>
+</ul>
 <h2 id="more-examples">More examples<a class="headerlink" href="#more-examples" title="Permanent link">&para;</a></h2>
 <h3 id="data-processing-using-opencv">Data processing using opencv<a class="headerlink" href="#data-processing-using-opencv" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
@@ -1519,6 +1726,7 @@
 <li><code>normalize()</code> normalizes the data to the range [0, 255].</li>
 <li><code>enlarge()</code> enlarges the image.</li>
 <li><code>apply_colormap()</code> applies a colormap to the image.</li>
+<li><code>parse_header()</code> parses the raw header from <code>read()</code> into a <code>SenxorHeader</code> with frame_counter, vdd, die_temp, timestamp, maxVal, minVal, crc.</li>
 </ul>
 
 

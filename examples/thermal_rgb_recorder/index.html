@@ -12,13 +12,13 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/examples/v4l2-virtual-camera/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/examples/thermal_rgb_recorder/">
       
       
-        <link rel="prev" href="../fastapi_mjpeg_streamer/">
+        <link rel="prev" href="../multi_senxor_alarm/">
       
       
-        <link rel="next" href="../../api/senxor/">
+        <link rel="next" href="../fastapi_mjpeg_streamer/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Stream to Virtual Camera using FFmpeg and v4l2loopback - pysenxor</title>
+        <title>Thermal + RGB Recorder - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v4l2-virtual-camerapy" class="md-skip">
+        <a href="#thermal-rgb-recorder" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Stream to Virtual Camera using FFmpeg and v4l2loopback
+              Thermal + RGB Recorder
             
           </span>
         </div>
@@ -777,10 +777,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../thermal_rgb_recorder/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -791,6 +800,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -823,32 +833,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Stream to Virtual Camera using FFmpeg and v4l2loopback
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../v4l2-virtual-camera/" class="md-nav__link">
         
   
   
@@ -859,62 +847,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage Examples
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advantages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#c-alternative" class="md-nav__link">
-    <span class="md-ellipsis">
-      C++ Alternative
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1250,50 +1182,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage Examples
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advantages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#c-alternative" class="md-nav__link">
-    <span class="md-ellipsis">
-      C++ Alternative
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1308,7 +1196,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/examples/v4l2-virtual-camera.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/examples/thermal_rgb_recorder.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1317,42 +1205,122 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/examples/v4l2-virtual-camera.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/examples/thermal_rgb_recorder.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="v4l2-virtual-camerapy"><code>v4l2-virtual-camera.py</code><a class="headerlink" href="#v4l2-virtual-camerapy" title="Permanent link">&para;</a></h1>
-<p>This example, <code>v4l2-virtual-camera.py</code>, allows you to stream the thermal camera feed to a virtual video device using FFmpeg and v4l2loopback.</p>
-<p>You can find the source code at <a href="https://github.com/MeridianInnovation/pysenxor/blob/main/example/v4l2-virtual-camera.py">Here</a>.</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Flexible Output Options</strong>: Supports local display of thermal images or streaming to a virtual video device (e.g., <code>/dev/video1</code>) using FFmpeg for integration with applications like Zoom, OBS, or VLC.</li>
-<li><strong>Advanced Image Processing</strong>: Includes temporal smoothing, spatial median blur, and optional CLAHE (Contrast Limited Adaptive Histogram Equalization) for enhanced image quality.</li>
-<li><strong>Customizable Parameters</strong>: Allows configuration of colormap, emissivity, scaling factor, and smoothing levels via command-line arguments.</li>
-<li><strong>Min/Max Temperature Annotation</strong>: Automatically annotates the minimum and maximum temperature points on the displayed or streamed image.</li>
-<li><strong>Clean Exit Handling</strong>: Gracefully handles interruptions (e.g., Ctrl+C) to ensure proper cleanup of camera resources and windows.</li>
-</ul>
-<h2 id="usage-examples">Usage Examples<a class="headerlink" href="#usage-examples" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Local Display</strong>:
-  <div class="highlight"><pre><span></span><code>python<span class="w"> </span>thermal_toolbox.py<span class="w"> </span>--scale<span class="w"> </span><span class="m">6</span><span class="w"> </span>--colormap<span class="w"> </span>viridis<span class="w"> </span>--smoothing-level<span class="w"> </span><span class="m">7</span>
-</code></pre></div></li>
-<li><strong>Streaming to Virtual Camera</strong> (requires FFmpeg and v4l2loopback):
-  <div class="highlight"><pre><span></span><code>python<span class="w"> </span>thermal_toolbox.py<span class="w"> </span>--stream<span class="w"> </span><span class="p">|</span><span class="w"> </span>ffmpeg<span class="w"> </span>-f<span class="w"> </span>rawvideo<span class="w"> </span>-pixel_format<span class="w"> </span>rgb24<span class="w"> </span>-video_size<span class="w"> </span>640x480<span class="w"> </span>-framerate<span class="w"> </span><span class="m">5</span><span class="w"> </span>-i<span class="w"> </span>-<span class="w"> </span>-f<span class="w"> </span>v4l2<span class="w"> </span>/dev/video1
-</code></pre></div></li>
-</ul>
-<h2 id="advantages">Advantages<a class="headerlink" href="#advantages" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Versatility</strong>: Seamlessly switch between local visualization and streaming, making it ideal for diverse use cases like live monitoring or video conferencing.</li>
-<li><strong>Enhanced Image Quality</strong>: Advanced processing options improve clarity and reduce noise in thermal images.</li>
-<li><strong>User-Friendly</strong>: Intuitive command-line interface with sensible defaults for quick setup.</li>
-<li><strong>Integration with C++ Version</strong>: This Python example complements the C++ MI48Dx Serial Driver (<a href="https://github.com/HefnySco/mi48dx-serial-driver">HefnySco/mi48dx-serial-driver</a>), which offers a lightweight alternative for processing raw binary data streams and converting 16-bit pixel values into Kelvin temperatures with frame statistics (MIN/MAX/AVG). The C++ version is ideal for performance-critical applications or environments where Python dependencies are a constraint.</li>
-</ul>
-<h2 id="c-alternative">C++ Alternative<a class="headerlink" href="#c-alternative" title="Permanent link">&para;</a></h2>
-<p>For a lower-level, high-performance interface to the MI48 thermal imaging sensor, check out the <a href="https://github.com/HefnySco/mi48dx-serial-driver">C++ MI48Dx Serial Driver</a>. It provides direct access to raw data streams and is optimized for minimal overhead, making it suitable for embedded systems or real-time applications.</p>
+<h1 id="thermal-rgb-recorder">Thermal + RGB Recorder<a class="headerlink" href="#thermal-rgb-recorder" title="Permanent link">&para;</a></h1>
+<p>This example resolves the blocking nature of <code>cv2.VideoCapture</code> and <code>cv2.VideoWriter</code> by wrapping the RGB camera in a background thread using <code>senxor.cv_utils.CVCamThread</code>. It combines both frames side-by-side in real time and records the stream to a local video file.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Dual-camera synchronous recording system using multithreading.</span>
+
+<span class="sd">This example solves the blocking nature of cv2.VideoCapture and cv2.VideoWriter</span>
+<span class="sd">by wrapping the RGB camera in a background thread using senxor.cv_utils.CVCamThread.</span>
+<span class="sd">It non-blockingly polls both the thermal and RGB cameras, combines their frames</span>
+<span class="sd">side-by-side, displays them in real time, and records them to a local video file.</span>
+
+<span class="sd">External dependencies:</span>
+<span class="sd">- opencv-python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">list_senxor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.cv_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">CVCamThread</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">senxor.proc</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalize</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># 1. Initialize Senxor Device</span>
+    <span class="n">devices</span> <span class="o">=</span> <span class="n">list_senxor</span><span class="p">(</span><span class="s2">&quot;serial&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No devices found&quot;</span><span class="p">)</span>
+
+    <span class="n">senxor_device</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Set frame rate divider to 0 to get the maximum frame rate</span>
+    <span class="n">senxor_device</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">FRAME_RATE_DIVIDER</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">senxor_device</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
+
+    <span class="c1"># 2. Initialize RGB Camera using CVCamThread to prevent blocking</span>
+    <span class="c1"># standard cv2.VideoCapture(0) would block the main loop</span>
+    <span class="n">raw_cam</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CAP_DSHOW</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_cam</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+        <span class="n">senxor_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No RGB camera found&quot;</span><span class="p">)</span>
+
+    <span class="n">raw_cam</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">,</span> <span class="mi">640</span><span class="p">)</span>
+    <span class="n">raw_cam</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">,</span> <span class="mi">480</span><span class="p">)</span>
+
+    <span class="n">rgb_cam</span> <span class="o">=</span> <span class="n">CVCamThread</span><span class="p">(</span><span class="n">raw_cam</span><span class="p">)</span>
+    <span class="n">rgb_cam</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c1"># 3. Setup Video Writer</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+    <span class="n">DATA_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;data/record_</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.avi&quot;</span>
+
+    <span class="c1"># We will resize both frames to 640x480 and put them side-by-side -&gt; 1280x480</span>
+    <span class="n">fourcc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;XVID&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore[reportUnknownMember]</span>
+    <span class="c1"># Using ~30 fps as a baseline for the recording</span>
+    <span class="n">video_writer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">fourcc</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
+
+    <span class="n">thermal_image_resized</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rgb_image_resized</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;System running, press &#39;q&#39; or &#39;ESC&#39; to exit&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Non-blocking read from thermal camera</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">thermal_raw</span> <span class="o">=</span> <span class="n">senxor_device</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">thermal_raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Convert 16-bit thermal data to 8-bit visual image</span>
+                <span class="n">norm_img</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">thermal_raw</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+                <span class="n">color_img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">applyColorMap</span><span class="p">(</span><span class="n">norm_img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLORMAP_INFERNO</span><span class="p">)</span>
+                <span class="c1"># Resize to standard height 480</span>
+                <span class="n">thermal_image_resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">color_img</span><span class="p">,</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
+
+            <span class="c1"># Non-blocking read from the RGB camera thread</span>
+            <span class="n">rgb_raw</span> <span class="o">=</span> <span class="n">rgb_cam</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">rgb_raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rgb_image_resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">rgb_raw</span><span class="p">,</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">thermal_image_resized</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rgb_image_resized</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Stack them side-by-side horizontally</span>
+            <span class="n">combined_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">thermal_image_resized</span><span class="p">,</span> <span class="n">rgb_image_resized</span><span class="p">))</span>
+
+            <span class="c1"># Show in UI</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;Thermal + RGB Recorder&quot;</span><span class="p">,</span> <span class="n">combined_frame</span><span class="p">)</span>
+
+            <span class="c1"># Write to disk(technically blocking I/O, but it is fast enough to run in the main loop)</span>
+            <span class="n">video_writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">combined_frame</span><span class="p">)</span>
+
+            <span class="c1"># Wait for 30ms</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.03</span><span class="p">)</span>
+
+            <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)):</span>  <span class="c1"># ESC or &#39;q&#39;</span>
+                <span class="k">break</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+        <span class="n">video_writer</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">rgb_cam</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="n">senxor_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
 
 
 
@@ -1388,7 +1356,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../fastapi_mjpeg_streamer/" class="md-footer__link md-footer__link--prev" aria-label="Previous: FastAPI MJPEG Streamer">
+          <a href="../multi_senxor_alarm/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Multi-Senxor Alarm">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1398,20 +1366,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                FastAPI MJPEG Streamer
+                Multi-Senxor Alarm
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../api/senxor/" class="md-footer__link md-footer__link--next" aria-label="Next: senxor">
+          <a href="../fastapi_mjpeg_streamer/" class="md-footer__link md-footer__link--next" aria-label="Next: FastAPI MJPEG Streamer">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                senxor
+                FastAPI MJPEG Streamer
               </div>
             </div>
             <div class="md-footer__button md-icon">

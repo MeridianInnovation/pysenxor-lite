@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/examples/basic_stream/">
       
       
-        <link rel="prev" href="../../guides/7.error_handling/">
+        <link rel="prev" href="../../guides/advanced/1.concurrency_patterns/">
       
       
-        <link rel="next" href="../v4l2-virtual-camera/">
+        <link rel="next" href="../thermal_rgb/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -575,6 +575,80 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_8">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/advanced/1.concurrency_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Concurrency patterns for Senxor: multi-device streaming and blocking I/O
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -658,6 +732,98 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../thermal_rgb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Thermal + RGB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi_senxor_alarm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-Senxor Alarm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../thermal_rgb_recorder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Thermal + RGB Recorder
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fastapi_mjpeg_streamer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FastAPI MJPEG Streamer
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1048,7 +1214,11 @@
 
 <h1 id="basic-stream">Basic Stream<a class="headerlink" href="#basic-stream" title="Permanent link">&para;</a></h1>
 <p>This example shows how to stream frames from a Senxor device and display them in a window using cv2.</p>
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;A basic example of how to stream frames from a Senxor device and display them in a window using cv2.&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;A basic example of how to stream frames from a Senxor device and display them in a window using OpenCV.</span>
+
+<span class="sd">External dependencies:</span>
+<span class="sd">- opencv-python</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -1133,7 +1303,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../guides/7.error_handling/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Error Handling">
+          <a href="../../guides/advanced/1.concurrency_patterns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Concurrency patterns for Senxor: multi-device streaming and blocking I/O">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1143,20 +1313,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Error Handling
+                Concurrency patterns for Senxor: multi-device streaming and blocking I/O
               </div>
             </div>
           </a>
         
         
           
-          <a href="../v4l2-virtual-camera/" class="md-footer__link md-footer__link--next" aria-label="Next: Stream to Virtual Camera using FFmpeg and v4l2loopback">
+          <a href="../thermal_rgb/" class="md-footer__link md-footer__link--next" aria-label="Next: Thermal + RGB">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Stream to Virtual Camera using FFmpeg and v4l2loopback
+                Thermal + RGB
               </div>
             </div>
             <div class="md-footer__button md-icon">
