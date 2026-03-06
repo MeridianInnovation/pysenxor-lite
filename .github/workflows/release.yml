@@ -27,12 +27,12 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           if [[ ${{ steps.get_version.outputs.version }} != ${{ github.ref_name }}* ]]; then
-            echo "::error::Version mismatch!" >> $GITHUB_OUTPUT
-            echo "Version in pyproject.toml: ${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
-            echo "Tag name: ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "::error::Version mismatch!" >> $GITHUB_STEP_SUMMARY
+            echo "Version in pyproject.toml: ${{ steps.get_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+            echo "Tag name: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-          echo "Version matches the tag name." >> $GITHUB_OUTPUT
+          echo "Version matches the tag name." >> $GITHUB_STEP_SUMMARY
 
   build-sdists-and-wheels:
     name: Build sdists and wheels
