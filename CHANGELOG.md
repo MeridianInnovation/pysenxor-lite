@@ -1,3 +1,9 @@
+## v3.1.2 (2026-03-09)
+
+### Fix
+
+- Fix the issue of colormaps not being loaded correctly in build sdists and wheels.
+
 ## v3.1.0 (2026-01-28)
 
 !!! BREAKING CHANGE !!!
