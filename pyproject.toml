@@ -55,7 +55,7 @@ build-backend = "setuptools.build_meta"
 senxor = "senxor"
 
 [tool.setuptools.package-data]
-"senxor" = ["resources/*"]
+"senxor" = ["resources/**/*"]
 
 [project.urls]
 Homepage = "https://www.meridianinno.com/"
