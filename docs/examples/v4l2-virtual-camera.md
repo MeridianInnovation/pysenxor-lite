@@ -2,7 +2,7 @@
 
 This example, `v4l2-virtual-camera.py`, allows you to stream the thermal camera feed to a virtual video device using FFmpeg and v4l2loopback.
 
-You can find the source code at [Here](https://github.com/MeridianInnovation/pysenxor/blob/main/example/v4l2-virtual-camera.py).
+You can find the source code at [Here](https://github.com/MeridianInnovation/pysenxor-lite/blob/main/example/v4l2-virtual-camera.py).
 
 ## Features
 
@@ -16,11 +16,11 @@ You can find the source code at [Here](https://github.com/MeridianInnovation/pys
 
 - **Local Display**:
   ```bash
-  python thermal_toolbox.py --scale 6 --colormap viridis --smoothing-level 7
+  python v4l2-virtual-camera.py --scale 6 --colormap viridis --smoothing-level 7
   ```
 - **Streaming to Virtual Camera** (requires FFmpeg and v4l2loopback):
   ```bash
-  python thermal_toolbox.py --stream | ffmpeg -f rawvideo -pixel_format rgb24 -video_size 640x480 -framerate 5 -i - -f v4l2 /dev/video1
+  python v4l2-virtual-camera.py --stream | ffmpeg -f rawvideo -pixel_format rgb24 -video_size 640x480 -framerate 5 -i - -f v4l2 /dev/video1
   ```
 
 ## Advantages
