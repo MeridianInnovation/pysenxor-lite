@@ -8,8 +8,6 @@ import queue
 import threading
 from typing import TYPE_CHECKING, Callable, cast
 
-from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras
-
 if TYPE_CHECKING:
     import numpy as np
     from cv2 import VideoCapture
@@ -43,6 +41,12 @@ def list_camera_info(
     >>> cap = cv2.VideoCapture(camera_info.index, camera_info.backend)
 
     """
+    try:
+        from cv2_enumerate_cameras import enumerate_cameras as _enumerate_cameras  # noqa: PLC0415
+    except ImportError:
+        raise ImportError(
+            "Required dependency is not installed. Please install it with `pip install cv2-enumerate-cameras`.",
+        ) from None
     # 3.1.0: remove the exclude_same_index parameter and related logic
     cameras = _enumerate_cameras(backend)
     return cameras

@@ -19,7 +19,6 @@ dependencies = [
   "numpy>=1.19.5",
   "pyserial>=3.5",
   "structlog>=25.4.0",
-  "cv2-enumerate-cameras>=1.2.2",
   "tomli>=2.2.1 ; python_full_version < '3.10'",
 ]
 
@@ -30,6 +29,8 @@ dev = [
   "pillow>=11.2.1",
   "rich>=10.11.0",
 ]
+
+camera = ["pyvirtualcam>=0.14.0", "cv2-enumerate-cameras>=1.2.2"]
 
 doc = [
   "mkdocs>=1.6.1",
@@ -62,7 +63,7 @@ Homepage = "https://www.meridianinno.com/"
 Issues = "https://www.meridianinno.com/"
 
 [tool.uv]
-default-groups = ["dev", "test"]
+default-groups = ["dev", "test", "camera"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
