@@ -25,7 +25,7 @@ nav:
       - Multi-Senxor Alarm: examples/multi_senxor_alarm.md
       - Thermal + RGB Recorder: examples/thermal_rgb_recorder.md
       - FastAPI MJPEG Streamer: examples/fastapi_mjpeg_streamer.md
-      - Stream to Virtual Camera using FFmpeg and v4l2loopback: examples/v4l2-virtual-camera.md
+      - Virtual Camera: examples/virtual-camera.md
   - API Reference:
       - senxor: api/senxor.md
       - senxor.proc: api/proc.md

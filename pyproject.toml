@@ -28,6 +28,7 @@ dev = [
   "opencv-python>=4.11.0.86",
   "pillow>=11.2.1",
   "rich>=10.11.0",
+  "typer>=0.23.2",
 ]
 
 camera = ["pyvirtualcam>=0.14.0", "cv2-enumerate-cameras>=1.2.2"]
