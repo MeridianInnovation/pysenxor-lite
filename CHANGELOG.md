@@ -1,3 +1,9 @@
+## v3.1.3 (2026-03-24)
+
+### Fix
+
+- Update `SENXOR_TYPE`, `MCU_TYPE`, and `MODULE_TYPE` in `senxor.consts`.
+
 ## v3.1.2 (2026-03-09)
 
 ### Fix
