@@ -12,7 +12,7 @@
         <meta name="author" content="Meridian Innovation">
       
       
-        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/examples/v4l2-virtual-camera/">
+        <link rel="canonical" href="https://MeridianInnovation.github.io/pysenxor-lite/examples/virtual-camera/">
       
       
         <link rel="prev" href="../fastapi_mjpeg_streamer/">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Stream to Virtual Camera using FFmpeg and v4l2loopback - pysenxor</title>
+        <title>Virtual Camera - pysenxor</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v4l2-virtual-camerapy" class="md-skip">
+        <a href="#virtual-camera" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Stream to Virtual Camera using FFmpeg and v4l2loopback
+              Virtual Camera
             
           </span>
         </div>
@@ -840,7 +840,7 @@
   
   
   <span class="md-ellipsis">
-    Stream to Virtual Camera using FFmpeg and v4l2loopback
+    Virtual Camera
     
   </span>
   
@@ -853,7 +853,7 @@
   
   
   <span class="md-ellipsis">
-    Stream to Virtual Camera using FFmpeg and v4l2loopback
+    Virtual Camera
     
   </span>
   
@@ -876,36 +876,60 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#prerequisites-by-platform" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Prerequisites by platform
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites by platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      macOS
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples" class="md-nav__link">
+  <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage Examples
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advantages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#c-alternative" class="md-nav__link">
-    <span class="md-ellipsis">
-      C++ Alternative
+      Dependencies
     </span>
   </a>
   
@@ -1257,36 +1281,60 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#prerequisites-by-platform" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Prerequisites by platform
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites by platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      macOS
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples" class="md-nav__link">
+  <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage Examples
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advantages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#c-alternative" class="md-nav__link">
-    <span class="md-ellipsis">
-      C++ Alternative
+      Dependencies
     </span>
   </a>
   
@@ -1308,7 +1356,7 @@
 
 
   
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/examples/v4l2-virtual-camera.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/edit/main/docs/examples/virtual-camera.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1317,42 +1365,39 @@
     
       
     
-    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/examples/v4l2-virtual-camera.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MeridianInnovation/pysenxor-lite/raw/main/docs/examples/virtual-camera.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="v4l2-virtual-camerapy"><code>v4l2-virtual-camera.py</code><a class="headerlink" href="#v4l2-virtual-camerapy" title="Permanent link">&para;</a></h1>
-<p>This example, <code>v4l2-virtual-camera.py</code>, allows you to stream the thermal camera feed to a virtual video device using FFmpeg and v4l2loopback.</p>
-<p>You can find the source code at <a href="https://github.com/MeridianInnovation/pysenxor/blob/main/example/v4l2-virtual-camera.py">Here</a>.</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<h1 id="virtual-camera">Virtual Camera<a class="headerlink" href="#virtual-camera" title="Permanent link">&para;</a></h1>
+<p>This example streams the Senxor thermal imaging feed to a <strong>virtual webcam</strong> that works as a system camera. You can use it in Zoom, OBS, Teams, or any application that uses a camera.</p>
+<p>It runs on <strong>Windows</strong>, <strong>Linux</strong>, and <strong>macOS</strong>.</p>
+<p>Source: <a href="https://github.com/MeridianInnovation/pysenxor-lite/blob/main/example/virtual-camera.py">virtual-camera.py</a>.</p>
+<h2 id="prerequisites-by-platform">Prerequisites by platform<a class="headerlink" href="#prerequisites-by-platform" title="Permanent link">&para;</a></h2>
+<h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<p>Install <a href="https://obsproject.com/">OBS</a> (OBS Virtual Camera) or Unity Capture.</p>
+<h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
+<p>Install and load v4l2loopback.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>v4l2loopback-dkms
+sudo<span class="w"> </span>modprobe<span class="w"> </span>v4l2loopback<span class="w"> </span><span class="nv">video_nr</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">card_label</span><span class="o">=</span><span class="s2">&quot;Senxor Thermal&quot;</span><span class="w"> </span><span class="nv">exclusive_caps</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div>
+<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<p>Install OBS and enable OBS Virtual Camera.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>Default run:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>example/virtual-camera.py
+</code></pre></div>
+<p>View all options:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>example/virtual-camera.py<span class="w"> </span>--help
+</code></pre></div>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Flexible Output Options</strong>: Supports local display of thermal images or streaming to a virtual video device (e.g., <code>/dev/video1</code>) using FFmpeg for integration with applications like Zoom, OBS, or VLC.</li>
-<li><strong>Advanced Image Processing</strong>: Includes temporal smoothing, spatial median blur, and optional CLAHE (Contrast Limited Adaptive Histogram Equalization) for enhanced image quality.</li>
-<li><strong>Customizable Parameters</strong>: Allows configuration of colormap, emissivity, scaling factor, and smoothing levels via command-line arguments.</li>
-<li><strong>Min/Max Temperature Annotation</strong>: Automatically annotates the minimum and maximum temperature points on the displayed or streamed image.</li>
-<li><strong>Clean Exit Handling</strong>: Gracefully handles interruptions (e.g., Ctrl+C) to ensure proper cleanup of camera resources and windows.</li>
+<li><strong>pyvirtualcam</strong>: virtual camera output.</li>
+<li><strong>typer</strong>: CLI.</li>
 </ul>
-<h2 id="usage-examples">Usage Examples<a class="headerlink" href="#usage-examples" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Local Display</strong>:
-  <div class="highlight"><pre><span></span><code>python<span class="w"> </span>thermal_toolbox.py<span class="w"> </span>--scale<span class="w"> </span><span class="m">6</span><span class="w"> </span>--colormap<span class="w"> </span>viridis<span class="w"> </span>--smoothing-level<span class="w"> </span><span class="m">7</span>
-</code></pre></div></li>
-<li><strong>Streaming to Virtual Camera</strong> (requires FFmpeg and v4l2loopback):
-  <div class="highlight"><pre><span></span><code>python<span class="w"> </span>thermal_toolbox.py<span class="w"> </span>--stream<span class="w"> </span><span class="p">|</span><span class="w"> </span>ffmpeg<span class="w"> </span>-f<span class="w"> </span>rawvideo<span class="w"> </span>-pixel_format<span class="w"> </span>rgb24<span class="w"> </span>-video_size<span class="w"> </span>640x480<span class="w"> </span>-framerate<span class="w"> </span><span class="m">5</span><span class="w"> </span>-i<span class="w"> </span>-<span class="w"> </span>-f<span class="w"> </span>v4l2<span class="w"> </span>/dev/video1
-</code></pre></div></li>
-</ul>
-<h2 id="advantages">Advantages<a class="headerlink" href="#advantages" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Versatility</strong>: Seamlessly switch between local visualization and streaming, making it ideal for diverse use cases like live monitoring or video conferencing.</li>
-<li><strong>Enhanced Image Quality</strong>: Advanced processing options improve clarity and reduce noise in thermal images.</li>
-<li><strong>User-Friendly</strong>: Intuitive command-line interface with sensible defaults for quick setup.</li>
-<li><strong>Integration with C++ Version</strong>: This Python example complements the C++ MI48Dx Serial Driver (<a href="https://github.com/HefnySco/mi48dx-serial-driver">HefnySco/mi48dx-serial-driver</a>), which offers a lightweight alternative for processing raw binary data streams and converting 16-bit pixel values into Kelvin temperatures with frame statistics (MIN/MAX/AVG). The C++ version is ideal for performance-critical applications or environments where Python dependencies are a constraint.</li>
-</ul>
-<h2 id="c-alternative">C++ Alternative<a class="headerlink" href="#c-alternative" title="Permanent link">&para;</a></h2>
-<p>For a lower-level, high-performance interface to the MI48 thermal imaging sensor, check out the <a href="https://github.com/HefnySco/mi48dx-serial-driver">C++ MI48Dx Serial Driver</a>. It provides direct access to raw data streams and is optimized for minimal overhead, making it suitable for embedded systems or real-time applications.</p>
 
 
 
