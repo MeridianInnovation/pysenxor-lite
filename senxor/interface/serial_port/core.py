@@ -130,7 +130,7 @@ class SerialInterface(ISenxorInterface[SerialPort]):
         "xonxoff": False,
         "rtscts": False,
         "dsrdtr": False,
-        "timeout": 0,
+        "timeout": 1,
         "write_timeout": 0.2,
         "exclusive": True,
     }

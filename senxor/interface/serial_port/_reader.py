@@ -3,10 +3,9 @@ from __future__ import annotations
 
 import queue
 import threading
-import time
 from collections import deque
 from enum import Enum, auto
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from serial import PortNotOpenError, Serial, SerialException
 
@@ -50,67 +49,123 @@ class SenxorSerialState(Enum):
     ACK_ERROR = auto()  # There was an ACK error (e.g. lost part of the ACK).
 
 
+class SerialReaderThread:
+    def __init__(
+        self,
+        ser: Serial,
+        logger,
+        on_started: Callable[[], None],
+        on_data: Callable[[bytes], None],
+        on_error: Callable[[Exception], None],
+    ):
+        self.ser = ser
+        self.logger = logger
+        self.on_started = on_started
+        self.on_data = on_data
+        self.on_error = on_error
+
+        self.worker_thread: threading.Thread | None = None
+        self.stop_event = threading.Event()
+        self._lock = threading.Lock()
+
+    def start(self) -> None:
+        """Start the receiver thread."""
+        if not self.ser.is_open:
+            raise RuntimeError("Serial port not open", self.ser.port)
+        if self.worker_thread:
+            raise RuntimeError("Serial reader thread already started")
+        self.on_started()
+        self.stop_event.clear()
+        self.worker_thread = threading.Thread(target=self._worker_loop, daemon=True)
+        self.worker_thread.start()
+
+    def stop(self) -> None:
+        self.stop_event.set()
+        self.ser.cancel_read()
+        if self.worker_thread:
+            self.worker_thread.join(timeout=3)
+            if self.worker_thread.is_alive():
+                self.logger.warning("serial_receiver_thread_stopped_timeout", thread=self.worker_thread.name)
+                self.clean_up()
+                self.logger.info("forced_clean_up")
+            self.worker_thread = None
+
+    def _worker_loop(self) -> None:
+        try:
+            while not self.stop_event.is_set():
+                chunk = self.ser.read(self.ser.in_waiting or 1)
+                if chunk:
+                    self.on_data(chunk)
+        except Exception as e:
+            self.on_error(e)
+        finally:
+            self.clean_up()
+
+    def clean_up(self) -> None:
+        """Clean up the reader."""
+        try:
+            with self._lock:
+                self.ser.close()
+            self.logger.debug("serial_closed")
+        except Exception as e:
+            self.logger.warning("close_serial_failed", error=e)
+
+    def write(self, data: bytes) -> None:
+        with self._lock:
+            self.ser.write(data)
+
+
 class SenxorSerialReader:
     def __init__(
         self,
         ser: Serial,
         logger,
         events: SenxorInterfaceEvent,
-        read_interval: float = 0.005,
     ):
         self.ser = ser
         self.logger = logger
         self.events = events
-        self.read_interval = read_interval
 
         self._buffer = ByteFIFO()
         self._parser = SenxorAckParser(logger)
         self._init_ack_pipe()
 
-        self._write_queue: queue.Queue[bytes] = queue.Queue()
-
         self.state: SenxorSerialState = SenxorSerialState.CLOSED
-        self.worker_thread: threading.Thread | None = None
 
-        self.stop_event = threading.Event()
         self.error_event = threading.Event()
         self.error_queue: queue.Queue[tuple[str, Exception]] = queue.Queue(1)
         self.no_module_event = threading.Event()
 
+        self._reader = SerialReaderThread(
+            ser,
+            logger,
+            on_started=self._on_reader_started,
+            on_data=self._on_data_received,
+            on_error=self._on_reader_error,
+        )
+
     def start(self) -> None:
-        """Start the receiver thread."""
-        if not self.ser.is_open:
-            raise RuntimeError("Serial port not open", self.ser.port)
-        if self.ser.timeout != 0:
-            raise ValueError("Serial read timeout must be 0")
-        self._reset_statis()
-        self.stop_event.clear()
-        self.state = SenxorSerialState.UNKNOWN
-        self.worker_thread = threading.Thread(target=self._worker_loop, daemon=True)
-        self.worker_thread.start()
+        """Start the reader."""
+        self._reader.start()
 
     def stop(self) -> None:
-        """Stop the receiver thread."""
-        self.stop_event.set()
-        if self.worker_thread:
-            self.worker_thread.join(timeout=3)
-            if self.worker_thread.is_alive():
-                self.logger.warning("serial_receiver_thread_stopped_timeout", thread=self.worker_thread.name)
-                self._clean_up()
-                self.logger.info("forced_clean_up")
-            self.worker_thread = None
+        """Stop the reader."""
+        self._reader.stop()
+
+    def write(self, data: bytes) -> None:
+        self._reader.write(data)
 
     def raise_if_error(self) -> None:
         if self.error_event.is_set():
             self.error_event.clear()
-            msg, error = self.error_queue.get()
-            self.logger.exception(msg, error=error)
+            msg, e = self.error_queue.get()
+            self.logger.exception(msg, error=e)
             self.stop()
-            raise error
+            raise e
 
-    def write(self, data: bytes) -> None:
-        # Raise error if the queue is full.
-        self._write_queue.put_nowait(data)
+    def _on_reader_started(self) -> None:
+        self._reset_statis()
+        self.state = SenxorSerialState.UNKNOWN
 
     def _init_ack_pipe(self) -> None:
         """Initialize the ACK pipe."""
@@ -126,63 +181,9 @@ class SenxorSerialReader:
         self.rrse_queue: deque[dict[int, int]] = deque(maxlen=1)
         self.rrse_ready = threading.Condition()
 
-    def _reset_statis(self) -> None:
-        self._ack_error_count = 0
-        self._misaligned_count = 0
-
-        self._max_ack_error_count = 4
-        self._max_misaligned_count = 4
-
-    def _set_error(self, error: Exception, msg: str) -> None:
-        self.error_queue.put((msg, error))
-        self.error_event.set()
-        self.events.error.emit(error)
-
-    def _worker_loop(self) -> None:
-        try:
-            while not self.stop_event.is_set():
-                self._read_data()
-                self._write_data()
-                time.sleep(self.read_interval)
-        except PortNotOpenError as e:
-            e_ = SenxorNotConnectedError()
-            self._set_error(e, "serial_port_not_open")
-        except SerialException:
-            e_ = SenxorLostConnectionError()
-            self._set_error(e_, "serial_lost_connection")
-        except Exception as e:
-            self._set_error(e, "serial_unexpected_error")
-        finally:
-            self._clean_up()
-            self.state = SenxorSerialState.CLOSED
-
-    def _clean_up(self) -> None:
-        """Clean up the receiver."""
-        try:
-            self.ser.close()
-            self.logger.debug("serial_closed")
-        except Exception as e:
-            self.logger.warning("close_serial_failed", error=e)
-
-    def _read_data(self) -> None:
-        """Read data from the serial port. Called in the worker thread."""
-        chunk = self.ser.read(self.ser.in_waiting)
-        if chunk:
-            self._buffer.put(chunk)
-            self._on_data_received()
-
-    def _write_data(self) -> None:
-        """Write data to the serial port. Called in the worker thread."""
-        try:
-            data = self._write_queue.get_nowait()
-        except queue.Empty:
-            return
-        self.ser.write(data)
-        self.logger.debug("serial_write", data=data)
-        self._write_queue.task_done()
-
-    def _on_data_received(self) -> None:
+    def _on_data_received(self, data: bytes) -> None:
         """On data received from the serial port."""
+        self._buffer.put(data)
         while True:
             if self.state == SenxorSerialState.ACK_ERROR:
                 self._on_invalid_ack()
@@ -197,6 +198,28 @@ class SenxorSerialReader:
                 break
             else:
                 raise RuntimeError(f"Invalid state: {self.state}")
+
+    def _on_reader_error(self, e: Exception) -> None:
+        if isinstance(e, PortNotOpenError):
+            error = SenxorNotConnectedError()
+            self._set_error(error, "serial_port_not_open")
+        elif isinstance(e, SerialException):
+            error = SenxorLostConnectionError()
+            self._set_error(error, "serial_lost_connection")
+        else:
+            self._set_error(e, "serial_unexpected_error")
+
+    def _reset_statis(self) -> None:
+        self._ack_error_count = 0
+        self._misaligned_count = 0
+
+        self._max_ack_error_count = 4
+        self._max_misaligned_count = 4
+
+    def _set_error(self, error: Exception, msg: str) -> None:
+        self.error_queue.put((msg, error))
+        self.error_event.set()
+        self.events.error.emit(error)
 
     def _check_state(self) -> None:
         """Check the state of the buffer.
@@ -342,6 +365,4 @@ class SenxorSerialReader:
                 # Only `read` function will raise `SenxorNoModuleError`.
                 self.events.error.emit(SenxorNoModuleError())
         else:
-            self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
-            self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
             self.logger.warning("unknown_ack_type", cmd=cmd, data=data)
