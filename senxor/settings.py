@@ -23,13 +23,22 @@ class SenxorSettings(BaseSettings):
         }
         local_vars["frame_shape"] = instance.get_shape()
         local_vars["name"] = str(instance.name)
+        local_vars["module_type"] = instance.get_module_type()
+        local_vars["mcu_type"] = instance.get_mcu_type()
+        local_vars["senxor_type"] = instance.get_senxor_type()
+        local_vars["module_name"] = instance.get_module_name()
+        local_vars["fw_version"] = instance.get_fw_version()
         return local_vars
 
     @classmethod
     def _apply_profile(cls, obj: Senxor, settings: dict[str, int]) -> None:
         for key, value in settings.items():
             try:
-                obj.set_field(key, value)  # type: ignore[reportArgumentType]
+                if key.startswith("REG_"):
+                    addr = int(key[4:], 0)
+                    obj.write_reg(addr, value)
+                else:
+                    obj.set_field(key, value)  # type: ignore[reportArgumentType]
             except Exception as e:  # noqa: PERF203
                 cls._logger.error("apply_profile_failed", key=key, value=value, error=e)
                 raise
