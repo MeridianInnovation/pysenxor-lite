@@ -120,6 +120,7 @@ class BaseSettings(ABC):
     Inherit this class to create a settings manager.
 
     There are two abstract methods need to be implemented:
+
     - `_get_local_variables`: Return a dictionary of local variables for the condition evaluation.
     - `_apply_profile`: Apply a profile to the destination object.
 

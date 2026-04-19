@@ -133,6 +133,7 @@ def normalize(
         - If `dtype` is None:
             - If image.dtype is a floating-point type, (0.0, 1.0) is used.
             - If image.dtype is an integer type, the min/max of image.dtype are used.
+
         Default is None.
 
     dtype : numpy.dtype or None, optional
@@ -419,14 +420,17 @@ def parse_header(header: np.ndarray) -> SenxorHeader:
 
     Returns
     -------
-    SenxorHeader: Dataclass with the following attributes:
-    - frame_counter: int, the frame counter value
-    - vdd: float, the VDD(Voltage) value
-    - die_temp: float, the die temperature value in °C
-    - timestamp: int, the timestamp value
-    - maxVal: float, the maximum temperature value in °C
-    - minVal: float, the minimum temperature value in °C
-    - crc: int, the CRC(Cyclic Redundancy Check) value
+    SenxorHeader : dataclass
+
+        Dataclass with the following attributes:
+
+        - frame_counter: int, the frame counter value
+        - vdd: float, the VDD(Voltage) value
+        - die_temp: float, the die temperature value in °C
+        - timestamp: int, the timestamp value
+        - maxVal: float, the maximum temperature value in °C
+        - minVal: float, the minimum temperature value in °C
+        - crc: int, the CRC(Cyclic Redundancy Check) value
 
     Examples
     --------

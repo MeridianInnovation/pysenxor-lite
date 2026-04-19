@@ -39,6 +39,7 @@ class SenxorHelperMixin:
         """Disable all filters inside the senxor.
 
         This method will set the following filters to disabled:
+
         - STARK
         - MMS KXMS
         - MMS RA
@@ -61,11 +62,13 @@ class SenxorHelperMixin:
         dict[str, bool]
             The status of all filters.
             Available keys:
+
             - stark
             - mms_kxms
             - mms_ra
             - median
             - temporal
+
             The value is True if the filter is available in current device and enabled.
 
         """
@@ -147,6 +150,7 @@ class SenxorHelperMixin:
         -------
         str
             The module gain setting as a string. Possible values:
+
             - "1.0" (default, maximum gain)
             - "auto" (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)
             - "0.25" (quarter gain)
@@ -162,6 +166,7 @@ class SenxorHelperMixin:
         ----------
         gain : int
             The module gain setting as an integer. Possible values:
+
             - 0: 1.0 (default, maximum gain)
             - 1: auto (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)
             - 2: 0.25 (quarter gain)
@@ -257,6 +262,7 @@ class SenxorHelperMixin:
 
         The SN code is a hex string of 12 characters, the format is:
         `YYWWLLSSSSSS`, where:
+
         - `YY` is the production year (from 2000 to 2099).
         - `WW` is the production week.
         - `LL` is the manufacturing location.
@@ -281,6 +287,7 @@ class SenxorHelperMixin:
         -------
         str
             The module name. Possible values:
+
             - "Cougar" (62x80)
             - "Panther" (120x160)
             - "Cheetah" (50x50)
