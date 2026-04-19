@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 """Logging utilities for Senxor devices."""
 
@@ -223,7 +223,9 @@ def _remove_logger_name_processor(_, __, event: dict):
 
 def _get_log_level(level: int | str):
     if isinstance(level, str):
-        log_level_ = logging.getLevelNamesMapping().get(level.upper())
+        log_level_ = logging._nameToLevel.get(
+            level.upper(),
+        )  # logging.getLevelNamesMapping() only available in Python 3.11+
         if log_level_ is None:
             raise KeyError(f"Invalid log level: {level}")
         return log_level_
