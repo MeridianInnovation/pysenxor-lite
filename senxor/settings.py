@@ -17,14 +17,13 @@ class SenxorSettings(BaseSettings):
 
     @classmethod
     def _get_local_variables(cls, instance: Senxor) -> dict[str, Any]:
-        local_vars = {}
-        local_vars["frame_shape"] = instance.get_shape()
-        local_vars["name"] = str(instance.name)
         fields_cache = instance.fields.cache
-        fields = {
+        local_vars: dict[str, Any] = {
             field: fields_cache[field] for field in fields_cache if not instance.fields.get_field(field).self_reset
         }
-        return fields
+        local_vars["frame_shape"] = instance.get_shape()
+        local_vars["name"] = str(instance.name)
+        return local_vars
 
     @classmethod
     def _apply_profile(cls, obj: Senxor, settings: dict[str, int]) -> None:
