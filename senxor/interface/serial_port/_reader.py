@@ -1,7 +1,6 @@
 # Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 from __future__ import annotations
 
-import queue
 import threading
 from collections import deque
 from enum import Enum, auto
@@ -81,7 +80,8 @@ class SerialReaderThread:
 
     def stop(self) -> None:
         self.stop_event.set()
-        self.ser.cancel_read()
+        if self.ser.is_open:
+            self.ser.cancel_read()
         if self.worker_thread:
             self.worker_thread.join(timeout=3)
             if self.worker_thread.is_alive():
@@ -132,8 +132,8 @@ class SenxorSerialReader:
 
         self.state: SenxorSerialState = SenxorSerialState.CLOSED
 
-        self.error_event = threading.Event()
-        self.error_queue: queue.Queue[tuple[str, Exception]] = queue.Queue(1)
+        self._fatal_error_lock = threading.Lock()
+        self._fatal_error: tuple[str, Exception] | None = None
         self.no_module_event = threading.Event()
 
         self._reader = SerialReaderThread(
@@ -156,12 +156,14 @@ class SenxorSerialReader:
         self._reader.write(data)
 
     def raise_if_error(self) -> None:
-        if self.error_event.is_set():
-            self.error_event.clear()
-            msg, e = self.error_queue.get()
-            self.logger.exception(msg, error=e)
-            self.stop()
-            raise e
+        with self._fatal_error_lock:
+            if self._fatal_error is None:
+                return
+            msg, e = self._fatal_error
+            self._fatal_error = None
+        self.logger.exception(msg, error=e)
+        self.stop()
+        raise e
 
     def _on_reader_started(self) -> None:
         self._reset_statis()
@@ -217,8 +219,11 @@ class SenxorSerialReader:
         self._max_misaligned_count = 4
 
     def _set_error(self, error: Exception, msg: str) -> None:
-        self.error_queue.put((msg, error))
-        self.error_event.set()
+        with self._fatal_error_lock:
+            if self._fatal_error is not None:
+                self.logger.warning("fatal_error_suppressed", pending=self._fatal_error[0], msg=msg, error=error)
+                return
+            self._fatal_error = (msg, error)
         self.events.error.emit(error)
 
     def _check_state(self) -> None:

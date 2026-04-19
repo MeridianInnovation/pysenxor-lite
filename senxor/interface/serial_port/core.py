@@ -221,11 +221,14 @@ class SerialInterface(ISenxorInterface[SerialPort]):
 
     def _wait_for_ack(self, cmd: str, queue: deque, ready: threading.Condition, timeout: float) -> Any:
         start_time = time.time()
-        with ready:
-            while not queue:
+        while True:
+            self.receiver.raise_if_error()
+            with ready:
+                if queue:
+                    return queue.popleft()
                 remaining = timeout - (time.time() - start_time)
                 if remaining <= 0:
-                    self.receiver.raise_if_error()
-                    raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")
+                    break
                 ready.wait(remaining)
-            return queue.popleft()
+        self.receiver.raise_if_error()
+        raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")
