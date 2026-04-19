@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class SenxorSettings(BaseSettings):
-    _logger = get_logger(logger_name="senxor_settings")
+    _logger = get_logger(logger_name="senxor")
 
     @classmethod
     def _get_local_variables(cls, instance: Senxor) -> dict[str, Any]:
@@ -25,6 +25,15 @@ class SenxorSettings(BaseSettings):
             field: fields_cache[field] for field in fields_cache if not instance.fields.get_field(field).self_reset
         }
         return fields
+
+    @classmethod
+    def _apply_profile(cls, obj: Senxor, settings: dict[str, int]) -> None:
+        for key, value in settings.items():
+            try:
+                obj.set_field(key, value)  # type: ignore[reportArgumentType]
+            except Exception as e:  # noqa: PERF203
+                cls._logger.error("apply_profile_failed", key=key, value=value, error=e)
+                raise
 
 
 def loads(

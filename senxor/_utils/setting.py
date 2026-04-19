@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Meridian Innovation. All rights reserved.
+# Copyright (c) 2025-2026 Meridian Innovation. All rights reserved.
 
 """A settings manager utility."""
 
@@ -197,13 +197,13 @@ class BaseSettings(ABC):
     @abstractmethod
     def _get_local_variables(cls, instance: Any) -> dict[str, Any]:
         """Return a dictionary of local variables for the condition evaluation."""
-        ...
+        raise NotImplementedError("Subclasses must implement this method.")
 
     @classmethod
     @abstractmethod
     def _apply_profile(cls, obj: Any, settings: dict[str, Any]) -> None:
         """Apply a profile to a destination object."""
-        ...
+        raise NotImplementedError("Subclasses must implement this method.")
 
     @staticmethod
     def _load_file(path: str | Path) -> dict[str, Any]:
