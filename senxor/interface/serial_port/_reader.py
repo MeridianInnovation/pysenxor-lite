@@ -213,10 +213,10 @@ class SenxorSerialReader:
 
     def _reset_statis(self) -> None:
         self._ack_error_count = 0
-        self._misaligned_count = 0
+        self._misaligned_bytes = 0
 
         self._max_ack_error_count = 4
-        self._max_misaligned_count = 4
+        self._max_misaligned_bytes = 65536
 
     def _set_error(self, error: Exception, msg: str) -> None:
         with self._fatal_error_lock:
@@ -250,12 +250,6 @@ class SenxorSerialReader:
             self.state = SenxorSerialState.EMPTY
         elif self._parser.is_buffer_unaligned(self._buffer.buf):
             self.state = SenxorSerialState.MISALIGNED
-            self._misaligned_count += 1
-            if self._misaligned_count >= self._max_misaligned_count:
-                self._set_error(
-                    SenxorAckInvalidError("Can not recover from misaligned buffer"),
-                    "serial_misaligned_count_exceeded",
-                )
         elif self._parser.is_buffer_pending(self._buffer.buf):
             self.state = SenxorSerialState.PENDING
         else:
@@ -287,6 +281,13 @@ class SenxorSerialReader:
             discarded = prefix_idx
             self._buffer.discard(discarded)
             self.logger.debug("realign_buffer", state="aligned", discarded=discarded)
+
+        self._misaligned_bytes += discarded
+        if self._misaligned_bytes >= self._max_misaligned_bytes:
+            self._set_error(
+                SenxorAckInvalidError("Can not recover from misaligned buffer"),
+                "serial_misaligned_bytes_exceeded",
+            )
         self.state = SenxorSerialState.UNKNOWN
 
     def _on_invalid_ack(self) -> None:
