@@ -24,36 +24,61 @@ This package can let users interact with Meridian Innovation's thermal imaging d
 
 ## Installation
 
-### Production Installation
+We strongly recommend using `uv` to manage the virtual environment.
 
-To install the library from PyPI, run the following command:
+To install `uv`, please refer to the [official documentation](https://docs.astral.sh/uv/getting-started/installation/).
+
+
+On Linux, if you plan to use `pysenxor-lite` together with `opencv`, `qt`, `tkinter`, etc., `uv` can help avoid many system dependency issues.
+
+### 1. Recommended: use `uv`
+
+Create a virtual environment and install the package with `uv`:
+
+```bash
+uv init   # create a pyproject.toml file, if you already have one, skip this step
+uv add pysenxor-lite # Add the package to the virtual environment
+```
+
+or without `pyproject.toml`:
+
+```bash
+uv venv --seed   # Create a virtual environment and install the dependencies
+uv pip install pysenxor-lite # Install the package
+```
+
+### 2. Use `pip`
 
 ```bash
 python -m pip install pysenxor-lite
 ```
 
-To get the latest nightly version, you can install the library from the GitHub repository:
+### 3. Linux notes
+
+If you are using SenXor via USB serial on Linux, ensure you have the proper permissions to access the serial port. You can add your user to the `dialout` group and reboot to apply the changes:
 
 ```bash
-python -m pip install git+https://github.com/MeridianInnovation/pysenxor-lite.git
+sudo usermod -aG dialout $USER
 ```
 
-### Development Installation
+### 4. Development installation
 
-For development, you can install the project in editable mode:
-
-```bash
-git clone https://github.com/MeridianInnovation/pysenxor-lite.git
-cd pysenxor-lite
-python -m pip install -e .
-```
-
-or use uv:
+For development, clone the repository and sync the environment with `uv`:
 
 ```bash
 git clone https://github.com/MeridianInnovation/pysenxor-lite.git
 cd pysenxor-lite
 uv sync
+```
+
+This will create a virtual environment and install pysenxor-lite in editable mode.
+
+If you prefer `pip`, you can use:
+
+```bash
+git clone https://github.com/MeridianInnovation/pysenxor-lite.git
+cd pysenxor-lite
+python -m pip install -e .
 ```
 
 ## Usage
