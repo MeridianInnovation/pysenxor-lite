@@ -1,3 +1,18 @@
+## v3.1.4 (2026-04-20)
+
+### Feat
+
+- Added more device context variables for `senxor.settings` `when` conditions, including module, MCU, and firmware information.
+- Added support for direct register writes in `senxor.settings` via keys like `REG_0xB1` and `REG_23`.
+
+### Fix
+
+- Improved serial data reading robustness to reduce packet loss at high frame rates.
+- Fixed `senxor.log` compatibility with Python 3.9 and 3.10.
+- Fixed an issue where `senxor.settings.apply` could fail to apply settings.
+- Fixed profile matching in `senxor.settings` so `when` conditions reliably receive device context variables.
+- Refactor misalignment handling in serial port reader, which may cause `SenxorAckInvalidError` when first communication with the device.
+
 ## v3.1.3 (2026-03-24)
 
 ### Fix
