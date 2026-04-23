@@ -3349,12 +3349,14 @@
     <div class="doc doc-contents ">
 
         <p>Disable all filters inside the senxor.</p>
-<p>This method will set the following filters to disabled:
-- STARK
-- MMS KXMS
-- MMS RA
-- Median
-- Temporal</p>
+<p>This method will set the following filters to disabled:</p>
+<ul>
+<li>STARK</li>
+<li>MMS KXMS</li>
+<li>MMS RA</li>
+<li>Median</li>
+<li>Temporal</li>
+</ul>
 <p>See related fields .help attribute to get more information about the filters.</p>
 
           
@@ -3393,13 +3395,15 @@
             <td>
               <div class="doc-md-description">
                 <p>The status of all filters.
-Available keys:
-- stark
-- mms_kxms
-- mms_ra
-- median
-- temporal
-The value is True if the filter is available in current device and enabled.</p>
+Available keys:</p>
+<ul>
+<li>stark</li>
+<li>mms_kxms</li>
+<li>mms_ra</li>
+<li>median</li>
+<li>temporal</li>
+</ul>
+<p>The value is True if the filter is available in current device and enabled.</p>
               </div>
             </td>
           </tr>
@@ -3595,11 +3599,13 @@ the range of scene temperatures that can be reported.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The module gain setting as a string. Possible values:
-- "1.0" (default, maximum gain)
-- "auto" (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)
-- "0.25" (quarter gain)
-- "0.5" (half gain)</p>
+                <p>The module gain setting as a string. Possible values:</p>
+<ul>
+<li>"1.0" (default, maximum gain)</li>
+<li>"auto" (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)</li>
+<li>"0.25" (quarter gain)</li>
+<li>"0.5" (half gain)</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -3646,11 +3652,13 @@ the range of scene temperatures that can be reported.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The module gain setting as an integer. Possible values:
-- 0: 1.0 (default, maximum gain)
-- 1: auto (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)
-- 2: 0.25 (quarter gain)
-- 3: 0.5 (half gain)</p>
+                <p>The module gain setting as an integer. Possible values:</p>
+<ul>
+<li>0: 1.0 (default, maximum gain)</li>
+<li>1: auto (automatic gain selection: 1.0, 0.5, or 0.25 based on input signal)</li>
+<li>2: 0.25 (quarter gain)</li>
+<li>3: 0.5 (half gain)</li>
+</ul>
               </div>
             </td>
             <td>
@@ -3973,11 +3981,13 @@ the range of scene temperatures that can be reported.</p>
 
         <p>Get the SN code string in hex format.</p>
 <p>The SN code is a hex string of 12 characters, the format is:
-<code>YYWWLLSSSSSS</code>, where:
-- <code>YY</code> is the production year (from 2000 to 2099).
-- <code>WW</code> is the production week.
-- <code>LL</code> is the manufacturing location.
-- <code>SSSSSS</code> is the serial number (from 000000 to 999999).</p>
+<code>YYWWLLSSSSSS</code>, where:</p>
+<ul>
+<li><code>YY</code> is the production year (from 2000 to 2099).</li>
+<li><code>WW</code> is the production week.</li>
+<li><code>LL</code> is the manufacturing location.</li>
+<li><code>SSSSSS</code> is the serial number (from 000000 to 999999).</li>
+</ul>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -4037,10 +4047,12 @@ the range of scene temperatures that can be reported.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The module name. Possible values:
-- "Cougar" (62x80)
-- "Panther" (120x160)
-- "Cheetah" (50x50)</p>
+                <p>The module name. Possible values:</p>
+<ul>
+<li>"Cougar" (62x80)</li>
+<li>"Panther" (120x160)</li>
+<li>"Cheetah" (50x50)</li>
+</ul>
               </div>
             </td>
           </tr>

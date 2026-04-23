@@ -432,18 +432,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#production-installation" class="md-nav__link">
+  <a href="#1-recommended-use-uv" class="md-nav__link">
     <span class="md-ellipsis">
-      Production Installation
+      1. Recommended: use uv
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#development-installation" class="md-nav__link">
+  <a href="#2-use-pip" class="md-nav__link">
     <span class="md-ellipsis">
-      Development Installation
+      2. Use pip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-linux-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Linux notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-development-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Development installation
     </span>
   </a>
   
@@ -1302,18 +1320,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#production-installation" class="md-nav__link">
+  <a href="#1-recommended-use-uv" class="md-nav__link">
     <span class="md-ellipsis">
-      Production Installation
+      1. Recommended: use uv
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#development-installation" class="md-nav__link">
+  <a href="#2-use-pip" class="md-nav__link">
     <span class="md-ellipsis">
-      Development Installation
+      2. Use pip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-linux-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Linux notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-development-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Development installation
     </span>
   </a>
   
@@ -1386,23 +1422,36 @@
 <li>Lightweight and minimal dependencies(no cv2 or matplotlib required)</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<h3 id="production-installation">Production Installation<a class="headerlink" href="#production-installation" title="Permanent link">&para;</a></h3>
-<p>To install the library from PyPI, run the following command:</p>
+<p>We strongly recommend using <code>uv</code> to manage the virtual environment.</p>
+<p>To install <code>uv</code>, please refer to the <a href="https://docs.astral.sh/uv/getting-started/installation/">official documentation</a>.</p>
+<p>On Linux, if you plan to use <code>pysenxor-lite</code> together with <code>opencv</code>, <code>qt</code>, <code>tkinter</code>, etc., <code>uv</code> can help avoid many system dependency issues.</p>
+<h3 id="1-recommended-use-uv">1. Recommended: use <code>uv</code><a class="headerlink" href="#1-recommended-use-uv" title="Permanent link">&para;</a></h3>
+<p>Create a virtual environment and install the package with <code>uv</code>:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>init<span class="w">   </span><span class="c1"># create a pyproject.toml file, if you already have one, skip this step</span>
+uv<span class="w"> </span>add<span class="w"> </span>pysenxor-lite<span class="w"> </span><span class="c1"># Add the package to the virtual environment</span>
+</code></pre></div>
+<p>or without <code>pyproject.toml</code>:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>venv<span class="w"> </span>--seed<span class="w">   </span><span class="c1"># Create a virtual environment and install the dependencies</span>
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pysenxor-lite<span class="w"> </span><span class="c1"># Install the package</span>
+</code></pre></div>
+<h3 id="2-use-pip">2. Use <code>pip</code><a class="headerlink" href="#2-use-pip" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pysenxor-lite
 </code></pre></div>
-<p>To get the latest nightly version, you can install the library from the GitHub repository:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/MeridianInnovation/pysenxor-lite.git
+<h3 id="3-linux-notes">3. Linux notes<a class="headerlink" href="#3-linux-notes" title="Permanent link">&para;</a></h3>
+<p>If you are using SenXor via USB serial on Linux, ensure you have the proper permissions to access the serial port. You can add your user to the <code>dialout</code> group and reboot to apply the changes:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>dialout<span class="w"> </span><span class="nv">$USER</span>
 </code></pre></div>
-<h3 id="development-installation">Development Installation<a class="headerlink" href="#development-installation" title="Permanent link">&para;</a></h3>
-<p>For development, you can install the project in editable mode:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MeridianInnovation/pysenxor-lite.git
-<span class="nb">cd</span><span class="w"> </span>pysenxor-lite
-python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
-<p>or use uv:</p>
+<h3 id="4-development-installation">4. Development installation<a class="headerlink" href="#4-development-installation" title="Permanent link">&para;</a></h3>
+<p>For development, clone the repository and sync the environment with <code>uv</code>:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MeridianInnovation/pysenxor-lite.git
 <span class="nb">cd</span><span class="w"> </span>pysenxor-lite
 uv<span class="w"> </span>sync
+</code></pre></div>
+<p>This will create a virtual environment and install pysenxor-lite in editable mode.</p>
+<p>If you prefer <code>pip</code>, you can use:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MeridianInnovation/pysenxor-lite.git
+<span class="nb">cd</span><span class="w"> </span>pysenxor-lite
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>

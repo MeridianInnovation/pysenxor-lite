@@ -1383,9 +1383,12 @@
 <li><code>name</code>: profile name (required)</li>
 <li><code>desc</code>: short description (optional)</li>
 <li><code>when</code>: condition expression (optional); the profile is applied only when it evaluates to true</li>
-<li><code>settings</code>: dict of field names to values (required)</li>
+<li><code>settings</code>: dict of field names or register addresses to values (required)<ul>
+<li>Field names: e.g. <code>EMISSIVITY</code>, <code>FRAME_RATE_DIVIDER</code></li>
+<li>Register addresses: e.g. <code>REG_0xB1</code>, <code>REG_23</code></li>
 </ul>
-<p>Field names and values are the same as in <a href="../4.device_control/">Device Control</a>.</p>
+</li>
+</ul>
 <p>Example (YAML):</p>
 <div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
@@ -1395,11 +1398,55 @@
 <span class="w">      </span><span class="nt">FRAME_RATE_DIVIDER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;panther&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">120x160</span><span class="nv"> </span><span class="s">modules&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
+<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Settings</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">Panther</span><span class="nv"> </span><span class="s">modules&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;module_name</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;Panther&#39;&quot;</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span>
+<span class="w">      </span><span class="nt">REG_0xD0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</code></pre></div>
+<p>Example (TOML):</p>
+<div class="highlight"><pre><span></span><code><span class="k">[[profiles]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;default&quot;</span>
+<span class="n">desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Default settings for general use&quot;</span>
+
+<span class="k">[profiles.settings]</span>
+<span class="n">EMISSIVITY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">83</span>
+<span class="n">FRAME_RATE_DIVIDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+
+<span class="k">[[profiles]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;panther&quot;</span>
+<span class="n">desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Settings for Panther modules&quot;</span>
+<span class="n">when</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;module_name == &#39;Panther&#39;&quot;</span>
+
+<span class="k">[profiles.settings]</span>
+<span class="n">STARK_ENABLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="n">EMISSIVITY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">95</span>
+<span class="n">REG_0xD0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+</code></pre></div>
+<p>Example (JSON):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Default settings for general use&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;EMISSIVITY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">83</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;FRAME_RATE_DIVIDER&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;panther&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Settings for Panther modules&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;when&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;module_name == &#39;Panther&#39;&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;STARK_ENABLE&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;EMISSIVITY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;REG_0xD0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>TOML and JSON use the same structure; the file type is inferred from the file extension (<code>.yaml</code>, <code>.toml</code>, <code>.json</code>).</p>
 <h2 id="3-load-and-apply">3. Load and apply<a class="headerlink" href="#3-load-and-apply" title="Permanent link">&para;</a></h2>
@@ -1430,6 +1477,31 @@
 <td>Frame size, e.g. <code>(120, 160)</code></td>
 </tr>
 <tr>
+<td><code>mcu_type</code></td>
+<td>str</td>
+<td>MCU type, e.g. <code>"MI48D4"</code></td>
+</tr>
+<tr>
+<td><code>senxor_type</code></td>
+<td>str</td>
+<td>Senxor type, e.g. <code>"MI0801"</code></td>
+</tr>
+<tr>
+<td><code>module_type</code></td>
+<td>str</td>
+<td>Module type, e.g. <code>"MI0802-M5S"</code></td>
+</tr>
+<tr>
+<td><code>module_name</code></td>
+<td><code>"Panther" | "Cougar" | "Cheetah"</code></td>
+<td>Module name returned by <code>get_module_name()</code></td>
+</tr>
+<tr>
+<td><code>fw_version</code></td>
+<td>str</td>
+<td>Firmware version, e.g. <code>"4.5.12"</code></td>
+</tr>
+<tr>
 <td><code>name</code></td>
 <td>str</td>
 <td>Device name, e.g. <code>"COM3"</code></td>
@@ -1441,19 +1513,24 @@
 </tr>
 </tbody>
 </table>
-<p>Example: apply different settings by frame size:</p>
+<p>Example: apply different settings by module name and firmware version:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">profiles</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;panther&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(120,</span><span class="nv"> </span><span class="s">160)&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;module_name</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;Panther&#39;&quot;</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">85</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cougar&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frame_shape</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">(60,</span><span class="nv"> </span><span class="s">80)&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fw_4_5_12&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fw_version</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;4.5.12&#39;&quot;</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">EMISSIVITY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fw_4_5_newer&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FW_VERSION_MAJOR</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">(FW_VERSION_MAJOR</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">FW_VERSION_MINOR</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">5)&quot;</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">STARK_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
 <h2 id="5-load-from-string-bytes-or-file-object">5. Load from string, bytes, or file object<a class="headerlink" href="#5-load-from-string-bytes-or-file-object" title="Permanent link">&para;</a></h2>
 <p>Use <code>loads(fp, filetype="yaml")</code> when the config is not from a path: e.g. from a string, bytes, or an open file. Set <code>filetype</code> to <code>"yaml"</code>, <code>"toml"</code>, or <code>"json"</code>.</p>

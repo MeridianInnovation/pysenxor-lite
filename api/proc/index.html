@@ -1869,11 +1869,11 @@ Providing (min, max) is recommended, because this can avoid re-computation.</p>
 <li>If <code>dtype</code> is specified as an integer type, the min/max of <code>dtype</code> are used.</li>
 <li>If <code>dtype</code> is None:<ul>
 <li>If image.dtype is a floating-point type, (0.0, 1.0) is used.</li>
-<li>If image.dtype is an integer type, the min/max of image.dtype are used.
-Default is None.</li>
+<li>If image.dtype is an integer type, the min/max of image.dtype are used.</li>
 </ul>
 </li>
 </ul>
+<p>Default is None.</p>
               </div>
             </td>
             <td>
@@ -2397,81 +2397,20 @@ depends on the characteristics of the input image. Default is 256.</p>
       <tbody>
           <tr class="doc-section-item">
 <td><code>SenxorHeader</code></td>            <td>
-                  <code>Dataclass with the following attributes:</code>
+                  <code><a class="autorefs autorefs-external" title="&lt;code&gt;dataclasses.dataclass&lt;/code&gt;" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass">dataclass</a></code>
             </td>
             <td>
               <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- frame_counter: int, the frame counter value</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- vdd: float, the VDD(Voltage) value</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- die_temp: float, the die temperature value in °C</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- timestamp: int, the timestamp value</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- maxVal: float, the maximum temperature value in °C</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- minVal: float, the minimum temperature value in °C</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code>- crc: int, the CRC(Cyclic Redundancy Check) value</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
+                <p>Dataclass with the following attributes:</p>
+<ul>
+<li>frame_counter: int, the frame counter value</li>
+<li>vdd: float, the VDD(Voltage) value</li>
+<li>die_temp: float, the die temperature value in °C</li>
+<li>timestamp: int, the timestamp value</li>
+<li>maxVal: float, the maximum temperature value in °C</li>
+<li>minVal: float, the minimum temperature value in °C</li>
+<li>crc: int, the CRC(Cyclic Redundancy Check) value</li>
+</ul>
               </div>
             </td>
           </tr>
