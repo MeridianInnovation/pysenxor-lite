@@ -4,15 +4,12 @@ from __future__ import annotations
 import threading
 from collections import deque
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Callable
+from typing import Callable
 
 from serial import PortNotOpenError, Serial, SerialException
 
-from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNoModuleError, SenxorNotConnectedError
+from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNotConnectedError
 from senxor.interface.serial_port._parser import SenxorAckDecoder, SenxorAckParser
-
-if TYPE_CHECKING:
-    from senxor.interface.event import SenxorInterfaceEvent
 
 
 class ByteFIFO:
@@ -120,11 +117,9 @@ class SenxorSerialReader:
         self,
         ser: Serial,
         logger,
-        events: SenxorInterfaceEvent,
     ):
         self.ser = ser
         self.logger = logger
-        self.events = events
 
         self._buffer = ByteFIFO()
         self._parser = SenxorAckParser(logger)
@@ -224,7 +219,6 @@ class SenxorSerialReader:
                 self.logger.warning("fatal_error_suppressed", pending=self._fatal_error[0], msg=msg, error=error)
                 return
             self._fatal_error = (msg, error)
-        self.events.error.emit(error)
 
     def _check_state(self) -> None:
         """Check the state of the buffer.
@@ -351,7 +345,6 @@ class SenxorSerialReader:
                 temp_data_ = bytes(temp_data)
                 self.gfra_queue.append((header_, temp_data_))
                 self.gfra_ready.notify_all()
-                self.events.data.emit(header_, temp_data_)
         elif cmd == "RREG":
             with self.rreg_ready:
                 self.rreg_queue.append(SenxorAckDecoder._parse_ack_rreg(data))
@@ -367,8 +360,5 @@ class SenxorSerialReader:
         elif cmd == "SERR":
             if not self.no_module_event.is_set():
                 self.no_module_event.set()
-                # We don't call `_set_error` here because register operations still work without lens module.
-                # Only `read` function will raise `SenxorNoModuleError`.
-                self.events.error.emit(SenxorNoModuleError())
         else:
             self.logger.warning("unknown_ack_type", cmd=cmd, data=data)

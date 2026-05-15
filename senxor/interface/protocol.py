@@ -2,11 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Literal, Protocol, overload
-
-if TYPE_CHECKING:
-    from senxor.interface.event import SenxorInterfaceEvent
-
+from typing import Protocol
 
 # The following is the protocol for the interface class.
 # The interface class must implement the methods and properties defined in this protocol class.
@@ -74,7 +70,6 @@ class ISenxorInterface(Protocol):
 
     device: IDevice
     is_connected: bool
-    events: SenxorInterfaceEvent
 
     def __init__(self, device: IDevice) -> None:
         """Initialize the interface.
@@ -201,45 +196,6 @@ class ISenxorInterface(Protocol):
 
         """
         ...
-
-    @overload
-    def on(self, event: Literal["open", "close"], listener: Callable[[], None]) -> Callable[[], None]: ...
-    @overload
-    def on(self, event: Literal["data"], listener: Callable[[bytes | None, bytes], None]) -> Callable[[], None]: ...
-    @overload
-    def on(self, event: Literal["error"], listener: Callable[[Exception], None]) -> Callable[[], None]: ...
-
-    def on(self, event: Literal["open", "close", "data", "error"], listener: Callable) -> Callable[[], None]:
-        """Register a listener for an event.
-
-        Parameters
-        ----------
-        event : Literal["open", "close", "data", "error"]
-            The event to register the listener for.
-        listener : Callable
-            The listener to register.
-
-        Returns
-        -------
-        Callable[[], None]
-            The function to clear the listener.
-
-        Raises
-        ------
-        ValueError
-            If the event is invalid.
-
-        """
-        if event == "open":
-            return self.events.open.on(listener)
-        elif event == "close":
-            return self.events.close.on(listener)
-        elif event == "data":
-            return self.events.data.on(listener)
-        elif event == "error":
-            return self.events.error.on(listener)
-        else:
-            raise ValueError(f"Invalid event: {event}")
 
     def __repr__(self) -> str:
         """Return a string representation of the interface."""

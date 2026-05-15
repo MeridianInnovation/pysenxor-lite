@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Callable, Literal, overload
 import numpy as np
 
 from senxor.error import SenxorResponseTimeoutError
+from senxor.events import SenxorEvents
 from senxor.helper import SenxorHelperMixin
 from senxor.log import get_logger
 from senxor.proc import process_senxor_data
@@ -48,6 +49,7 @@ class Senxor(SenxorHelperMixin):
 
         self.regs = SenxorRegistersManager(interface)
         self.fields = self.regs.fieldmap
+        self._events = SenxorEvents(self)
 
         if auto_open:
             self.open()
@@ -96,6 +98,7 @@ class Senxor(SenxorHelperMixin):
             module_type=self.get_module_type(),
             sn=self.get_sn(),
         )
+        self._events.notify_opened()
 
     def close(self):
         """Close the senxor. If the senxor is not connected, do nothing."""
@@ -103,8 +106,10 @@ class Senxor(SenxorHelperMixin):
             return
 
         self._logger.info("closing_senxor")
+        self._events.notify_closing()
         self.interface.close()
         self._logger.info("close_senxor_success")
+        self._events.notify_closed()
 
     @property
     def is_streaming(self) -> bool:
@@ -156,16 +161,7 @@ class Senxor(SenxorHelperMixin):
         If the listener is not thread-safe, it may cause unexpected behavior.
 
         """
-        if event == "data":
-
-            def on_data(header_bytes: bytes | None, data_bytes: bytes):
-                header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
-                data = process_senxor_data(data_bytes, adc=self.fields.ADC_ENABLE.get() == 1)
-                listener(header, data)
-
-            return self.interface.on(event, on_data)
-        else:
-            return self.interface.on(event, listener)
+        return self._events.on(event, listener)
 
     def start_stream(self):
         """Start the stream mode."""
