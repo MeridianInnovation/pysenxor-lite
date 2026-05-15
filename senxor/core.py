@@ -242,21 +242,20 @@ class Senxor(SenxorHelperMixin):
             If the read operation timeout due to other reasons.
 
         """
+        interface_timeout = self.get_read_timeout() if block else 0
         try:
-            header_bytes, data_bytes = self.interface.read(block)
+            header_bytes, data_bytes = self.interface.read(interface_timeout)
         except SenxorResponseTimeoutError as e:
             if not self.is_streaming:
                 raise SenxorResponseTimeoutError("Senxor is not in the stream mode or single capture mode") from None
-            else:
-                raise e
+            raise e
 
         if data_bytes is None:
             return None, None
-        else:
-            header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
-            is_adc_enabled = self.fields.ADC_ENABLE.get() == 1
-            data = process_senxor_data(data_bytes, adc=is_adc_enabled)
-            return header, data
+        header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
+        is_adc_enabled = self.fields.ADC_ENABLE.get() == 1
+        data = process_senxor_data(data_bytes, adc=is_adc_enabled)
+        return header, data
 
     def read_reg(self, reg: int | RegisterName) -> int:
         """Read the value from a register.
@@ -394,6 +393,13 @@ class Senxor(SenxorHelperMixin):
 
         """
         return self.fields.set_field(field, value)
+
+    def get_read_timeout(self) -> float:
+        """Get the read timeout based on the frame rate divider."""
+        fps_divider = self.fields.FRAME_RATE_DIVIDER.get()
+        if fps_divider < 20:
+            return 1.0
+        return 0.05 * fps_divider
 
     def _setup_senxor(self):
         # Ensure the TEMP_UNITS is set to 0

@@ -94,7 +94,7 @@ def _op_wrapper(func: Callable) -> Callable:
         return func(self, *args, **kwargs)
 
     def handle_error(self: SerialInterface, error: Exception, try_count: int) -> None:
-        if isinstance(error, (SenxorNotConnectedError, SenxorLostConnectionError)):
+        if isinstance(error, (SenxorNotConnectedError, SenxorLostConnectionError, SenxorResponseTimeoutError)):
             raise error
         if try_count == 0:
             self.logger.error("op_failed", error=error, func_name=func.__name__)
@@ -174,16 +174,14 @@ class SerialInterface(ISenxorInterface):
         self.receiver.stop()
 
     @_op_wrapper
-    def read(self, block: bool = True) -> tuple[bytes | None, bytes | None]:
+    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
         if self.receiver.gfra_queue:
             return self.receiver.gfra_queue.popleft()
-        elif self.receiver.no_module_event.is_set():
+        if self.receiver.no_module_event.is_set():
             raise SenxorNoModuleError
-        elif block:
-            data = self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, self.READ_TIMEOUT)
-            return data
-        else:
+        if timeout == 0:
             return None, None
+        return self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, timeout)
 
     @_op_wrapper
     def read_reg(self, reg: int) -> int:
@@ -214,16 +212,25 @@ class SerialInterface(ISenxorInterface):
         for reg, value in regs.items():
             self.write_reg(reg, value)
 
-    def _wait_for_ack(self, cmd: str, queue: deque, ready: threading.Condition, timeout: float) -> Any:
+    def _wait_for_ack(
+        self,
+        cmd: str,
+        queue: deque,
+        ready: threading.Condition,
+        timeout: float | None,
+    ) -> Any:
         start_time = time.time()
         while True:
             self.receiver.raise_if_error()
             with ready:
                 if queue:
                     return queue.popleft()
-                remaining = timeout - (time.time() - start_time)
-                if remaining <= 0:
-                    break
-                ready.wait(remaining)
+                if timeout is not None:
+                    remaining = timeout - (time.time() - start_time)
+                    if remaining <= 0:
+                        break
+                    ready.wait(remaining)
+                else:
+                    ready.wait()
         self.receiver.raise_if_error()
         raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")

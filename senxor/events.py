@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import threading
-from typing import TYPE_CHECKING, Callable, Literal, overload
+from typing import TYPE_CHECKING, Callable, Literal, cast, overload
 
 import numpy as np
 
@@ -98,9 +98,7 @@ class SenxorEvents:
             if listener is None:
                 break
             try:
-                header_bytes, data_bytes = self._senxor.interface.read(block=True)
-                if data_bytes is None:
-                    continue
+                header_bytes, data_bytes = self._senxor.interface.read(self._senxor.get_read_timeout())
             except Exception as e:
                 error_listener = self._error_listener
                 if error_listener is not None:
@@ -109,5 +107,5 @@ class SenxorEvents:
 
             header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
             is_adc_enabled = self._senxor.fields.ADC_ENABLE.get() == 1
-            frame = process_senxor_data(data_bytes, adc=is_adc_enabled)
+            frame = process_senxor_data(cast("bytes", data_bytes), adc=is_adc_enabled)
             listener(header, frame)

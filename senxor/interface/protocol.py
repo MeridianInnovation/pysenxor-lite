@@ -26,7 +26,7 @@ from typing import Protocol
 # For example, when the `read` method times out, this could be because the device is not in streaming mode
 # or due to communication errors.
 # If the interface class can determine it's a communication error, it can handle it directly
-# (e.g. clear buffers and retry), otherwise it should raise `SenxorReadTimeoutError` to the Senxor class.
+# (e.g. clear buffers and retry), otherwise it should raise `SenxorResponseTimeoutError` to the Senxor class.
 
 
 # Specifically, if the device is disconnected, the interface class should set the `is_connected` property to False
@@ -106,29 +106,25 @@ class ISenxorInterface(Protocol):
         """
         ...
 
-    def read(self, block: bool = True) -> tuple[bytes | None, bytes | None]:
+    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
         """Read a frame from the senxor.
-
-        In block mode, the method should raise `SenxorReadTimeoutError` if no frame is available after the timeout.
-        In non-block mode, the method should return None if no frame is available.
 
         Parameters
         ----------
-        block : bool, optional
-            Whether to block the read operation until a frame is available, by default True
-            If False, the function will return None immediately if no frame is available.
+        timeout : float | None, optional
+            Maximum seconds to wait for a frame. ``None`` waits until a frame is available.
+            ``0`` returns immediately when no frame is available.
 
         Raises
         ------
-        SenxorReadTimeoutError
-            If no frame is available after the timeout.
-
+        SenxorResponseTimeoutError
+            If no frame is available before the timeout expires.
 
         Returns
         -------
         tuple[bytes | None, bytes | None]
-            A tuple of two bytes containing the frame header and the frame data.
-            If no frame is available, the function will return (None, None).
+            Frame header and payload bytes. When ``timeout=0`` and no frame is available,
+            returns ``(None, None)``.
 
         """
         ...
