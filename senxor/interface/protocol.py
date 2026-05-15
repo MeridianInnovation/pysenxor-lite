@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Literal, Protocol, TypeVar, overload
+from typing import TYPE_CHECKING, Callable, Literal, Protocol, overload
 
 if TYPE_CHECKING:
     from senxor.interface.event import SenxorInterfaceEvent
-
-TDevice = TypeVar("TDevice", bound="IDevice")
-TInterface = TypeVar("TInterface", bound="ISenxorInterface")
 
 
 # The following is the protocol for the interface class.
@@ -60,7 +57,7 @@ class IDevice(Protocol):
     name: str
 
 
-class ISenxorInterface(Protocol[TDevice]):
+class ISenxorInterface(Protocol):
     """Protocol class for the Senxor devices.
 
     This class is used to provide a uniform interface for the communication with
@@ -68,23 +65,23 @@ class ISenxorInterface(Protocol[TDevice]):
 
     Attributes
     ----------
-    device : TDevice
+    device : IDevice
         The device to communicate with.
     is_connected : bool
         Whether the device is connected.
 
     """
 
-    device: TDevice
+    device: IDevice
     is_connected: bool
     events: SenxorInterfaceEvent
 
-    def __init__(self, device: TDevice) -> None:
+    def __init__(self, device: IDevice) -> None:
         """Initialize the interface.
 
         Parameters
         ----------
-        device : TDevice
+        device : IDevice
             The device to connect to.
         **kwargs : Any
             Additional keyword arguments to pass to the interface.
@@ -96,7 +93,7 @@ class ISenxorInterface(Protocol[TDevice]):
         """
 
     @classmethod
-    def list_devices(cls) -> list[TDevice]:
+    def list_devices(cls) -> list[IDevice]:
         """List all the devices of this interface."""
         ...
 

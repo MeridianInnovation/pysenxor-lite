@@ -5,26 +5,25 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Callable, Generic, Literal, overload
+from typing import TYPE_CHECKING, Callable, Literal, overload
 
 import numpy as np
 
 from senxor.error import SenxorResponseTimeoutError
 from senxor.helper import SenxorHelperMixin
-from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
 from senxor.proc import process_senxor_data
 from senxor.regmap import SenxorRegistersManager
 
 if TYPE_CHECKING:
-    from senxor.interface import ISenxorInterface
+    from senxor.interface import IDevice, ISenxorInterface
     from senxor.regmap.types import FieldName, RegisterName
 
 
-class Senxor(SenxorHelperMixin, Generic[TDevice]):
+class Senxor(SenxorHelperMixin):
     def __init__(
         self,
-        interface: ISenxorInterface[TDevice],
+        interface: ISenxorInterface,
         *,
         auto_open: bool = True,
     ):
@@ -32,7 +31,7 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
 
         Parameters
         ----------
-        interface : TInterface
+        interface : ISenxorInterface
             The interface of the senxor.
         auto_open : bool, optional
             Whether to open the senxor automatically, by default True.
@@ -47,14 +46,14 @@ class Senxor(SenxorHelperMixin, Generic[TDevice]):
         )
         self.interface = interface
 
-        self.regs = SenxorRegistersManager[TDevice](interface)
+        self.regs = SenxorRegistersManager(interface)
         self.fields = self.regs.fieldmap
 
         if auto_open:
             self.open()
 
     @property
-    def device(self) -> TDevice:
+    def device(self) -> IDevice:
         """Get the device instance."""
         return self.interface.device
 

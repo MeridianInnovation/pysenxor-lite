@@ -13,7 +13,7 @@ class MockDevice(IDevice):
         self.name = name
 
 
-class MockInterface(ISenxorInterface[MockDevice]):
+class MockInterface(ISenxorInterface):
     def __init__(self, device: MockDevice) -> None:
         self.device = device
         self.is_connected = True

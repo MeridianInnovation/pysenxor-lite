@@ -120,7 +120,7 @@ def _op_wrapper(func: Callable) -> Callable:
     return retry_wrapper
 
 
-class SerialInterface(ISenxorInterface[SerialPort]):
+class SerialInterface(ISenxorInterface):
     # The parameters for the serial port, should not be changed.
     SENXOR_SERIAL_PARAMS: ClassVar[dict[str, Any]] = {
         "baudrate": 115200,

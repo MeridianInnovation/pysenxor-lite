@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generic, cast
+from typing import TYPE_CHECKING, cast
 
-from senxor.interface.protocol import TDevice
 from senxor.log import get_logger
 from senxor.regmap.fields import Fields
 from senxor.regmap.registers import Registers
@@ -17,12 +16,12 @@ if TYPE_CHECKING:
     from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
 
 
-class SenxorRegistersManager(Registers, Generic[TDevice]):
+class SenxorRegistersManager(Registers):
     """The register system for the senxor.
 
     Attributes
     ----------
-    interface : ISenxorInterface[TDevice]
+    interface : ISenxorInterface
         The interface of the senxor.
     registers : dict[int, Register]
         The dictionary of registers instance by address.
@@ -63,8 +62,8 @@ class SenxorRegistersManager(Registers, Generic[TDevice]):
 
     """
 
-    def __init__(self, interface: ISenxorInterface[TDevice]):
-        self.interface: ISenxorInterface[TDevice] = interface
+    def __init__(self, interface: ISenxorInterface):
+        self.interface: ISenxorInterface = interface
         self._log = get_logger(name=self.interface.device.name)
         self.registers: dict[int, Register] = {register.address: register(self) for register in self.__regs__}
         self._registers_by_name: dict[RegisterName, Register] = {
