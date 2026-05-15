@@ -43,7 +43,7 @@ class SenxorEvents:
             self._error_listener = listener
         elif event == "data":
             self._data_listener = listener
-            if self._senxor.is_connected:
+            if self._senxor.is_streaming:
                 self._start_acquisition_thread()
         else:
             raise ValueError(f"Invalid event: {event}")
@@ -57,14 +57,20 @@ class SenxorEvents:
                 self._error_listener = None
             elif event == "data":
                 self._data_listener = None
+                self._stop_acquisition_thread()
 
         return clear
 
     def notify_opened(self) -> None:
         if self._open_listener is not None:
             self._open_listener()
+
+    def notify_stream_started(self) -> None:
         if self._data_listener is not None:
             self._start_acquisition_thread()
+
+    def notify_stream_stopped(self) -> None:
+        self._stop_acquisition_thread()
 
     def notify_closing(self) -> None:
         self._stop_acquisition_thread()
@@ -108,4 +114,10 @@ class SenxorEvents:
             header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
             is_adc_enabled = self._senxor.fields.ADC_ENABLE.get() == 1
             frame = process_senxor_data(cast("bytes", data_bytes), adc=is_adc_enabled)
-            listener(header, frame)
+            try:
+                listener(header, frame)
+            except Exception as e:
+                error_listener = self._error_listener
+                if error_listener is not None:
+                    error_listener(e)
+                break

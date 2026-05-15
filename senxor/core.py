@@ -166,6 +166,7 @@ class Senxor(SenxorHelperMixin):
     def start_stream(self):
         """Start the stream mode."""
         self.fields.CONTINUOUS_STREAM.set(1)
+        self._events.notify_stream_started()
         self._logger.info("start_stream_success")
 
     def stop_stream(self):
@@ -175,6 +176,7 @@ class Senxor(SenxorHelperMixin):
         except Exception as e:
             self._logger.error("stop_stream_failed", error=e)
             raise
+        self._events.notify_stream_stopped()
         self._logger.info("stop_stream_success")
 
     def refresh_all(self):
