@@ -222,6 +222,25 @@ class TestFieldsManager:
         updated_fields = mock_fieldmap._update_field_values({addr: 1})
         assert updated_fields == {}
 
+    def test_fields_changed_callback(self, mock_fieldmap: SenxorFieldsManager, mock_regmap: SenxorRegistersManager):
+        received: list[dict[str, int]] = []
+
+        def on_changed(updated: dict[str, int]) -> None:
+            received.append(updated)
+
+        mock_fieldmap.set_fields_changed_callback(on_changed)
+        reg = mock_regmap.EMISSIVITY
+        mock_regmap.write_reg(reg.address, 95)
+        assert received == [{"EMISSIVITY": 95}]
+        mock_regmap.write_reg(reg.address, 95)
+        assert received == [{"EMISSIVITY": 95}]
+        mock_regmap.write_reg(reg.address, 96)
+        assert received == [{"EMISSIVITY": 95}, {"EMISSIVITY": 96}]
+
+        mock_fieldmap.set_fields_changed_callback(None)
+        mock_regmap.write_reg(reg.address, 97)
+        assert received == [{"EMISSIVITY": 95}, {"EMISSIVITY": 96}]
+
     def test_warn_disabled_fields(self, mock_fieldmap: SenxorFieldsManager):
         assert mock_fieldmap.TEMP_UNITS.available is False
         with capture_logs() as logs:

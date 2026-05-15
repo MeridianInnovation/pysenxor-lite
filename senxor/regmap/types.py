@@ -2,7 +2,10 @@
 
 """Types for the senxor registers system."""
 
+from collections.abc import Callable
 from typing import Literal
+
+FieldsChangedCallback = Callable[[dict[str, int]], None]
 
 RegisterName = Literal[
     "MCU_RESET",

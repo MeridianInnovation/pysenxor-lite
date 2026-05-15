@@ -18,7 +18,7 @@ from senxor.regmap import SenxorRegistersManager
 
 if TYPE_CHECKING:
     from senxor.interface import IDevice, ISenxorInterface
-    from senxor.regmap.types import FieldName, RegisterName
+    from senxor.regmap.types import FieldName, FieldsChangedCallback, RegisterName
 
 
 class Senxor(SenxorHelperMixin):
@@ -50,6 +50,8 @@ class Senxor(SenxorHelperMixin):
         self.regs = SenxorRegistersManager(interface)
         self.fields = self.regs.fieldmap
         self._events = SenxorEvents(self)
+        self._fields_changed_callback: FieldsChangedCallback | None = None
+        self.fields.set_fields_changed_callback(self._notify_fields_changed)
 
         if auto_open:
             self.open()
@@ -162,6 +164,13 @@ class Senxor(SenxorHelperMixin):
 
         """
         return self._events.on(event, listener)
+
+    def on_fields_changed(self, callback: FieldsChangedCallback | None) -> None:
+        self._fields_changed_callback = callback
+
+    def _notify_fields_changed(self, updated: dict[str, int]) -> None:
+        if self._fields_changed_callback is not None:
+            self._fields_changed_callback(updated)
 
     def start_stream(self):
         """Start the stream mode."""

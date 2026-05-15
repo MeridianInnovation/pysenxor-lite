@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
     from senxor.interface.protocol import ISenxorInterface
     from senxor.regmap.base import Field, Register
-    from senxor.regmap.types import FieldName, RegisterAddress, RegisterName
+    from senxor.regmap.types import FieldName, FieldsChangedCallback, RegisterAddress, RegisterName
 
 
 class SenxorRegistersManager(Registers):
@@ -222,6 +222,10 @@ class SenxorFieldsManager(Fields):
         self._log = regmap._log
         self.regmap: SenxorRegistersManager = regmap
         self.fields: dict[str, Field] = {field.name: field(self) for field in self.__fields__}
+        self._fields_changed_callback: FieldsChangedCallback | None = None
+
+    def set_fields_changed_callback(self, callback: FieldsChangedCallback | None) -> None:
+        self._fields_changed_callback = callback
 
     def __iter__(self) -> Iterator[Field]:
         return iter(self.fields.values())
@@ -287,6 +291,9 @@ class SenxorFieldsManager(Fields):
                 if field_value != field._value:
                     updated_fields[field.name] = field_value
                     field._update_value(field_value)
+
+        if updated_fields and self._fields_changed_callback is not None:
+            self._fields_changed_callback(updated_fields)
 
         return updated_fields
 
