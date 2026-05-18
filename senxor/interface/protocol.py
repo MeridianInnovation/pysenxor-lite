@@ -98,6 +98,11 @@ class ISenxorInterface(Protocol):
 
         """
 
+    @property
+    def data_ready(self) -> bool:
+        """(Optional) Whether the data is ready to be read."""
+        raise NotImplementedError("Data ready is not supported by this interface.")
+
     @classmethod
     def list_devices(cls) -> list[IDevice]:
         """List all the devices of this interface."""
@@ -207,6 +212,26 @@ class ISenxorInterface(Protocol):
 
         """
         ...
+
+    def hard_reset(self) -> None:
+        """(Optional) Hard reset the device.
+
+        This operation is optional and may not be supported by all devices.
+
+        This method should not automatically re-open the connection to the device.
+
+        Returns
+        -------
+        None
+
+
+        Raises
+        ------
+        NotImplementedError
+            If the device does not support hard reset.
+
+        """
+        raise NotImplementedError("Hard reset is not supported by this interface.")
 
     def __repr__(self) -> str:
         """Return a string representation of the interface."""
