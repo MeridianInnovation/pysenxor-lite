@@ -21,7 +21,7 @@ class TrackingMockInterface(MockInterface):
 
 class TestDeviceStateSync:
     def test_open_syncs_state(self):
-        interface = TrackingMockInterface(MockDevice())
+        interface = TrackingMockInterface(MockDevice())  # pyright: ignore[reportAbstractUsage]
         _seed_mock_values(interface)
 
         Senxor(interface, auto_open=True)
@@ -33,7 +33,7 @@ class TestDeviceStateSync:
         assert state.is_streaming is False
 
     def test_field_write_syncs_state(self):
-        interface = TrackingMockInterface(MockDevice())
+        interface = TrackingMockInterface(MockDevice())  # pyright: ignore[reportAbstractUsage]
         _seed_mock_values(interface)
         interface.values[0xB4] = 1
 
@@ -53,7 +53,7 @@ class TestDeviceStateSync:
         assert mock_interface._device_state is not None
 
     def test_user_callback_after_state_sync(self):
-        interface = TrackingMockInterface(MockDevice())
+        interface = TrackingMockInterface(MockDevice())  # pyright: ignore[reportAbstractUsage]
         _seed_mock_values(interface)
 
         senxor = Senxor(interface, auto_open=False)

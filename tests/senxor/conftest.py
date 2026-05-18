@@ -9,13 +9,18 @@ from senxor.regmap.core import SenxorFieldsManager, SenxorRegistersManager
 
 
 class MockDevice(IDevice):
+    name: str = "mock_device"
+
     def __init__(self, name: str = "mock_device"):
-        self.name = name
+        self.name = name  # pyright: ignore[reportIncompatibleMethodOverride]
 
 
 class MockInterface(ISenxorInterface):
+    is_connected: bool = False
+    device: MockDevice = None  # pyright: ignore[reportAssignmentType]
+
     def __init__(self, device: MockDevice) -> None:
-        self.device = device
+        self.device = device  # pyright: ignore[reportIncompatibleMethodOverride]
         self.is_connected = False
         self.values = {}
 
@@ -30,9 +35,9 @@ class MockInterface(ISenxorInterface):
         self.is_connected = True
 
     def close(self) -> None:
-        self.is_connected = False
+        self.is_connected = False  # pyright: ignore[reportIncompatibleMethodOverride]
 
-    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
+    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:  # noqa: ARG002
         return (None, None)
 
     def read_reg(self, reg: int) -> int:
@@ -67,7 +72,7 @@ def mock_device():
 
 @pytest.fixture
 def mock_interface(mock_device):
-    return MockInterface(mock_device)
+    return MockInterface(mock_device)  # pyright: ignore[reportAbstractUsage]
 
 
 @pytest.fixture

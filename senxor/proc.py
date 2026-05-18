@@ -71,7 +71,7 @@ class _LazyLutDict(Mapping):
             self.data[key] = self._load_lut(key)
         return self.data[key]
 
-    def __contains__(self, key: str) -> bool:
+    def __contains__(self, key: object) -> bool:
         return key in self._keys
 
     def __iter__(self) -> Iterator[ColormapKey]:

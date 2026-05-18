@@ -57,10 +57,6 @@ def list_senxor(interface: Literal["serial"] = "serial", **kwargs) -> Sequence[I
     return InterfaceRegistry.list_devices(interface)
 
 
-@overload
-def connect(device: SerialPort, *, auto_open: bool = True) -> Senxor[SerialPort]: ...
-@overload
-def connect(device: None, *, auto_open: bool = True) -> Senxor[SerialPort]: ...
 def connect(device=None, *, auto_open: bool = True, **kwargs) -> Senxor:
     """Connect to a Senxor device.
 

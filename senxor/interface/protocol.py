@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 @dataclass(frozen=True)
@@ -60,7 +63,10 @@ class IDevice(Protocol):
 
     """
 
-    name: str
+    @property
+    def name(self) -> str:
+        """The name of the device."""
+        ...
 
 
 class ISenxorInterface(Protocol):
@@ -75,11 +81,11 @@ class ISenxorInterface(Protocol):
         The device to communicate with.
     is_connected : bool
         Whether the device is connected.
+    data_ready : bool
+        Whether the data is ready to be read.
 
     """
 
-    device: IDevice
-    is_connected: bool
     _device_state: DeviceState
 
     def __init__(self, device: IDevice) -> None:
@@ -99,12 +105,22 @@ class ISenxorInterface(Protocol):
         """
 
     @property
+    def device(self) -> IDevice:
+        """The device to communicate with."""
+        ...
+
+    @property
+    def is_connected(self) -> bool:
+        """Whether the device is connected."""
+        ...
+
+    @property
     def data_ready(self) -> bool:
         """(Optional) Whether the data is ready to be read."""
         raise NotImplementedError("Data ready is not supported by this interface.")
 
     @classmethod
-    def list_devices(cls) -> list[IDevice]:
+    def list_devices(cls) -> Sequence[IDevice]:
         """List all the devices of this interface."""
         ...
 

@@ -140,7 +140,7 @@ class SerialInterface(ISenxorInterface):
     OP_RETRY_INTERVAL: ClassVar[float] = 0.1
 
     def __init__(self, device: SerialPort):
-        self.device = device
+        self.device: SerialPort = device
         if not is_serial_port_senxor(device.port):
             raise ValueError(f"The serial port {device.device} is not a senxor device.")
         self.logger = get_logger().bind(name=device.name)
