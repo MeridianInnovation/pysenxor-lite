@@ -140,7 +140,7 @@ class SerialInterface(ISenxorInterface):
     OP_RETRY_INTERVAL: ClassVar[float] = 0.1
 
     def __init__(self, device: SerialPort):
-        self.device: SerialPort = device
+        self._device: SerialPort = device
         if not is_serial_port_senxor(device.port):
             raise ValueError(f"The serial port {device.device} is not a senxor device.")
         self.logger = get_logger().bind(name=device.name)
@@ -150,6 +150,10 @@ class SerialInterface(ISenxorInterface):
             self.logger,
         )
         self._op_lock = threading.Lock()
+
+    @property
+    def device(self) -> SerialPort:
+        return self._device
 
     @property
     def is_connected(self) -> bool:
