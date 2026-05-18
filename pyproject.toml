@@ -23,13 +23,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-  "commitizen>=4.8.3",
-  "opencv-python>=4.11.0.86",
-  "pillow>=11.2.1",
-  "rich>=10.11.0",
-  "typer>=0.23.2",
-]
+dev = ["opencv-python>=4.11.0.86", "pillow>=11.2.1"]
 
 camera = ["pyvirtualcam>=0.14.0", "cv2-enumerate-cameras>=1.2.2"]
 
@@ -41,12 +35,13 @@ doc = [
   "mkdocstrings[python]>=0.29.1",
   "pymdown-extensions>=10.16",
 ]
+
 test = [
-  "deptry>=0.23.0",
-  "mypy>=1.16.1",
+  "pyright>=1.1.409",
   "pre-commit>=4.2.0",
   "pytest>=8.4.0",
   "ruff>=0.11.13",
+  "rich>=10.11.0",
 ]
 
 [build-system]

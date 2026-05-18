@@ -61,7 +61,7 @@ jobs:
 
 
       - name: Check for type errors
-        run: uv run mypy
+        run: uv run --group=test pyright senxor tests
         continue-on-error: true
 
   tests-on-multiple-python-versions:
