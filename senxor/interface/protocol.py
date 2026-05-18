@@ -2,7 +2,17 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Protocol
+
+
+@dataclass(frozen=True)
+class DeviceState:
+    is_streaming: bool
+    frame_shape: tuple[int, int]
+    fps_divider: int
+    no_header: bool
+
 
 # The following is the protocol for the interface class.
 # The interface class must implement the methods and properties defined in this protocol class.
@@ -70,6 +80,7 @@ class ISenxorInterface(Protocol):
 
     device: IDevice
     is_connected: bool
+    _device_state: DeviceState
 
     def __init__(self, device: IDevice) -> None:
         """Initialize the interface.
@@ -105,6 +116,10 @@ class ISenxorInterface(Protocol):
         If the device is already closed, this method should not raise an exception.
         """
         ...
+
+    def bind_state(self, state: DeviceState) -> None:
+        """Receive the latest device state snapshot from Senxor."""
+        self._device_state = state
 
     def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
         """Read a frame from the senxor.

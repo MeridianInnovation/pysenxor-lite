@@ -12,6 +12,7 @@ import numpy as np
 from senxor.error import SenxorResponseTimeoutError
 from senxor.events import SenxorEvents
 from senxor.helper import SenxorHelperMixin
+from senxor.interface.protocol import DeviceState
 from senxor.log import get_logger
 from senxor.proc import process_senxor_data
 from senxor.regmap import SenxorRegistersManager
@@ -19,6 +20,37 @@ from senxor.regmap import SenxorRegistersManager
 if TYPE_CHECKING:
     from senxor.interface import IDevice, ISenxorInterface
     from senxor.regmap.types import FieldName, FieldsChangedCallback, RegisterName
+
+
+class SenxorDeviceState:
+    _FIELDS = frozenset(
+        {
+            "CONTINUOUS_STREAM",
+            "NO_HEADER",
+            "FRAME_RATE_DIVIDER",
+            "SENXOR_TYPE",
+        },
+    )
+
+    def __init__(self, senxor: Senxor) -> None:
+        self._senxor = senxor
+
+    def init(self) -> None:
+        self._build()
+
+    def sync(self, updated: dict[str, int]) -> None:
+        if updated is not None and not updated.keys() & self._FIELDS:
+            return
+        self._senxor.interface.bind_state(self._build())
+
+    def _build(self) -> DeviceState:
+        senxor = self._senxor
+        return DeviceState(
+            is_streaming=senxor.fields.CONTINUOUS_STREAM.get() == 1,
+            frame_shape=senxor.get_shape(),
+            fps_divider=senxor.fields.FRAME_RATE_DIVIDER.get(),
+            no_header=senxor.fields.NO_HEADER.get() == 1,
+        )
 
 
 class Senxor(SenxorHelperMixin):
@@ -50,6 +82,7 @@ class Senxor(SenxorHelperMixin):
         self.regs = SenxorRegistersManager(interface)
         self.fields = self.regs.fieldmap
         self._events = SenxorEvents(self)
+        self._device_state = SenxorDeviceState(self)
         self._fields_changed_callback: FieldsChangedCallback | None = None
         self.fields.set_fields_changed_callback(self._notify_fields_changed)
 
@@ -90,6 +123,7 @@ class Senxor(SenxorHelperMixin):
                 reg.get()
 
         self._setup_senxor()
+        self._device_state.init()
 
         time_cost = int((time.time() - time_start) * 1000)
         self._logger.info(
@@ -169,6 +203,8 @@ class Senxor(SenxorHelperMixin):
         self._fields_changed_callback = callback
 
     def _notify_fields_changed(self, updated: dict[str, int]) -> None:
+        if updated:
+            self._device_state.sync(updated)
         if self._fields_changed_callback is not None:
             self._fields_changed_callback(updated)
 

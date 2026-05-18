@@ -16,7 +16,7 @@ class MockDevice(IDevice):
 class MockInterface(ISenxorInterface):
     def __init__(self, device: MockDevice) -> None:
         self.device = device
-        self.is_connected = True
+        self.is_connected = False
         self.values = {}
 
     def set_value(self, reg: int, value: int) -> None:
@@ -27,12 +27,12 @@ class MockInterface(ISenxorInterface):
         return [MockDevice(name="test_device")]
 
     def open(self) -> None:
-        pass
+        self.is_connected = True
 
     def close(self) -> None:
-        pass
+        self.is_connected = False
 
-    def read(self, block: bool = True) -> tuple:
+    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
         return (None, None)
 
     def read_reg(self, reg: int) -> int:
