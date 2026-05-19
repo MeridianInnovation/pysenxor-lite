@@ -9,7 +9,7 @@ from typing import Callable
 from serial import PortNotOpenError, Serial, SerialException
 
 from senxor.error import SenxorAckInvalidError, SenxorLostConnectionError, SenxorNotConnectedError
-from senxor.interface.serial_port._parser import SenxorAckDecoder, SenxorAckParser
+from senxor.interface.serial_port.parser import SenxorAckDecoder, SenxorAckParser
 
 
 class ByteFIFO:

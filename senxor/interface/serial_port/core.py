@@ -18,8 +18,8 @@ from senxor.error import (
     SenxorResponseTimeoutError,
 )
 from senxor.interface.protocol import IDevice, ISenxorInterface
-from senxor.interface.serial_port._parser import SenxorCmdEncoder
 from senxor.interface.serial_port._reader import SenxorSerialReader
+from senxor.interface.serial_port.parser import SenxorCmdEncoder
 from senxor.log import get_logger
 
 if TYPE_CHECKING:
