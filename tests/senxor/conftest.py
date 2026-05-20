@@ -9,6 +9,7 @@ from senxor.regmap.core import SenxorFieldsManager, SenxorRegistersManager
 
 
 class MockDevice(IDevice):
+    INTERFACE_TYPE = "mock"
     name: str = "mock_device"
 
     def __init__(self, name: str = "mock_device"):
