@@ -2,29 +2,17 @@
 
 from __future__ import annotations
 
-import functools
-import threading
-import time
-from typing import TYPE_CHECKING, Any, Callable, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
-from serial import Serial, SerialException
+from serial import PortNotOpenError, Serial, SerialException
 from serial.tools import list_ports
 
 from senxor.consts import SENXOR_PRODUCT_ID, SENXOR_VENDER_ID
-from senxor.error import (
-    SenxorLostConnectionError,
-    SenxorNoModuleError,
-    SenxorNotConnectedError,
-    SenxorResponseTimeoutError,
-)
-from senxor.interface.protocol import IDevice, ISenxorInterface
-from senxor.interface.serial_port._reader import SenxorSerialReader
-from senxor.interface.serial_port.parser import SenxorCmdEncoder
-from senxor.log import get_logger
+from senxor.error import SenxorLostConnectionError, SenxorNotConnectedError
+from senxor.interface.protocol import IDevice
+from senxor.interface.serial_port.base import SerialInterfaceBase, SerialTransportBase
 
 if TYPE_CHECKING:
-    from collections import deque
-
     from serial.tools.list_ports_common import ListPortInfo
 
 
@@ -85,42 +73,7 @@ class SerialPort(IDevice):
         return f"SerialPort {self.name}"
 
 
-def _op_wrapper(func: Callable) -> Callable:
-    def operation(self: SerialInterface, *args, **kwargs) -> Any:
-        self.receiver.raise_if_error()
-        if not self.is_connected:
-            self.close()
-            raise SenxorNotConnectedError
-        return func(self, *args, **kwargs)
-
-    def handle_error(self: SerialInterface, error: Exception, try_count: int) -> None:
-        if isinstance(error, (SenxorNotConnectedError, SenxorLostConnectionError, SenxorResponseTimeoutError)):
-            raise error
-        if try_count == 0:
-            self.logger.error("op_failed", error=error, func_name=func.__name__)
-            time.sleep(self.OP_RETRY_INTERVAL)
-        elif try_count < self.OP_RETRY_TIMES:
-            self.logger.error("retry_failed", retry_count=try_count, error=error, func_name=func.__name__)
-            time.sleep(self.OP_RETRY_INTERVAL)
-        else:
-            self.logger.exception("last_retry_failed", retry_count=try_count, error=error, func_name=func.__name__)
-            self.close()
-            raise error
-
-    @functools.wraps(func)
-    def retry_wrapper(self: SerialInterface, *args, **kwargs) -> Any:
-        for try_count in range(self.OP_RETRY_TIMES + 1):
-            try:
-                op_result = operation(self, *args, **kwargs)
-                return op_result
-            except Exception as e:  # noqa: PERF203
-                handle_error(self, e, try_count)
-
-    return retry_wrapper
-
-
-class SerialInterface(ISenxorInterface):
-    # The parameters for the serial port, should not be changed.
+class SerialTransport(SerialTransportBase):
     SENXOR_SERIAL_PARAMS: ClassVar[dict[str, Any]] = {
         "baudrate": 115200,
         "bytesize": 8,
@@ -134,107 +87,66 @@ class SerialInterface(ISenxorInterface):
         "exclusive": True,
     }
 
-    READ_TIMEOUT: ClassVar[float] = 1.5
-    OP_TIMEOUT: ClassVar[float] = 3
-    OP_RETRY_TIMES: ClassVar[int] = 1
-    OP_RETRY_INTERVAL: ClassVar[float] = 0.1
+    def __init__(self, device: SerialPort):
+        super().__init__(device)
+        self.ser: Serial = Serial()
+
+    @property
+    def is_open(self) -> bool:
+        return self.ser.is_open
+
+    def open(self) -> None:
+        device = cast("SerialPort", self.device)
+        if self.ser.is_open:
+            return
+        else:
+            self.ser.port = device.device
+            self.ser.apply_settings(self.SENXOR_SERIAL_PARAMS)
+            self.ser.open()
+
+    def close(self) -> None:
+        self.ser.close()
+
+    def cancel_read(self) -> None:
+        self.ser.cancel_read()
+
+    def read(self) -> bytes:
+        try:
+            data = self.ser.read(self.ser.in_waiting or 1)
+        except Exception as e:
+            if isinstance(e, PortNotOpenError):
+                raise SenxorNotConnectedError from e
+            elif isinstance(e, SerialException):
+                raise SenxorLostConnectionError from e
+            else:
+                raise e
+        else:
+            return data
+
+    def write(self, data: bytes) -> None:
+        try:
+            self.ser.write(data)
+        except Exception as e:
+            if isinstance(e, PortNotOpenError):
+                raise SenxorNotConnectedError from e
+            elif isinstance(e, SerialException):
+                raise SenxorLostConnectionError from e
+            else:
+                raise e
+
+
+class SerialInterface(SerialInterfaceBase):
+    TRANSPORT_CLASS = SerialTransport
 
     def __init__(self, device: SerialPort):
-        self._device: SerialPort = device
         if not is_serial_port_senxor(device.port):
             raise ValueError(f"The serial port {device.device} is not a senxor device.")
-        self.logger = get_logger().bind(name=device.name)
-        self.ser: Serial = Serial()
-        self.receiver = SenxorSerialReader(
-            self.ser,
-            self.logger,
-        )
-        self._op_lock = threading.Lock()
+        super().__init__(device)
 
     @property
     def device(self) -> SerialPort:
-        return self._device
-
-    @property
-    def is_connected(self) -> bool:
-        return self.ser.is_open
+        return cast("SerialPort", self._device)
 
     @classmethod
     def list_devices(cls) -> list[SerialPort]:
         return list_senxor_serial_ports()
-
-    def open(self) -> None:
-        try:
-            self.ser.port = self.device.device
-            self.ser.apply_settings(self.SENXOR_SERIAL_PARAMS)
-            if not self.is_connected:
-                self.ser.open()
-            self.receiver.start()
-        except Exception as e:
-            self.logger.exception("open_failed", error=e)
-            raise
-
-    def close(self):
-        self.receiver.stop()
-
-    @_op_wrapper
-    def read(self, timeout: float | None = None) -> tuple[bytes | None, bytes | None]:
-        if self.receiver.gfra_queue:
-            return self.receiver.gfra_queue.popleft()
-        if self.receiver.no_module_event.is_set():
-            raise SenxorNoModuleError
-        if timeout == 0:
-            return None, None
-        return self._wait_for_ack("GFRA", self.receiver.gfra_queue, self.receiver.gfra_ready, timeout)
-
-    @_op_wrapper
-    def read_reg(self, reg: int) -> int:
-        with self._op_lock:
-            cmd = SenxorCmdEncoder.encode_ack_rreg(reg)
-            self.receiver.write(cmd)
-            data = self._wait_for_ack("RREG", self.receiver.rreg_queue, self.receiver.rreg_ready, self.OP_TIMEOUT)
-            return data
-
-    @_op_wrapper
-    def write_reg(self, reg: int, value: int) -> None:
-        with self._op_lock:
-            cmd = SenxorCmdEncoder.encode_ack_wreg(reg, value)
-            self.receiver.write(cmd)
-            data = self._wait_for_ack("WREG", self.receiver.wreg_queue, self.receiver.wreg_ready, self.OP_TIMEOUT)
-            return data
-
-    @_op_wrapper
-    def read_regs(self, regs: list[int]) -> dict[int, int]:
-        with self._op_lock:
-            cmd = SenxorCmdEncoder.encode_ack_rrse(regs)
-            self.receiver.write(cmd)
-            data = self._wait_for_ack("RRSE", self.receiver.rrse_queue, self.receiver.rrse_ready, self.OP_TIMEOUT)
-            return data
-
-    @_op_wrapper
-    def write_regs(self, regs: dict[int, int]) -> None:
-        for reg, value in regs.items():
-            self.write_reg(reg, value)
-
-    def _wait_for_ack(
-        self,
-        cmd: str,
-        queue: deque,
-        ready: threading.Condition,
-        timeout: float | None,
-    ) -> Any:
-        start_time = time.time()
-        while True:
-            self.receiver.raise_if_error()
-            with ready:
-                if queue:
-                    return queue.popleft()
-                if timeout is not None:
-                    remaining = timeout - (time.time() - start_time)
-                    if remaining <= 0:
-                        break
-                    ready.wait(remaining)
-                else:
-                    ready.wait()
-        self.receiver.raise_if_error()
-        raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")
