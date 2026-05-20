@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, ClassVar, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -60,8 +60,12 @@ class IDevice(Protocol):
     ----------
     name : str
         The name of the device.
+    interface_type : ClassVar[str]
+        The type of the interface.
 
     """
+
+    INTERFACE_TYPE: ClassVar[str]
 
     @property
     def name(self) -> str:

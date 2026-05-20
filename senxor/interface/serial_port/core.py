@@ -47,6 +47,8 @@ def list_senxor_serial_ports(exclude_open_ports: bool = True) -> list[SerialPort
 
 
 class SerialPort(IDevice):
+    INTERFACE_TYPE = "serial"
+
     def __init__(self, port: ListPortInfo):
         self.port = port
 

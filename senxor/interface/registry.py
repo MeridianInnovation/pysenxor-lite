@@ -4,20 +4,51 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar
 
-from senxor.interface.serial_port.core import SerialInterface, SerialPort
-
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Callable, Sequence
 
     from senxor.interface.protocol import IDevice, ISenxorInterface
+
+
+def _load_serial() -> tuple[type[IDevice], type[ISenxorInterface]]:
+    from senxor.interface.serial_port.core import SerialInterface, SerialPort  # noqa: PLC0415
+
+    return SerialPort, SerialInterface
 
 
 class InterfaceRegistry:
     """Registry for the interfaces."""
 
-    _registry: ClassVar[dict[str, tuple[type[IDevice], type[ISenxorInterface]]]] = {
-        "serial": (SerialPort, SerialInterface),
+    _BUILTIN_LOADERS: ClassVar[dict[str, Callable[[], tuple[type[IDevice], type[ISenxorInterface]]]]] = {
+        "serial": _load_serial,
     }
+
+    _registry: ClassVar[dict[str, tuple[type[IDevice], type[ISenxorInterface]]]] = {}
+
+    @classmethod
+    def _interface_names(cls) -> list[str]:
+        seen: set[str] = set()
+        names: list[str] = []
+        for name in (*cls._registry, *cls._BUILTIN_LOADERS):
+            if name not in seen:
+                seen.add(name)
+                names.append(name)
+        return names
+
+    @classmethod
+    def _resolve(cls, name: str) -> tuple[type[IDevice], type[ISenxorInterface]]:
+        if name in cls._registry:
+            return cls._registry[name]
+        loader = cls._BUILTIN_LOADERS.get(name)
+        if loader is None:
+            raise KeyError(f"Unknown interface type: {name}")
+        try:
+            entry = loader()
+        except ImportError as exc:
+            msg = f"Failed to load interface '{name}': missing required dependencies"
+            raise ImportError(msg) from exc
+        cls._registry[name] = entry
+        return entry
 
     @classmethod
     def register(cls, name: str, device_class: type[IDevice], interface_class: type[ISenxorInterface]) -> None:
@@ -42,9 +73,7 @@ class InterfaceRegistry:
     @classmethod
     def get(cls, name: str) -> tuple[type[IDevice], type[ISenxorInterface]]:
         """Get the interface class by name."""
-        if name not in cls._registry:
-            raise KeyError(f"Unknown interface type: {name}")
-        return cls._registry[name]
+        return cls._resolve(name)
 
     @classmethod
     def list_devices(cls, interface_name: str) -> Sequence[IDevice]:
@@ -53,7 +82,16 @@ class InterfaceRegistry:
 
     @classmethod
     def create_interface(cls, device: IDevice) -> ISenxorInterface:
-        for device_class, interface_class in cls._registry.values():
+        interface_type = getattr(type(device), "INTERFACE_TYPE", None)
+        if interface_type is not None:
+            device_class, interface_class = cls.get(interface_type)
+            if not isinstance(device, device_class):
+                msg = f"Device type {type(device)!r} does not match interface '{interface_type}'"
+                raise ValueError(msg)
+            return interface_class(device)
+
+        for name in cls._interface_names():
+            device_class, interface_class = cls._resolve(name)
             if isinstance(device, device_class):
                 return interface_class(device)
         raise ValueError(f"Unsupported device type: {type(device)}")
