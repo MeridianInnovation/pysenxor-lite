@@ -16,11 +16,18 @@ def _load_serial() -> tuple[type[IDevice], type[ISenxorInterface]]:
     return SerialPort, SerialInterface
 
 
+def _load_tcpip_serial() -> tuple[type[IDevice], type[ISenxorInterface]]:
+    from senxor.interface.tcpip_serial.core import TCPIPInterface, TCPIPPort  # noqa: PLC0415
+
+    return TCPIPPort, TCPIPInterface
+
+
 class InterfaceRegistry:
     """Registry for the interfaces."""
 
     _BUILTIN_LOADERS: ClassVar[dict[str, Callable[[], tuple[type[IDevice], type[ISenxorInterface]]]]] = {
         "serial": _load_serial,
+        "tcpip_serial": _load_tcpip_serial,
     }
 
     _registry: ClassVar[dict[str, tuple[type[IDevice], type[ISenxorInterface]]]] = {}
