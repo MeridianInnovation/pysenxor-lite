@@ -51,9 +51,7 @@ class TCPIPTransport(SerialTransportBase):
             sock.settimeout(_READ_TIMEOUT)
             sock.connect((device.host, device.port))
         except OSError as e:
-            with contextlib.suppress(OSError):
-                sock.close()
-            raise self._map_os_error(e) from e
+            raise RuntimeError(f"Failed to connect to {device.name}") from e
         self._sock = sock
 
     def close(self) -> None:
