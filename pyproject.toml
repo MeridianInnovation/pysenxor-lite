@@ -58,6 +58,10 @@ senxor = "senxor"
 Homepage = "https://www.meridianinno.com/"
 Issues = "https://www.meridianinno.com/"
 
+[project.optional-dependencies]
+tcpip = ["zeroconf>=0.148.0"]
+
+
 [tool.uv]
 default-groups = ["dev", "test", "camera"]
 

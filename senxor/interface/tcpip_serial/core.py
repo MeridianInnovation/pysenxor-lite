@@ -7,6 +7,7 @@ import socket
 from typing import cast
 
 from senxor.error import SenxorLostConnectionError, SenxorNotConnectedError
+from senxor.interface.esp32_discovery import discover_esp32_devices
 from senxor.interface.protocol import IDevice
 from senxor.interface.serial_port.base import SerialInterfaceBase, SerialTransportBase
 
@@ -110,4 +111,4 @@ class TCPIPInterface(SerialInterfaceBase):
 
     @classmethod
     def list_devices(cls) -> list[TCPIPPort]:
-        raise NotImplementedError("TCP/IP serial devices do not support automatic discovery")
+        return [TCPIPPort(d.server, d.port) for d in discover_esp32_devices()]

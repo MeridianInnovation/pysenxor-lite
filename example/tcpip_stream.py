@@ -8,12 +8,8 @@ import cv2
 import numpy as np
 
 import senxor
-from senxor.interface.tcpip_serial import TCPIPPort
 from senxor.log import setup_console_logger
 from senxor.proc import apply_colormap, colormaps, enlarge, normalize
-
-DEVICE_HOST = "192.168.2.74"
-DEVICE_PORT = 3333
 
 cmap = colormaps["inferno"]
 
@@ -22,9 +18,17 @@ if __name__ == "__main__":
     # This is optional.
     setup_console_logger()
 
-    device = TCPIPPort(DEVICE_HOST, DEVICE_PORT)
+    # For some devices without mDNS, you can specify the host and port manually.
+    # Example:
+    # from senxor.interface.tcpip_serial import TCPIPPort
+    # device = TCPIPPort("192.168.2.74", 3333)
 
-    with senxor.connect(device) as dev:
+    devices = senxor.list_senxor("tcpip_serial")
+    if not devices:
+        raise ValueError("No devices found")
+
+    print(devices[0])
+    with senxor.connect(devices[0]) as dev:
         dev.start_stream()
 
         while True:

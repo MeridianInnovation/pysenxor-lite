@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 
     from senxor.interface.protocol import IDevice
     from senxor.interface.serial_port.core import SerialPort
+    from senxor.interface.tcpip_serial.core import TCPIPPort
 
 __all__ = [
     "connect",
@@ -31,16 +32,20 @@ __all__ = [
 def list_senxor() -> list[SerialPort]: ...
 @overload
 def list_senxor(interface: Literal["serial"]) -> list[SerialPort]: ...
-def list_senxor(interface: Literal["serial"] = "serial", **kwargs) -> Sequence[IDevice]:
+@overload
+def list_senxor(interface: Literal["tcpip_serial"]) -> list[TCPIPPort]: ...
+
+
+def list_senxor(  # noqa: D417
+    interface: Literal["serial", "tcpip_serial"] = "serial",
+    **kwargs,
+) -> Sequence[IDevice]:
     """List available Senxor devices.
 
     Parameters
     ----------
-    interface : Literal["serial"], optional
+    interface : Literal["serial", "tcpip_serial"], optional
         The interface type to list devices for, by default "serial"
-
-    **kwargs
-        Additional arguments for backward compatibility.
 
     Returns
     -------
@@ -54,7 +59,7 @@ def list_senxor(interface: Literal["serial"] = "serial", **kwargs) -> Sequence[I
 
     """
     interface = kwargs.pop("type", interface)  # Backward compatibility
-    return InterfaceRegistry.list_devices(interface)
+    return InterfaceRegistry.list_devices(interface, **kwargs)
 
 
 def connect(device=None, *, auto_open: bool = True, **kwargs) -> Senxor:
@@ -62,7 +67,7 @@ def connect(device=None, *, auto_open: bool = True, **kwargs) -> Senxor:
 
     Parameters
     ----------
-    device : ListPortInfo | None, optional
+    device : IDevice | None, optional
         The device to connect to, by default None
         If None, the first serial device is connected.
     auto_open : bool, optional
