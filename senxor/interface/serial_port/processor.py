@@ -104,7 +104,8 @@ class SerialTransportReadThread:
                 if chunk:
                     self.on_data(chunk)
         except Exception as e:
-            self.on_error(e)
+            if not self.stop_event.is_set():
+                self.on_error(e)
         finally:
             self.clean_up()
 
