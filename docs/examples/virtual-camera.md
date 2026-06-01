@@ -1,3 +1,11 @@
+---
+title: Virtual Camera
+description: Stream Senxor output to a virtual webcam on Windows, Linux, and macOS.
+navigation:
+  title: Virtual Camera
+  order: 6
+---
+
 # Virtual Camera
 
 This example streams the Senxor thermal imaging feed to a **virtual webcam** that works as a system camera. You can use it in Zoom, OBS, Teams, or any application that uses a camera.
