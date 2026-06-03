@@ -1,3 +1,3 @@
-## `senxor.log`
+# `senxor.log`
 
 ::: senxor.log

@@ -35,7 +35,6 @@ We strongly recommend using `uv` to manage the virtual environment.
 
 To install `uv`, please refer to the [official documentation](https://docs.astral.sh/uv/getting-started/installation/).
 
-
 On Linux, if you plan to use `pysenxor-lite` together with `opencv`, `qt`, `tkinter`, etc., `uv` can help avoid many system dependency issues.
 
 ### 1. Recommended: use `uv`

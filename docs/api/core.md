@@ -1,0 +1,3 @@
+# `senxor.core`
+
+::: senxor.core

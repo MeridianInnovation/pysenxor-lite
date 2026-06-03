@@ -116,7 +116,7 @@ jobs:
         uses: ./.github/actions/setup-python-env
 
       - name: Build documentation
-        run: uv run --group=doc mkdocs build
+        run: uv run --group=doc zensical build --clean
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3

@@ -1,3 +1,3 @@
-## `senxor.proc`
+# `senxor.proc`
 
 ::: senxor.proc

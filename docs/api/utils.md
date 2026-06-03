@@ -1,3 +1,3 @@
-## `senxor.utils`
+# `senxor.utils`
 
 ::: senxor.utils

@@ -1,3 +1,3 @@
-## `senxor.settings`
+# `senxor.settings`
 
 ::: senxor.settings

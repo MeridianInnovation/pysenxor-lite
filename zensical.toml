@@ -1,0 +1,132 @@
+[project]
+
+site_name = "PySenXor Lite Documentation"
+repo_url = "https://github.com/MeridianInnovation/pysenxor-lite"
+repo_name = "MeridianInnovation/pysenxor-lite"
+site_url = "https://MeridianInnovation.github.io/pysenxor-lite"
+site_description = "A Python Library for Meridian Innovation's thermal imaging devices."
+site_author = "Meridian Innovation"
+edit_uri = "edit/main/docs/"
+copyright = """
+Maintained by <a href=\"https://www.meridianinno.com/\">MeridianInnovation</a>. - <a href="#__consent">Change cookie settings</a>
+"""
+
+docs_dir = "docs"
+
+nav = [
+    { "Overview" = "index.md" },
+    { "Tutorials" = [
+        { "Basic Usage" = [
+            "guides/1.connect_device.md",
+            "guides/2.basic_stream.md",
+            "guides/3.data_processing.md",
+            "guides/4.device_control.md",
+            "guides/5.logging.md",
+            "guides/6.loading_settings.md",
+            "guides/7.error_handling.md",
+        ] },
+        { "Advanced" = [
+            "guides/advanced/1.concurrency_patterns.md",
+        ] },
+    ] },
+    { "Examples" = [
+        "examples/basic_stream.md",
+        "examples/thermal_rgb.md",
+        "examples/multi_senxor_alarm.md",
+        "examples/thermal_rgb_recorder.md",
+        "examples/fastapi_mjpeg_streamer.md",
+        "examples/virtual-camera.md",
+    ] },
+    { "API Reference" = [
+        { "Modules" = [
+            { "senxor.core" = "api/core.md" },
+            { "senxor.proc" = "api/proc.md" },
+            { "senxor.utils" = "api/utils.md" },
+            { "senxor.error" = "api/error.md" },
+            { "senxor.log" = "api/log.md" },
+            { "senxor.settings" = "api/settings.md" },
+            { "senxor.regmap" = "api/regmap.md" },
+            { "senxor.cv_utils" = "api/cv_utils.md" },
+            { "senxor.interface.protocol" = "api/interface/protocol.md" },
+            { "senxor.interface.registry" = "api/interface/registry.md" },
+            { "senxor.interface.serial_port" = "api/interface/serial_port.md" },
+            { "senxor.interface.tcpip_serial" = "api/interface/tcpip_serial.md" },
+        ] },
+        { "Fields and Registers" = [
+            { "Fields" = "api/fields.md" },
+            { "Registers" = "api/registers.md" },
+        ] },
+    ] },
+]
+
+# Palette toggle for automatic mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+# Palette toggle for light mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[project.theme]
+features = [
+    "navigation.tabs",
+    "navigation.footer",
+    "navigation.instant",
+    "navigation.sections",
+    "navigation.path",
+    "navigation.top",
+    "content.code.copy",
+]
+
+[project.extra.consent]
+title = "Cookie consent"
+description = """
+    We use cookies to recognize your repeated visits and preferences, as well
+    as to measure the effectiveness of our documentation and whether users
+    find what they're searching for. With your consent, you're helping us to
+    make our documentation better.
+"""
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["senxor"]
+
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.superfences]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.pymdownx.emoji]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "numpy"
+inherited_members = true
+members_order = "source"
+group_by_category = true
+parameter_headings = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+heading_level = 3
+show_source = false
+line_length = 88
+merge_init_into_class = true
+docstring_options = { ignore_init_summary = true }
+backlinks = "tree"
+docstring_section_style = "table"
+unwrap_annotated = true
+relative_crossrefs = true
+scoped_crossrefs = true
+signature_crossrefs = true
+show_if_no_docstring = true
+filters = ["!^_", "^__init__$"]
+
+[project.markdown_extensions.toc]
+toc_depth = 4
