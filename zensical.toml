@@ -36,6 +36,7 @@ nav = [
         "examples/thermal_rgb_recorder.md",
         "examples/fastapi_mjpeg_streamer.md",
         "examples/virtual-camera.md",
+        "examples/tcpip_stream.md",
     ] },
     { "API Reference" = [
         { "Modules" = [
