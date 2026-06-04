@@ -1,3 +1,19 @@
+## v3.1.5 (2026-06-03)
+
+### Feat
+
+- Added **TCP/IP serial** support for SenXor devices on ESP32-style bridges: use `list_senxor("tcpip_serial")` and `connect(device)` the same way as USB serial. Install optional discovery support with `pip install 'pysenxor-lite[tcpip]'` (pulls in `zeroconf` for mDNS device listing); devices without mDNS can still be connected by constructing `TCPIPPort(host, port)` manually.
+- Added **`Senxor.on_fields_changed(callback)`** to be notified when register fields change after writes or refresh, with device state kept in sync automatically.
+
+### Fix
+
+- Fixed incorrect behavior in the **`on('data')`** event callback during streaming.
+- Reduced spurious errors from the **serial read thread** when stopping the stream or closing the device.
+
+### Docs
+
+- Rebuilt project documentation with **Zensical** (new site layout and API reference structure).
+
 ## v3.1.4 (2026-04-20)
 
 ### Feat
@@ -74,7 +90,7 @@ This version is a breaking change, some interfaces and class names have changed,
 - Add examples for SenxorThread usage with threading and Tkinter
 - Implement threaded background reading with listener support in SenxorThread
 - Add `get_shape` method to `Senxor`
-- Enhance dual_light_tkinter  demo
+- Enhance dual_light_tkinter demo
 - Update the error handler
 - Enhance dual_light_tkinter with improved device management and UI layout
 - Integrate Nuitka for packaging dual_light_tkinter
@@ -92,12 +108,12 @@ This version is a breaking change, some interfaces and class names have changed,
 - Fix the issue in `_fetch_regs_values_by_fields`
 - Fix some type hint issues
 - fix logger error in `senxor.log`
-- Fix some issues of  regmap
+- Fix some issues of regmap
 - Update address property in SenxorInterfaceSerial to handle ListPortInfo type
 - Ensure stream stops only when connected
 - Fix the error in cmaps.json
 - Raise RuntimeError in read method if thread is not started for SenxorThread and LiteCamThread
-- fix the AttributeError in SenxorThread.__del__ if failed to start thread
+- fix the AttributeError in SenxorThread.**del** if failed to start thread
 - Correct response handling in DualLightApp
 - Remove unstable LiteWindow class from cam.py.
 - Improve error handling when closing the Senxor interface
@@ -112,11 +128,11 @@ This version is a breaking change, some interfaces and class names have changed,
 - Replace REGS usage with new regmap structure
 - Remove dual_light_tkinter.py and dual_stream_tkinter.py.
 - Update Register class to compatible with py3.9
-- Improve the  _BackgroundReader to manage listener backlog with queue.
+- Improve the \_BackgroundReader to manage listener backlog with queue.
 - Enhance dual_light_cv.py
 - Remove unusable LiteCamThread, Add a CvCamThread.
 - Update SenxorThread/CamThread initialization to accept Senxor/Cam instance directly.
 - Remove duplicate log messages
 - Refactor the internal implementation of usb interface
-- modify the return type of  Senxor.read()
+- modify the return type of Senxor.read()
 - Update Senxor interface protocol and error handling
