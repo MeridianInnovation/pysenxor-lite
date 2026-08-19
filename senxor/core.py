@@ -446,7 +446,7 @@ class Senxor(SenxorHelperMixin):
         fps_divider = self.fields.FRAME_RATE_DIVIDER.get()
         if fps_divider < 20:
             return 1.0
-        return 0.05 * fps_divider
+        return 0.1 * fps_divider
 
     def _setup_senxor(self):
         # Ensure the TEMP_UNITS is set to 0
