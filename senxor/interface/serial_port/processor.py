@@ -345,7 +345,7 @@ class SerialAckProcessor:
             with self.rreg_ready:
                 self.rreg_queue.append(SenxorAckDecoder._parse_ack_rreg(data))
                 self.rreg_ready.notify_all()
-        elif cmd == "WREG":
+        elif cmd == "WREG" or cmd == "WRGE":
             with self.wreg_ready:
                 self.wreg_queue.append(SenxorAckDecoder._parse_ack_wreg(data))
                 self.wreg_ready.notify_all()
