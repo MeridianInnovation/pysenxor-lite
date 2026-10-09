@@ -2820,14 +2820,19 @@
 
 
 <h3 id="senxor.proc.process_senxor_data" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">process_senxor_data</span><span class="p">(</span><span class="n">bytes_data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">adc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">process_senxor_data</span><span class="p">(</span><span class="n">bytes_data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">adc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dk</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Process the senxor bytes data to a frame.</p>
+        <p>Process the senxor bytes data to a 2-D frame.</p>
+<ul>
+<li>dtype: float32, unit: Celsius, default output.</li>
+<li>dtype: uint16, unit: dKelvin, enabled by <code>dk=True</code>.</li>
+<li>dtype: uint16, raw ADC values, enabled by <code>adc=True</code>; ignores <code>dk</code>.</li>
+</ul>
 
           <backlinks identifier="senxor.proc.process_senxor_data" handler="python" />
 
@@ -2889,7 +2894,7 @@
 <h4 id="senxor.proc.normalize(in_range)" class="doc doc-heading doc-heading-parameter">                  <code>in_range</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a> or None</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple">tuple</a> or None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2908,7 +2913,7 @@ Providing (min, max) is recommended, because this can avoid re-computation.</p>
 <h4 id="senxor.proc.normalize(out_range)" class="doc doc-heading doc-heading-parameter">                  <code>out_range</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a> or None</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple">tuple</a> or None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3079,7 +3084,7 @@ intermediate steps. Only normalize to <code>np.uint8</code> as the <strong>very 
 <h4 id="senxor.proc.enlarge(scale)" class="doc doc-heading doc-heading-parameter">                  <code>scale</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3169,7 +3174,7 @@ intermediate steps. Only normalize to <code>np.uint8</code> as the <strong>very 
 <h4 id="senxor.proc.resample_lut(n)" class="doc doc-heading doc-heading-parameter">                  <code>n</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3218,7 +3223,7 @@ intermediate steps. Only normalize to <code>np.uint8</code> as the <strong>very 
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>(<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#TypeError">TypeError</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a>)</code>
+                  <code>(<a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError">TypeError</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError">ValueError</a>)</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3304,7 +3309,7 @@ intermediate steps. Only normalize to <code>np.uint8</code> as the <strong>very 
 <h4 id="senxor.proc.apply_colormap(in_range)" class="doc doc-heading doc-heading-parameter">                  <code>in_range</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a> | None</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple">tuple</a> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3321,7 +3326,7 @@ providing (min, max) is recommended, because this can avoid re-computation.</p>
 <h4 id="senxor.proc.apply_colormap(to_int)" class="doc doc-heading doc-heading-parameter">                  <code>to_int</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3338,7 +3343,7 @@ If False and image.dtype is not uint8, the color image will be normalized to flo
 <h4 id="senxor.proc.apply_colormap(resample_size)" class="doc doc-heading doc-heading-parameter">                  <code>resample_size</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3357,7 +3362,7 @@ depends on the characteristics of the input image. Default is 256.</p>
 <h4 id="senxor.proc.apply_colormap(norm)" class="doc doc-heading doc-heading-parameter">                  <code>norm</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">

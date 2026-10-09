@@ -1978,6 +1978,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#senxor.core.Senxor.get_dk_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_dk_enabled
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.core.Senxor.set_dk_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;set_dk_enabled
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3247,6 +3269,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#senxor.core.Senxor.get_dk_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_dk_enabled
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#senxor.core.Senxor.set_dk_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;set_dk_enabled
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3516,7 +3560,7 @@
 <h4 id="senxor.core.Senxor(auto_open)" class="doc doc-heading doc-heading-parameter">                  <code>auto_open</code>
 </h4>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3971,17 +4015,26 @@ If the listener is not thread-safe, it may cause unexpected behavior.</p>
 
         <p>Read a frame from the Senxor and return (header, frame).</p>
 <ul>
-<li>header : np.ndarray[uint16], 1-D<ul>
+<li>header : np.ndarray[uint16], 1-D | None<ul>
 <li>Frame metadata; see the documentation for layout details.</li>
 </ul>
 </li>
-<li>frame  : np.ndarray, 2-D, shape (height, width)<ul>
-<li>If ADC_ENABLE = 1 → dtype = uint16, values are raw ADC counts.</li>
-<li>If ADC_ENABLE = 0 → dtype = float32, values are temperature in °C.</li>
+<li>frame  : np.ndarray, 2-D, shape (height, width) | None<ul>
+<li>dtype: float32, unit: Celsius, default output.</li>
+<li>dtype: uint16, unit: dKelvin, to enable dK output, call <code>set_dk_enabled(True)</code>.</li>
+<li>dtype: uint16, raw ADC values, only for developing and debugging.</li>
 </ul>
 </li>
 </ul>
 
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <ul>
+<li>If <code>block=False</code>, the frame and header may be None if no frame is available, remember to check
+the return value before using it.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -3999,7 +4052,7 @@ If the listener is not thread-safe, it may cause unexpected behavior.</p>
 <h5 id="senxor.core.Senxor.read(block)" class="doc doc-heading doc-heading-parameter">                  <code>block</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4026,7 +4079,7 @@ If False, if no frame is available, return None immediately.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a>[<span title="numpy.ndarray">ndarray</span> | None, <span title="numpy.ndarray">ndarray</span> | None]</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple">tuple</a>[<span title="numpy.ndarray">ndarray</span> | None, <span title="numpy.ndarray">ndarray</span> | None]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4051,7 +4104,7 @@ The first array is the header data, the second array is the frame data.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError">RuntimeError</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError">RuntimeError</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4118,7 +4171,7 @@ device once.</li>
 <h5 id="senxor.core.Senxor.read_reg(reg)" class="doc doc-heading doc-heading-parameter">                  <code>reg</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4144,7 +4197,7 @@ device once.</li>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4167,7 +4220,7 @@ device once.</li>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError">ValueError</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4228,7 +4281,7 @@ Warning: On some devices with older firmware, this method may cause the device t
 <h5 id="senxor.core.Senxor.read_regs(regs)" class="doc doc-heading doc-heading-parameter">                  <code>regs</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span>]</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4255,7 +4308,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>]</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4278,7 +4331,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError">ValueError</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4331,7 +4384,7 @@ instances.</p>
 <h5 id="senxor.core.Senxor.write_reg(reg)" class="doc doc-heading doc-heading-parameter">                  <code>reg</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a> | <span title="senxor.regmap.types.RegisterName">RegisterName</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4347,7 +4400,7 @@ instances.</p>
 <h5 id="senxor.core.Senxor.write_reg(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4396,7 +4449,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError">ValueError</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4450,7 +4503,7 @@ instances.</p>
 <h5 id="senxor.core.Senxor.get_field(field)" class="doc doc-heading doc-heading-parameter">                  <code>field</code>
 </h5>            </td>
             <td>
-                  <code>(<span title="senxor.regmap.types.FieldName">FieldName</span>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>)</code>
+                  <code>(<span title="senxor.regmap.types.FieldName">FieldName</span>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a>)</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4476,7 +4529,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4539,7 +4592,7 @@ instances.</p>
 <h5 id="senxor.core.Senxor.set_field(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4688,7 +4741,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>]</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple">tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4758,7 +4811,7 @@ instances.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>]</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4810,7 +4863,7 @@ Available keys:</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4864,7 +4917,7 @@ Instead, calculate the actual frame rate from the timestamps of received frames.
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4915,7 +4968,7 @@ When <code>FRAME_RATE_DIVIDER</code> is 0, the maximum frame rate (FPS_MAX) is u
 <h5 id="senxor.core.Senxor.set_frame_rate_divider(divider)" class="doc doc-heading doc-heading-parameter">                  <code>divider</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4963,7 +5016,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5016,7 +5069,7 @@ the range of scene temperatures that can be reported.</p>
 <h5 id="senxor.core.Senxor.set_module_gain(gain)" class="doc doc-heading doc-heading-parameter">                  <code>gain</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5067,7 +5120,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5109,7 +5162,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5151,7 +5204,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5193,7 +5246,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5235,7 +5288,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5277,7 +5330,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5319,7 +5372,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#int">int</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5369,7 +5422,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5411,7 +5464,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5459,7 +5512,7 @@ the range of scene temperatures that can be reported.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5507,7 +5560,7 @@ the range of scene temperatures that can be reported.</p>
 <h5 id="senxor.core.Senxor.set_sensitivity(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5558,7 +5611,7 @@ accurate readout of the absolute temperature.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5611,7 +5664,7 @@ accurate readout of the absolute temperature.</p>
 <h5 id="senxor.core.Senxor.set_emissivity(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5659,7 +5712,7 @@ Range: -12.8 K to +12.7 K</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5709,7 +5762,7 @@ Range: -12.8 K to +12.7 K</p>
 <h5 id="senxor.core.Senxor.set_offset(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5758,7 +5811,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5809,7 +5862,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_otf(value)" class="doc doc-heading doc-heading-parameter">                  <code>value</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#float">float</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5854,7 +5907,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5901,7 +5954,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_stark_enable(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5946,7 +5999,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -5993,7 +6046,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_mms_kxms_enable(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6038,7 +6091,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6085,7 +6138,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_mms_ra_enable(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6130,7 +6183,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6177,7 +6230,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_median_enable(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6222,7 +6275,7 @@ Range: -1.28 to +1.27</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6269,7 +6322,7 @@ Range: -1.28 to +1.27</p>
 <h5 id="senxor.core.Senxor.set_temporal_enable(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6316,7 +6369,7 @@ When it is 1, the read method will return the raw ADC data.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6365,7 +6418,7 @@ If you are not sure whether you need to use the raw ADC data, do not modify this
 <h5 id="senxor.core.Senxor.set_adc_enabled(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
 </h5>            </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6380,6 +6433,75 @@ If you are not sure whether you need to use the raw ADC data, do not modify this
     </table>
 
           <backlinks identifier="senxor.core.Senxor.set_adc_enabled" handler="python" />
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.core.Senxor.get_dk_enabled" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">get_dk_enabled</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the dK output enabled flag, False by default.</p>
+
+          <backlinks identifier="senxor.core.Senxor.get_dk_enabled" handler="python" />
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="senxor.core.Senxor.set_dk_enabled" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">set_dk_enabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Set the dK output enabled flag.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+<h5 id="senxor.core.Senxor.set_dk_enabled(enabled)" class="doc doc-heading doc-heading-parameter">                  <code>enabled</code>
+</h5>            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/builtins/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>True: output uint16 dKelvin. False: output float32 Celsius (default).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+          <backlinks identifier="senxor.core.Senxor.set_dk_enabled" handler="python" />
 
     </div>
 
