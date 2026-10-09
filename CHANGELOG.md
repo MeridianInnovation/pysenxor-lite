@@ -1,3 +1,10 @@
+## 3.1.6
+
+### Feat
+
+- Added `set_dk_enabled(enabled)` and `get_dk_enabled()` to select uint16 dKelvin temperature output for `read()` and data callbacks. Celsius remains the default.
+- Updated the MODULE_TYPE definitions.
+
 ## v3.1.5 (2026-06-03)
 
 ### Feat
