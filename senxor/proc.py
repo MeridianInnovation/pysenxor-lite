@@ -84,11 +84,16 @@ class _LazyLutDict(Mapping):
 colormaps: dict[ColormapKey, np.ndarray] = _LazyLutDict()  # type: ignore[reportAssignmentIssue]
 
 
-def process_senxor_data(bytes_data: bytes, *, adc: bool = False) -> np.ndarray:
-    """Process the senxor bytes data to a frame."""
+def process_senxor_data(bytes_data: bytes, *, adc: bool = False, dk: bool = False) -> np.ndarray:
+    """Process the senxor bytes data to a 2-D frame.
+
+    - dtype: float32, unit: Celsius, default output.
+    - dtype: uint16, unit: dKelvin, enabled by `dk=True`.
+    - dtype: uint16, raw ADC values, enabled by `adc=True`; ignores `dk`.
+    """
     data = np.frombuffer(bytes_data, dtype=np.uint16)
-    if not adc:
-        data = np.round(data / 10 - KELVIN, 1)
+    if not adc and not dk:
+        data = np.round(data / 10 - KELVIN, 1).astype(np.float32)
     frame_shape = SENXOR_FRAME_SHAPE.get(data.shape[0], None)
     if frame_shape is None:
         raise ValueError(f"Unknown senxor data size: {data.shape[0]}, please report this issue to the developer.")

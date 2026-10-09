@@ -114,7 +114,7 @@ dev.close()
 
 ### Stream and read frames
 
-After connecting, you can start the stream and read frames. `read()` returns `(header, frame)`: `header` is a uint16 array or None, and `frame` is a 2D float32 array of temperature in Celsius.
+After connecting, you can start the stream and read frames. `read()` returns `(header, frame)`: `header` is a uint16 array or None, and `frame` is a 2D array of temperature in Celsius (float32) by default.
 
 ```python
 dev.start_stream()

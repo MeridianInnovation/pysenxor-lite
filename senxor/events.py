@@ -113,7 +113,11 @@ class SenxorEvents:
 
             header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
             is_adc_enabled = self._senxor.fields.ADC_ENABLE.get() == 1
-            frame = process_senxor_data(cast("bytes", data_bytes), adc=is_adc_enabled)
+            frame = process_senxor_data(
+                cast("bytes", data_bytes),
+                adc=is_adc_enabled,
+                dk=self._senxor.get_dk_enabled(),
+            )
             try:
                 listener(header, frame)
             except Exception as e:

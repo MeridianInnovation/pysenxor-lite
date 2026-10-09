@@ -13,6 +13,7 @@ class SenxorHelperMixin:
     def __init__(self):
         self.fields: SenxorFieldsManager
         self.regs: SenxorRegistersManager
+        self._dk_enabled = False
 
     def get_shape(self) -> tuple[int, int]:
         """Get the frame shape(height, width) of the senxor.
@@ -596,3 +597,18 @@ class SenxorHelperMixin:
 
         """
         self.fields.ADC_ENABLE.set(1 if enabled else 0)
+
+    def get_dk_enabled(self) -> bool:
+        """Get the dK output enabled flag, False by default."""
+        return self._dk_enabled
+
+    def set_dk_enabled(self, enabled: bool) -> None:
+        """Set the dK output enabled flag.
+
+        Parameters
+        ----------
+        enabled : bool
+            True: output uint16 dKelvin. False: output float32 Celsius (default).
+
+        """
+        self._dk_enabled = enabled

@@ -261,11 +261,17 @@ class Senxor(SenxorHelperMixin):
     ) -> tuple[np.ndarray | None, np.ndarray | None]:
         """Read a frame from the Senxor and return (header, frame).
 
-        - header : np.ndarray[uint16], 1-D
+        - header : np.ndarray[uint16], 1-D | None
             - Frame metadata; see the documentation for layout details.
-        - frame  : np.ndarray, 2-D, shape (height, width)
-            - If ADC_ENABLE = 1 → dtype = uint16, values are raw ADC counts.
-            - If ADC_ENABLE = 0 → dtype = float32, values are temperature in °C.
+        - frame  : np.ndarray, 2-D, shape (height, width) | None
+            - dtype: float32, unit: Celsius, default output.
+            - dtype: uint16, unit: dKelvin, to enable dK output, call `set_dk_enabled(True)`.
+            - dtype: uint16, raw ADC values, only for developing and debugging.
+
+        Notes
+        -----
+        - If `block=False`, the frame and header may be None if no frame is available, remember to check
+        the return value before using it.
 
         Parameters
         ----------
@@ -301,7 +307,7 @@ class Senxor(SenxorHelperMixin):
             return None, None
         header = np.frombuffer(header_bytes, dtype=np.uint16) if header_bytes is not None else None
         is_adc_enabled = self.fields.ADC_ENABLE.get() == 1
-        data = process_senxor_data(data_bytes, adc=is_adc_enabled)
+        data = process_senxor_data(data_bytes, adc=is_adc_enabled, dk=self.get_dk_enabled())
         return header, data
 
     def read_reg(self, reg: int | RegisterName) -> int:
