@@ -457,7 +457,7 @@ def parse_header(header: np.ndarray) -> SenxorHeader:
 
     die_temp = float(header[2] * 0.01 - KELVIN)
 
-    timestamp = int((header[4] << 16) | header[3])
+    timestamp = (int(header[4]) << 16) | int(header[3])
 
     max_val = float(header[5] * 0.1 - KELVIN)
     min_val = float(header[6] * 0.1 - KELVIN)
