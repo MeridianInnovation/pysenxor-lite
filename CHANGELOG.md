@@ -1,3 +1,10 @@
+## v3.1.7 (2026-10-29)
+
+### Fix
+
+- Fixed incorrect timestamps in captured frame data.
+- Device connections now close automatically when a control command times out, allowing applications to reconnect.
+
 ## 3.1.6
 
 ### Feat
