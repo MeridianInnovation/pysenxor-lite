@@ -177,4 +177,6 @@ class SerialInterfaceBase(ISenxorInterface):
                 else:
                     ready.wait()
         self.processor.raise_if_error()
+        if cmd != "GFRA":
+            self.close()
         raise SenxorResponseTimeoutError(f"Timeout waiting for {cmd} response")
