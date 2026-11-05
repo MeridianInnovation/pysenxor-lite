@@ -332,14 +332,12 @@ class SerialAckProcessor:
             self.logger.error("parse_ack_failed", state="unexpected_error", error=e)
             self.state = AckProcessorState.ACK_ERROR
 
-    def _on_ack_parsed(self, cmd: str, data: bytearray) -> None:
+    def _on_ack_parsed(self, cmd: str, data: bytes | bytearray) -> None:
         """On a new ACK parsed."""
         if cmd == "GFRA":
             with self.gfra_ready:
                 header, temp_data = SenxorAckDecoder._parse_ack_gfra(data)
-                header_ = None if header is None else bytes(header)
-                temp_data_ = bytes(temp_data)
-                self.gfra_queue.append((header_, temp_data_))
+                self.gfra_queue.append((header, temp_data))
                 self.gfra_ready.notify_all()
         elif cmd == "RREG":
             with self.rreg_ready:

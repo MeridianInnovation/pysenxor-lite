@@ -5,7 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar
 
+import numpy as np
+
 from senxor.error import SenxorAckInvalidError
+
+_CHECKSUM_NUMPY_THRESHOLD = 4096
 
 
 class SenxorAckParser:
@@ -71,7 +75,7 @@ class SenxorAckParser:
         length = self.parse_ack_header(buffer)
         return len(buffer) < self.ACK_LENGTH_IDX.stop + length
 
-    def parse_ack(self, buffer: bytearray) -> tuple[str, bytearray, int]:
+    def parse_ack(self, buffer: bytearray) -> tuple[str, bytes, int]:
         # Call `has_ack_prefix` and `has_enough_data` before calling this method.
         ack_len = self.parse_ack_header(buffer)
         cmd, data = self.parse_ack_body(buffer, ack_len)
@@ -86,7 +90,7 @@ class SenxorAckParser:
             raise SenxorAckInvalidError(f"Invalid ack length: {length_str}") from e
         return length
 
-    def parse_ack_body(self, buffer: bytearray, ack_len: int) -> tuple[str, bytearray]:
+    def parse_ack_body(self, buffer: bytearray, ack_len: int) -> tuple[str, bytes]:
         length_bytes = bytes(buffer[self.ACK_LENGTH_IDX])
         cmd_bytes = bytes(buffer[self.ACK_CMD_IDX])
 
@@ -94,8 +98,8 @@ class SenxorAckParser:
         data_len = ack_len - self.ACK_CHECKSUM_LENGTH - self.ACK_CMD_LENGTH
         data_stop = data_start + data_len
 
-        # Keep data_bytes as bytearray to avoid copying large data
-        data_bytes = buffer[data_start:data_stop]
+        with memoryview(buffer) as buffer_view, buffer_view[data_start:data_stop] as data_view:
+            data_bytes = bytes(data_view)
 
         checksum_start = data_stop
         checksum_stop = checksum_start + self.ACK_CHECKSUM_LENGTH
@@ -120,8 +124,18 @@ class SenxorAckParser:
             raise SenxorAckInvalidError(f"Invalid ack checksum: {checksum}") from e
         return checksum_value
 
-    def validate_checksum(self, checksum: int, len_bytes: bytes, cmd_bytes: bytes, data_bytes: bytearray) -> bool:
-        actual_checksum = (sum(len_bytes) + sum(cmd_bytes) + sum(data_bytes)) & 0xFFFF
+    def validate_checksum(
+        self,
+        checksum: int,
+        len_bytes: bytes,
+        cmd_bytes: bytes,
+        data_bytes: bytes | bytearray,
+    ) -> bool:
+        if len(data_bytes) >= _CHECKSUM_NUMPY_THRESHOLD:
+            data_sum = int(np.frombuffer(data_bytes, dtype=np.uint8).sum(dtype=np.uint64))
+        else:
+            data_sum = sum(data_bytes)
+        actual_checksum = (sum(len_bytes) + sum(cmd_bytes) + data_sum) & 0xFFFF
         if actual_checksum != checksum:
             raise SenxorAckInvalidError(f"Checksum mismatch: {actual_checksum:04X} != {checksum:04X}")
         return True
@@ -185,7 +199,7 @@ class SenxorAckDecoder:
     }
 
     @staticmethod
-    def _parse_ack_rreg(data: bytearray) -> int:
+    def _parse_ack_rreg(data: bytes | bytearray) -> int:
         try:
             value = int(data, base=16)
         except Exception as e:
@@ -193,13 +207,13 @@ class SenxorAckDecoder:
         return value
 
     @staticmethod
-    def _parse_ack_wreg(data: bytearray) -> bool:
+    def _parse_ack_wreg(data: bytes | bytearray) -> bool:
         if data != b"":
             raise SenxorAckInvalidError(f"Invalid ack wreg: {data}")
         return True
 
     @staticmethod
-    def _parse_ack_rrse(data: bytearray) -> dict[int, int]:
+    def _parse_ack_rrse(data: bytes | bytearray) -> dict[int, int]:
         key_value_pairs = data.decode("ascii")
         if len(key_value_pairs) % 4 != 0:
             raise SenxorAckInvalidError(f"Invalid ack rrse: {data}")
@@ -211,11 +225,17 @@ class SenxorAckDecoder:
         return reg_values
 
     @staticmethod
-    def _parse_ack_gfra(data: bytearray) -> tuple[bytearray | None, bytearray]:
+    def _parse_ack_gfra(data: bytes | bytearray) -> tuple[bytes | None, bytes]:
         data_len = len(data)
         struct = SenxorAckDecoder.GFRA_DATA_MAP[data_len]
-        header = None if struct.header_slice is None else data[struct.header_slice]
-        temp_data = data[struct.data_slice]
+        with memoryview(data) as data_view:
+            if struct.header_slice is None:
+                header = None
+            else:
+                with data_view[struct.header_slice] as header_view:
+                    header = bytes(header_view)
+            with data_view[struct.data_slice] as temp_view:
+                temp_data = bytes(temp_view)
 
         return header, temp_data
 
