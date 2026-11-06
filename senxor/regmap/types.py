@@ -46,6 +46,11 @@ RegisterName = Literal[
     "FILTER_CONTROL",
     "FILTER_SETTING_1_0",
     "FILTER_SETTING_1_1",
+    "STREAM_CTRL",
+    "DETECTION_CTRL",
+    "FUSION_CTRL",
+    "DETECTION_TYPES",
+    "FUSION_DISTANCE",
 ]
 
 
@@ -64,6 +69,10 @@ RegisterAddress = Literal[
     0xBA,
     0xBB,
     0x33,
+    0x34,
+    0x35,
+    0x38,
+    0x39,
     0xBC,
     0xC2,
     0xC5,
@@ -153,4 +162,15 @@ FieldName = Literal[
     "TEMPORAL_INIT",
     "TEMPORAL_LSB",
     "TEMPORAL_MSB",
+    "DNCNN_ENABLE",
+    "DETECTION_ENABLE",
+    "FUSION_STYLE",
+    "FUSION_SHRINK_STEP",
+    "FUSION_MASK_ENABLE",
+    "DETECTION_BOXES_ENABLE",
+    "DETECTION_OVERLAY_ENABLE",
+    "DETECTION_PERSON_ENABLE",
+    "DETECTION_DRINKWARE_ENABLE",
+    "DETECTION_APPLIANCES_ENABLE",
+    "DETECTION_OTHER_ENABLE",
 ]

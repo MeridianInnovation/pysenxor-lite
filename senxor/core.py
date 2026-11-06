@@ -79,7 +79,7 @@ class Senxor(SenxorHelperMixin):
         )
         self.interface = interface
 
-        self.regs = SenxorRegistersManager(interface)
+        self.regs = self._create_registers_manager(interface)
         self.fields = self.regs.fieldmap
         self._events = SenxorEvents(self)
         self._device_state = SenxorDeviceState(self)
@@ -88,6 +88,10 @@ class Senxor(SenxorHelperMixin):
 
         if auto_open:
             self.open()
+
+    def _create_registers_manager(self, interface: ISenxorInterface) -> SenxorRegistersManager:
+        """Create the register manager for this device."""
+        return SenxorRegistersManager(interface)
 
     @property
     def device(self) -> IDevice:

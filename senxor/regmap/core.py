@@ -70,7 +70,11 @@ class SenxorRegistersManager(Registers):
             register.name: register for register in self.registers.values()
         }
 
-        self.fieldmap = SenxorFieldsManager(self)
+        self.fieldmap = self._create_fieldmap()
+
+    def _create_fieldmap(self) -> SenxorFieldsManager:
+        """Create the field manager for this register map."""
+        return SenxorFieldsManager(self)
 
     def __iter__(self) -> Iterator[Register]:
         return iter(self.registers.values())
@@ -175,7 +179,7 @@ class SenxorRegistersManager(Registers):
             raise AttributeError(f"Register {reg.name} is read-only")
 
     def _warn_unknown_reg(self, addr: int, op: str):
-        if addr not in Registers.__addrs__:
+        if addr not in self.__addrs__:
             self._log.warning("access_unknown_reg", op=op, addr=addr)
             return True
         return False
